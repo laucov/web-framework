@@ -9,14 +9,15 @@
          failOnRisky="true"
          failOnSkipped="true"
          failOnWarning="true"
+         forceCoversAnnotation="true"
          testdox="true"
          verbose="true">
-    <coverage includeUncoveredFiles="false">
+    <coverage>
         <include>
-            <directory suffix=".php">framework</directory>
+            <directory suffix=".php">src</directory>
         </include>
         <report>
-            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+            <text outputFile="php://stdout"/>
         </report>
     </coverage>
     <testsuites>
