@@ -1,0 +1,14 @@
+{
+    "preset": "psr12",
+    "exclude": [
+        "local",
+        "vendor"
+    ],
+    "rules": {
+        "binary_operator_spaces": false,
+        "function_declaration": {
+            "closure_fn_spacing": "none"
+        },
+        "no_trailing_whitespace_in_comment": false
+    }
+}
