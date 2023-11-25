@@ -14,7 +14,8 @@ final class AbstractRequestTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(AbstractRequest::class);
+        $class_name = AbstractRequest::class;
+        $this->request = $this->getMockForAbstractClass($class_name);
     }
 
     /**
