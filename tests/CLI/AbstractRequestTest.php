@@ -12,7 +12,7 @@ final class AbstractRequestTest extends TestCase
 {
     private AbstractRequest $request;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->request = $this->getMockForAbstractClass(AbstractRequest::class);
     }
