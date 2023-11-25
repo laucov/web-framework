@@ -1,0 +1,21 @@
+{
+    "name": "covaleski/framework",
+    "description": "Simple framework to route CLI and HTTP requests.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Covaleski\\Framework\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "covaleski",
+            "email": "covaleski23@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}
