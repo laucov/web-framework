@@ -3,7 +3,7 @@
 namespace Covaleski\Framework\CLI;
 
 /**
- * Stores information about a CLI request.
+ * Stores information about a CLI incoming request.
  */
 class IncomingRequest extends AbstractRequest
 {
@@ -15,9 +15,9 @@ class IncomingRequest extends AbstractRequest
     /**
      * Create the incoming request instance.
      */
-    public function __construct(array $arguments)
+    public function __construct(array $php_arguments)
     {
-        foreach ($arguments as $i => $argument) {
+        foreach ($php_arguments as $i => $argument) {
             // Check if the argument is a string.
             if (!is_string($argument)) {
                 $message = 'All arguments must be of type string.';
