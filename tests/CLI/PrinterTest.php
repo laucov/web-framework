@@ -54,6 +54,11 @@ final class PrinterTest extends TestCase
         $colors = [Printer::BG_RED, Printer::TEXT_GREEN];
         $result = $this->printer->colorize($text, $colors);
         $this->assertSame('\e[0;41;32mHello, World!\e[0m', $result);
+
+        // Fail to use non-integer colors.
+        $colors = [Printer::BG_RED, 'invalid color'];
+        $this->expectException(\InvalidArgumentException::class);
+        $this->printer->colorize($text, $colors);
     }
 
     /**
