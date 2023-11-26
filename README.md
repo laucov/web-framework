@@ -1,3 +1,3 @@
 # Framework
 
-Small framework capable of routing CLI and HTTP requests.
+Minimalist framework to route CLI and HTTP requests.
