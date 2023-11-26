@@ -28,30 +28,33 @@ class Router
         $this->commands[$name] = $class_string;
     }
 
-    // /**
-    //  * Retrieve a command based on the given request object.
-    //  */
-    // public function route(AbstractRequest $request): ?Command
-    // {
-    //     $command_name = $request->getCommand();
-    //     if ($command_name === null) {
-    //         return null;
-    //     }
+    /**
+     * Retrieve a command based on the given request object.
+     */
+    public function route(AbstractRequest $request): ?Command
+    {
+        $command_name = $request->getCommand();
+        if ($command_name === null) {
+            $message = 'Cannot route request with unset command name.';
+            throw new \InvalidArgumentException($message);
+        }
 
-    //     $class_string = $this->getCommand($command_name);
-    //     if ($class_string === null) {
-    //         return null;
-    //     }
+        $class_string = $this->getCommand($command_name);
+        if ($class_string === null) {
+            return null;
+        }
 
-    //     $command = new $class_string();
-    //     return $command;
-    // }
+        $command = new $class_string();
+        return $command;
+    }
 
-    // /**
-    //  * Get the command class name stored under the given name.
-    //  */
-    // protected function getCommand(string $name): ?string
-    // {
-    //     return $this->commands[$name] ?? null;
-    // }
+    /**
+     * Get the command class name stored under the given name.
+     * 
+     * @return class-string<Command>
+     */
+    protected function getCommand(string $name): ?string
+    {
+        return $this->commands[$name] ?? null;
+    }
 }
