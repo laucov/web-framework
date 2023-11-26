@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Covaleski\Framework\CLI\Command;
+use Covaleski\Framework\CLI\AbstractCommand;
 use Covaleski\Framework\CLI\OutgoingRequest;
 use Covaleski\Framework\CLI\Router;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ final class RouterTest extends TestCase
      */
     public function testCanAddCommand(): void
     {
-        $this->router->addCommand('valid-class', Command::class);
+        $this->router->addCommand('valid-class', AbstractCommand::class);
         $this->expectException(\InvalidArgumentException::class);
         $this->router->addCommand('invalid-class', stdClass::class);
     }
@@ -33,7 +33,7 @@ final class RouterTest extends TestCase
      * @covers ::route
      * @covers ::getCommand
      * @uses Covaleski\Framework\CLI\AbstractRequest::getCommand
-     * @uses Covaleski\Framework\CLI\Command::__construct
+     * @uses Covaleski\Framework\CLI\AbstractCommand::__construct
      * @uses Covaleski\Framework\CLI\OutgoingRequest::setArguments
      * @uses Covaleski\Framework\CLI\OutgoingRequest::setCommand
      * @uses Covaleski\Framework\CLI\Router::addCommand
@@ -45,7 +45,7 @@ final class RouterTest extends TestCase
 
         // Add example command.
         $mock = $this
-            ->getMockBuilder(Command::class)
+            ->getMockBuilder(AbstractCommand::class)
             ->setConstructorArgs(['request' => $request])
             ->setMockClassName('RouterCommandTest')
             ->getMockForAbstractClass();

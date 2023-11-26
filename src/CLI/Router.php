@@ -3,14 +3,14 @@
 namespace Covaleski\Framework\CLI;
 
 /**
- * Stores routes and provides `Command` instances.
+ * Stores routes and provides `AbstractCommand` instances.
  */
 class Router
 {
     /**
      * Stored command names.
      * 
-     * @var array<string, class-string<Command>>
+     * @var array<string, class-string<AbstractCommand>>
      */
     protected array $commands = [];
 
@@ -19,8 +19,8 @@ class Router
      */
     public function addCommand(string $name, string $class_string): void
     {
-        if (!is_a($class_string, Command::class, true)) {
-            $class_name = Command::class;
+        if (!is_a($class_string, AbstractCommand::class, true)) {
+            $class_name = AbstractCommand::class;
             $message = 'The command class must extend "' . $class_name . '".';
             throw new \InvalidArgumentException($message);
         }
@@ -31,7 +31,7 @@ class Router
     /**
      * Retrieve a command based on the given request object.
      */
-    public function route(AbstractRequest $request): ?Command
+    public function route(AbstractRequest $request): ?AbstractCommand
     {
         $command_name = $request->getCommand();
         if ($command_name === null) {
@@ -51,7 +51,7 @@ class Router
     /**
      * Get the command class name stored under the given name.
      * 
-     * @return class-string<Command>
+     * @return class-string<AbstractCommand>
      */
     protected function getCommand(string $name): ?string
     {

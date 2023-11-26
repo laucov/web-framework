@@ -5,7 +5,7 @@ namespace Covaleski\Framework\CLI;
 /**
  * Stores a command's information and procedures.
  */
-abstract class Command
+abstract class AbstractCommand
 {
     /**
      * Executes the command procedures.

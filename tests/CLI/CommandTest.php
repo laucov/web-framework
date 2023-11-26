@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use Covaleski\Framework\CLI\Command;
+use Covaleski\Framework\CLI\AbstractCommand;
 use Covaleski\Framework\CLI\OutgoingRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\CLI\Command
+ * @coversDefaultClass \Covaleski\Framework\CLI\AbstractCommand
  */
 final class CommandTest extends TestCase
 {
-    protected Command $command;
+    protected AbstractCommand $command;
 
     protected function setUp(): void
     {
@@ -19,7 +19,7 @@ final class CommandTest extends TestCase
         $request->setCommand('do-something');
 
         $this->command = $this->getMockForAbstractClass(
-            Command::class,
+            AbstractCommand::class,
             ['request' => $request],
         );
     }
