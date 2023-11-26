@@ -33,21 +33,23 @@ final class RouterTest extends TestCase
      * @covers ::route
      * @covers ::getCommand
      * @uses Covaleski\Framework\CLI\AbstractRequest::getCommand
+     * @uses Covaleski\Framework\CLI\Command::__construct
      * @uses Covaleski\Framework\CLI\OutgoingRequest::setArguments
      * @uses Covaleski\Framework\CLI\OutgoingRequest::setCommand
      * @uses Covaleski\Framework\CLI\Router::addCommand
      */
     public function testCanRoute(): void
     {
+        // Get a request instance.
+        $request = new OutgoingRequest();
+
         // Add example command.
         $mock = $this
             ->getMockBuilder(Command::class)
+            ->setConstructorArgs(['request' => $request])
             ->setMockClassName('RouterCommandTest')
             ->getMockForAbstractClass();
         $this->router->addCommand('test-the-router', $mock::class);
-
-        // Get a request instance.
-        $request = new OutgoingRequest();
 
         // Route with valid command.
         $request->setCommand('test-the-router');
