@@ -44,7 +44,7 @@ class Router
             return null;
         }
 
-        $command = new $class_string();
+        $command = new $class_string($request);
         return $command;
     }
 
