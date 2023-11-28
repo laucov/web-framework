@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\CLI;
+
 use Covaleski\Framework\CLI\AbstractCommand;
 use Covaleski\Framework\CLI\OutgoingRequest;
 use Covaleski\Framework\CLI\Router;
@@ -26,7 +28,7 @@ final class RouterTest extends TestCase
     {
         $this->router->addCommand('valid-class', AbstractCommand::class);
         $this->expectException(\InvalidArgumentException::class);
-        $this->router->addCommand('invalid-class', stdClass::class);
+        $this->router->addCommand('invalid-class', \stdClass::class);
     }
 
     /**

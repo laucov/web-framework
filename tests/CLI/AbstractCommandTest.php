@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\CLI;
+
 use Covaleski\Framework\CLI\AbstractCommand;
 use Covaleski\Framework\CLI\OutgoingRequest;
 use PHPUnit\Framework\TestCase;
