@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Covaleski\Framework\CLI\AbstractCommand
  */
-final class CommandTest extends TestCase
+final class AbstractCommandTest extends TestCase
 {
     protected AbstractCommand $command;
 
