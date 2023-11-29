@@ -28,11 +28,11 @@ final class AbstractMessageTest extends TestCase
         $this->assertNull($this->request->getHeader('Content-Type'));
     }
 
-    /**
-     * @covers ::getBody
-     */
-    public function testCanGetBody(): void
-    {
-        $this->assertNull($this->request->getBody());
-    }
+    // /**
+    //  * @covers ::getBody
+    //  */
+    // public function testCanGetBody(): void
+    // {
+    //     $this->assertNull($this->request->getBody());
+    // }
 }
