@@ -57,11 +57,18 @@ class StringSource
         // Get the resource size.
         if ($this->isResource) {
             $stat = fstat($this->resource);
+            // @codeCoverageIgnoreStart
             if (!is_array($stat)) {
                 $message = 'Could not collect the resource information.';
                 throw new \RuntimeException($message);
             }
-            return (int) $stat['size'];
+            $size = $stat['size'] ?? null;
+            if (!is_int($size)) {
+                $message = 'Could not get the resource size.';
+                throw new \RuntimeException($message);
+            }
+            // @codeCoverageIgnoreEnd
+            return $size;
         }
 
         // Get the string length.
@@ -75,13 +82,21 @@ class StringSource
      */
     public function read(int $length): string
     {
+        // Check position value.
+        if ($length < 0) {
+            $message = 'Length must be a positive number.';
+            throw new \InvalidArgumentException($message);
+        }
+
         // Get resource content.
         if ($this->isResource === true) {
             $content = fread($this->resource, $length);
+            // @codeCoverageIgnoreStart
             if (!is_string($content)) {
                 $message = 'Could not read the resource.';
                 throw new \RuntimeException($message);
             }
+            // @codeCoverageIgnoreEnd
             return $content;
         }
 
@@ -97,13 +112,21 @@ class StringSource
      */
     public function seek(int $position): void
     {
+        // Check position value.
+        if ($position < 0 || $position > $this->getSize()) {
+            $message = 'Invalid position given.';
+            throw new \InvalidArgumentException($message);
+        }
+
         // Move the resource file pointer.
         if ($this->isResource) {
             $result = fseek($this->resource, $position);
+            // @codeCoverageIgnoreStart
             if ($result !== 0) {
                 $message = 'Could not move the resource file pointer.';
                 throw new \RuntimeException($message);
             }
+            // @codeCoverageIgnoreEnd
             return;
         }
 
@@ -119,10 +142,12 @@ class StringSource
         // Get the resource file pointer.
         if ($this->isResource) {
             $position = ftell($this->resource);
+            // @codeCoverageIgnoreStart
             if (!is_int($position)) {
                 $message = 'Could not get the resource file pointer position.';
                 throw new \RuntimeException($message);
             }
+            // @codeCoverageIgnoreEnd
             return $position;
         }
 
