@@ -9,8 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Covaleski\Framework\Files\StringSource
- * 
- * @todo Make tests with non-readable resources.
  */
 final class StringSourceTest extends TestCase
 {
@@ -39,7 +37,7 @@ final class StringSourceTest extends TestCase
      * @covers ::tell
      * @uses Covaleski\Framework\Files\StringSource::__construct
      */
-    public function testCanPerformReadOperations(): void
+    public function testCanRead(): void
     {
         // Get size.
         $size_a = $this->sourceA->getSize();
@@ -50,8 +48,12 @@ final class StringSourceTest extends TestCase
         // Read all content.
         $this->assertSame($this->text, $this->sourceA->read($size_a));
         $this->assertSame($this->text, $this->sourceB->read($size_b));
+
+        // Try reading after EOF.
         $this->assertSame('', $this->sourceA->read($size_a));
         $this->assertSame('', $this->sourceB->read($size_b));
+
+        // Ensure pointer is at EOF.
         $this->assertSame(44, $this->sourceA->tell());
         $this->assertSame(44, $this->sourceB->tell());
 
@@ -65,15 +67,55 @@ final class StringSourceTest extends TestCase
     /**
      * @covers ::__construct
      */
-    public function testMustInstantiateWithStringOrResource(): void
+    public function testMustInstantiateWithResourceOrString(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        new StringSource(['Lorem', 'ipsum']);
+        new StringSource(['The', 'quick', 'brown', 'fox']);
+    }
+
+    /**
+     * @covers ::read
+     * @uses Covaleski\Framework\Files\StringSource::__construct
+     */
+    public function testMustReadValidFileLenght(): void
+    {
+        // Test using negative positions.
         $this->expectException(\InvalidArgumentException::class);
-        new StringSource(12345);
+        $this->sourceB->read(-1);
+    }
+
+    /**
+     * @covers ::read
+     * @uses Covaleski\Framework\Files\StringSource::__construct
+     */
+    public function testMustReadValidStringLenght(): void
+    {
+        // Test using negative positions.
         $this->expectException(\InvalidArgumentException::class);
-        new StringSource(new StringSource('Lorem ipsum'));
+        $this->sourceA->read(-1);
+    }
+
+    /**
+     * @covers ::seek
+     * @uses Covaleski\Framework\Files\StringSource::getSize
+     * @uses Covaleski\Framework\Files\StringSource::__construct
+     */
+    public function testMustSeekValidFilePosition(): void
+    {
+        // Test using after EOF positions.
         $this->expectException(\InvalidArgumentException::class);
-        new StringSource(null);
+        $this->sourceB->seek(1024);
+    }
+
+    /**
+     * @covers ::seek
+     * @uses Covaleski\Framework\Files\StringSource::getSize
+     * @uses Covaleski\Framework\Files\StringSource::__construct
+     */
+    public function testMustSeekValidStringPosition(): void
+    {
+        // Test using after EOF positions.
+        $this->expectException(\InvalidArgumentException::class);
+        $this->sourceA->seek(1024);
     }
 }
