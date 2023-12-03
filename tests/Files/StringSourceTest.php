@@ -35,12 +35,12 @@ final class StringSourceTest extends TestCase
     /**
      * @covers ::getSize
      * @covers ::read
+     * @covers ::seek
+     * @covers ::tell
      * @uses Covaleski\Framework\Files\StringSource::__construct
      */
     public function testCanPerformReadOperations(): void
     {
-        
-
         // Get size.
         $size_a = $this->sourceA->getSize();
         $size_b = $this->sourceB->getSize();
@@ -52,8 +52,14 @@ final class StringSourceTest extends TestCase
         $this->assertSame($this->text, $this->sourceB->read($size_b));
         $this->assertSame('', $this->sourceA->read($size_a));
         $this->assertSame('', $this->sourceB->read($size_b));
-        // $this->sourceA->seek(0);
-        // $this->sourceB->seek(0);
+        $this->assertSame(44, $this->sourceA->tell());
+        $this->assertSame(44, $this->sourceB->tell());
+
+        // Move pointer.
+        $this->sourceA->seek(0);
+        $this->sourceB->seek(0);
+        $this->assertSame(0, $this->sourceA->tell());
+        $this->assertSame(0, $this->sourceB->tell());
     }
 
     /**
