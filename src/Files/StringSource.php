@@ -92,22 +92,41 @@ class StringSource
         return $string;
     }
 
-    // /**
-    //  * Move the content pointer to the designated position.
-    //  */
-    // public function seek(int $position): void
-    // {
-    //     // Move the resource file pointer.
-    //     if ($this->isResource) {
-    //         $content = fseek($this->resource, $position);
-    //         if (!is_string($content)) {
-    //             $message = 'Could not move the resource file pointer.';
-    //             throw new \RuntimeException($message);
-    //         }
-    //         return;
-    //     }
+    /**
+     * Move the content pointer to the designated position.
+     */
+    public function seek(int $position): void
+    {
+        // Move the resource file pointer.
+        if ($this->isResource) {
+            $result = fseek($this->resource, $position);
+            if ($result !== 0) {
+                $message = 'Could not move the resource file pointer.';
+                throw new \RuntimeException($message);
+            }
+            return;
+        }
 
-    //     // Set the string offset.
-    //     $this->offset = $position;
-    // }
+        // Set the string offset.
+        $this->offset = $position;
+    }
+
+    /**
+     * Get the current content pointer position.
+     */
+    public function tell(): int
+    {
+        // Get the resource file pointer.
+        if ($this->isResource) {
+            $position = ftell($this->resource);
+            if (!is_int($position)) {
+                $message = 'Could not get the resource file pointer position.';
+                throw new \RuntimeException($message);
+            }
+            return $position;
+        }
+
+        // Set the string offset.
+        return $this->offset;
+    }
 }
