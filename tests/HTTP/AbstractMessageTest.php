@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\CLI;
+namespace Tests\HTTP;
 
 use Covaleski\Framework\HTTP\AbstractMessage;
 use PHPUnit\Framework\TestCase;
@@ -22,10 +22,12 @@ final class AbstractMessageTest extends TestCase
 
     /**
      * @covers ::getHeader
+     * @covers ::getHeaderAsList
      */
     public function testCanGetHeader(): void
     {
         $this->assertNull($this->request->getHeader('Content-Type'));
+        $this->assertNull($this->request->getHeaderAsList('Cache-Control'));
     }
 
     /**
