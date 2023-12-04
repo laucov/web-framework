@@ -22,6 +22,14 @@ abstract class AbstractMessage
     protected array $headers;
 
     /**
+     * Get the message body.
+     */
+    public function getBody(): ?StringSource
+    {
+        return $this->body ?? null;
+    }
+
+    /**
      * Get a header value.
      */
     public function getHeader(string $name): ?string
@@ -30,10 +38,18 @@ abstract class AbstractMessage
     }
 
     /**
-     * Get the message body.
+     * Get a header list of values.
+     * 
+     * @return string[]
      */
-    public function getBody(): ?StringSource
+    public function getHeaderAsList(string $name): ?array
     {
-        return $this->body ?? null;
+        if (!array_key_exists($name, $this->headers)) {
+            return null;
+        }
+
+        $values = explode(',', $this->headers[$name]);
+        // return array_map('trim', $values);
+        return $values;
     }
 }
