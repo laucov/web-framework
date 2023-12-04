@@ -12,12 +12,12 @@ use PHPUnit\Framework\TestCase;
  */
 final class AbstractMessageTest extends TestCase
 {
-    private AbstractMessage $request;
+    private AbstractMessage $message;
 
     protected function setUp(): void
     {
         $class_name = AbstractMessage::class;
-        $this->request = $this->getMockForAbstractClass($class_name);
+        $this->message = $this->getMockForAbstractClass($class_name);
     }
 
     /**
@@ -26,8 +26,8 @@ final class AbstractMessageTest extends TestCase
      */
     public function testCanGetHeader(): void
     {
-        $this->assertNull($this->request->getHeader('Content-Type'));
-        $this->assertNull($this->request->getHeaderAsList('Cache-Control'));
+        $this->assertNull($this->message->getHeader('Content-Type'));
+        $this->assertNull($this->message->getHeaderAsList('Cache-Control'));
     }
 
     /**
@@ -35,6 +35,6 @@ final class AbstractMessageTest extends TestCase
      */
     public function testCanGetBody(): void
     {
-        $this->assertNull($this->request->getBody());
+        $this->assertNull($this->message->getBody());
     }
 }
