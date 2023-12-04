@@ -50,7 +50,6 @@ abstract class AbstractMessage
         }
 
         $values = explode(',', $this->headers[$name]);
-        // return array_map('trim', $values);
-        return $values;
+        return array_map('trim', $values);
     }
 }
