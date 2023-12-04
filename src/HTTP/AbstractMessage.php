@@ -44,7 +44,8 @@ abstract class AbstractMessage
      */
     public function getHeaderAsList(string $name): ?array
     {
-        if (!array_key_exists($name, $this->headers)) {
+        $header = $this->getHeader($name);
+        if ($header === null) {
             return null;
         }
 
