@@ -22,6 +22,26 @@ class AbstractOutgoingMessageTest extends TestCase
     }
 
     /**
+     * @covers ::addHeader
+     * @covers ::getHeader
+     * @covers ::getHeaderAsList
+     * @uses Covaleski\Framework\HTTP\AbstractOutgoingMessage::setHeader
+     */
+    public function testCanAddHeaders(): void
+    {
+        $this->message->addHeader('Cache-Control', 'must-understand');
+        $this->message->addHeader('Cache-Control', 'no-store');
+
+        $line = $this->message->getHeader('Cache-Control');
+        $this->assertSame('must-understand, no-store', $line);
+
+        $list = $this->message->getHeaderAsList('Cache-Control');
+        $this->assertCount(2, $list);
+        $this->assertContains('must-understand', $list);
+        $this->assertContains('no-store', $list);
+    }
+
+    /**
      * @covers ::getBody
      * @covers ::setBody
      * @uses Covaleski\Framework\Files\StringSource::__construct
@@ -36,12 +56,36 @@ class AbstractOutgoingMessageTest extends TestCase
         $this->assertSame('Lorem ipsum', $body->read(11));
     }
 
-    // /**
-    //  * @covers ::setHeader
-    //  */
-    // public function testCanSetHeader(): void
-    // {
-    //     $this->message->setHeader('Content-Length', '10');
-    //     $this->assertSame('10', $this->message->getHeader('Content-Length'));
-    // }
+    /**
+     * @covers ::setHeader
+     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader
+     */
+    public function testCanSetHeader(): void
+    {
+        $this->message->setHeader('Content-Length', '10');
+        $this->assertSame('10', $this->message->getHeader('Content-Length'));
+    }
+
+    /**
+     * @covers ::addHeader
+     * @covers ::setHeader
+     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader
+     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeaderAsList
+     */
+    public function testFiltersValues(): void
+    {
+        $this->message->setHeader('Content-Length', " 20 \n\n   \t");
+        $this->assertSame('20', $this->message->getHeader('Content-Length'));
+
+        $this->message->addHeader('Cache-Control', "\n\n\n\r must-understand");
+        $this->message->addHeader('Cache-Control', "   no-store ");
+
+        $line = $this->message->getHeader('Cache-Control');
+        $this->assertSame('must-understand, no-store', $line);
+
+        $list = $this->message->getHeaderAsList('Cache-Control');
+        $this->assertCount(2, $list);
+        $this->assertContains('must-understand', $list);
+        $this->assertContains('no-store', $list);
+    }
 }
