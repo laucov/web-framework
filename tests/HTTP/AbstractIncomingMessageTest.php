@@ -12,19 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractIncomingMessageTest extends TestCase
 {
-    // protected AbstractIncomingMessage $message;
-
-    // public function setUp(): void
-    // {
-    //     $class_name = AbstractIncomingMessage::class;
-    //     $this->message = $this->getMockForAbstractClass($class_name);
-    // }
-
     /**
      * @covers ::__construct
      * @uses Covaleski\Framework\Files\StringSource::__construct
      * @uses Covaleski\Framework\Files\StringSource::read
      * @uses Covaleski\Framework\HTTP\AbstractMessage::getBody
+     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader
+     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeaderAsList
      */
     public function testCanInstantiate(): void
     {
@@ -37,13 +31,39 @@ class AbstractIncomingMessageTest extends TestCase
             ],
         ]);
 
-        // Check values.
+        // Check body.
         /** @var \Covaleski\Framework\Files\StringSource */
         $body = $message->getBody();
         $this->assertNotNull($body);
         $this->assertSame('The quick', $body->read(9));
+
+        // Check headers.
+        $this->assertSame('44', $message->getHeader('Content-Length'));
+        $list = $message->getHeaderAsList('Cache-Control');
+        $this->assertCount(2, $list);
+        $this->assertContains('must-understand', $list);
+        $this->assertContains('no-store', $list);
     }
 
+    /**
+     * @covers ::__construct
+     * @uses Covaleski\Framework\Files\StringSource::__construct
+     */
+    public function testMustPassStringHeaders(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->getInstance([
+            'content' => '',
+            'headers' => [
+                'Cache-Control' => ['must-understand', 'no-store'],
+                'Content-Length' => 44,
+            ],
+        ]);
+    }
+
+    /**
+     * Get a mock for `AbstractIncomingMessage`.
+     */
     protected function getInstance(array $arguments): AbstractIncomingMessage
     {
         $class_name = AbstractIncomingMessage::class;
