@@ -7,7 +7,7 @@ use Covaleski\Framework\Files\StringSource;
 /**
  * Stores information about an HTTP message.
  */
-abstract class AbstractMessage
+abstract class AbstractMessage implements MessageInterface
 {
     /**
      * Stored message body.
