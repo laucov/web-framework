@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Covaleski\Framework\CLI\OutgoingRequest
+ * 
+ * @todo ::addParameter
+ * @todo ::setParameter
  */
 final class OutgoingRequestTest extends TestCase
 {
@@ -38,6 +41,10 @@ final class OutgoingRequestTest extends TestCase
         $this->request->setArguments(['arg1', 0, true]);
     }
 
+    // public function testCanAddParameter(): void
+    // {
+    // }
+
     /**
      * @covers ::setCommand
      * @uses Covaleski\Framework\CLI\AbstractRequest::getCommand
@@ -47,4 +54,8 @@ final class OutgoingRequestTest extends TestCase
         $this->request->setCommand('do-something');
         $this->assertSame('do-something', $this->request->getCommand());
     }
+
+    // public function testCanSetParameter(): void
+    // {
+    // }
 }
