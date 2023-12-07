@@ -54,7 +54,7 @@ final class StringSourceTest extends TestCase
         $this->assertSame(44, $size_a);
         $this->assertSame(44, $size_b);
         $this->assertSame($filesize, $size_c);
-        
+
         // Read all content.
         $this->assertSame($this->text, $this->sourceA->read($size_a));
         $this->assertSame($this->text, $this->sourceB->read($size_b));

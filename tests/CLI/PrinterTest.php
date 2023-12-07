@@ -39,7 +39,7 @@ final class PrinterTest extends TestCase
             Printer::TEXT_RED,
             Printer::TEXT_YELLOW,
         ];
-        
+
         // Make example text.
         $text = 'Hello, World!';
 

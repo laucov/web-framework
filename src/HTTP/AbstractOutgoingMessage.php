@@ -2,7 +2,6 @@
 
 namespace Covaleski\Framework\HTTP;
 
-use Covaleski\Framework\HTTP\AbstractMessage;
 use Covaleski\Framework\Files\StringSource;
 
 /**

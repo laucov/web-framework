@@ -1,6 +1,7 @@
 <?php
 
 namespace Covaleski\Framework\HTTP;
+
 use Covaleski\Framework\Files\StringSource;
 
 /**

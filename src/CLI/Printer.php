@@ -85,10 +85,10 @@ class Printer
         }
         // Close ANSI escaping.
         $result .= 'm';
-        
+
         // Add text and reset colors.
         $result .= $text . '\e[0m';
-        
+
         return $result;
     }
 

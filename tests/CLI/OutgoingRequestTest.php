@@ -30,7 +30,7 @@ final class OutgoingRequestTest extends TestCase
     {
         $input = ['arg1', 'arg2', 'arg3'];
         $this->request->setArguments($input);
-        
+
         $output = $this->request->getArguments();
         $this->assertSameSize($input, $output);
         foreach ($output as $i => $argument) {
