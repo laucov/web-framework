@@ -13,12 +13,36 @@ use PHPUnit\Framework\TestCase;
 class RequestTraitTest extends TestCase
 {
     /**
+     * @var RequestTrait
+     */
+    protected object $request;
+
+    protected function setUp(): void
+    {
+        $this->request = $this->getMockForTrait(RequestTrait::class);
+    }
+
+    /**
      * @covers ::getMethod
      */
     public function testCanGetMethod(): void
     {
-        /** @var RequestTrait */
-        $response = $this->getMockForTrait(RequestTrait::class);
-        $this->assertSame('GET', $response->getMethod());
+        $this->assertSame('GET', $this->request->getMethod());
+    }
+
+    /**
+     * @covers ::getParameter
+     */
+    public function testCanGetParameter(): void
+    {
+        $this->assertSame(null, $this->request->getParameter('foobar'));
+    }
+
+    /**
+     * @covers ::getParameterList
+     */
+    public function testCanGetParameterList(): void
+    {
+        $this->assertSame(null, $this->request->getParameterList('foobars'));
     }
 }
