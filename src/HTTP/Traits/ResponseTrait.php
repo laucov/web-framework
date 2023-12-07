@@ -8,19 +8,17 @@ namespace Covaleski\Framework\HTTP\Traits;
 trait ResponseTrait
 {
     /**
-     * Status code.
+     * HTTP status code.
      */
     protected int $statusCode = 200;
 
     /**
-     * Status code.
+     * HTTP status text.
      */
     protected string $statusText = 'OK';
 
     /**
      * Get the response status code.
-     * 
-     * Returns `0` if no code is set.
      */
     public function getStatusCode(): int
     {
