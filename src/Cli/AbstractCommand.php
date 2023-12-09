@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\CLI;
+namespace Covaleski\Framework\Cli;
 
 /**
  * Stores a command's information and procedures.

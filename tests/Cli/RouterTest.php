@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\CLI;
+namespace Tests\Cli;
 
-use Covaleski\Framework\CLI\AbstractCommand;
-use Covaleski\Framework\CLI\OutgoingRequest;
-use Covaleski\Framework\CLI\Router;
+use Covaleski\Framework\Cli\AbstractCommand;
+use Covaleski\Framework\Cli\OutgoingRequest;
+use Covaleski\Framework\Cli\Router;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\CLI\Router
+ * @coversDefaultClass \Covaleski\Framework\Cli\Router
  */
 final class RouterTest extends TestCase
 {
@@ -34,11 +34,11 @@ final class RouterTest extends TestCase
     /**
      * @covers ::route
      * @covers ::getCommand
-     * @uses Covaleski\Framework\CLI\AbstractRequest::getCommand
-     * @uses Covaleski\Framework\CLI\AbstractCommand::__construct
-     * @uses Covaleski\Framework\CLI\OutgoingRequest::setArguments
-     * @uses Covaleski\Framework\CLI\OutgoingRequest::setCommand
-     * @uses Covaleski\Framework\CLI\Router::addCommand
+     * @uses Covaleski\Framework\Cli\AbstractRequest::getCommand
+     * @uses Covaleski\Framework\Cli\AbstractCommand::__construct
+     * @uses Covaleski\Framework\Cli\OutgoingRequest::setArguments
+     * @uses Covaleski\Framework\Cli\OutgoingRequest::setCommand
+     * @uses Covaleski\Framework\Cli\Router::addCommand
      */
     public function testCanRoute(): void
     {

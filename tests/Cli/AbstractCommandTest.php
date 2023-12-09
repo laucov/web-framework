@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\CLI;
+namespace Tests\Cli;
 
-use Covaleski\Framework\CLI\AbstractCommand;
-use Covaleski\Framework\CLI\OutgoingRequest;
+use Covaleski\Framework\Cli\AbstractCommand;
+use Covaleski\Framework\Cli\OutgoingRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\CLI\AbstractCommand
+ * @coversDefaultClass \Covaleski\Framework\Cli\AbstractCommand
  */
 final class AbstractCommandTest extends TestCase
 {
@@ -29,7 +29,7 @@ final class AbstractCommandTest extends TestCase
     /**
      * @covers ::run
      * @covers ::__construct
-     * @uses Covaleski\Framework\CLI\OutgoingRequest::setCommand
+     * @uses Covaleski\Framework\Cli\OutgoingRequest::setCommand
      */
     public function testCanRun(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\CLI;
+namespace Covaleski\Framework\Cli;
 
 /**
  * Stores information about a CLI request.
