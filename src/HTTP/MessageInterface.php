@@ -10,6 +10,11 @@ use Covaleski\Framework\Files\StringSource;
 interface MessageInterface
 {
     /**
+     * Supported protocol versions.
+     */
+    const PROTOCOL_VERSIONS = ['1.0', '1.1', '2', '3'];
+
+    /**
      * Get the message body.
      */
     public function getBody(): null|StringSource;
@@ -21,6 +26,13 @@ interface MessageInterface
 
     /**
      * Get a message header.
+     * 
+     * @return string[]
      */
     public function getHeaderAsList(string $name): null|array;
+
+    /**
+     * Get the HTTP protocol version.
+     */
+    public function getProtocolVersion(): null|string;
 }

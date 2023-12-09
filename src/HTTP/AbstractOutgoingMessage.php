@@ -44,4 +44,21 @@ abstract class AbstractOutgoingMessage extends AbstractMessage
         $this->headers[$name] = trim($value);
         return $this;
     }
+
+    /**
+     * Set the HTTP protocol version.
+     */
+    public function setProtocolVersion(null|string $version): static
+    {
+        if (!in_array($version, static::PROTOCOL_VERSIONS, true)) {
+            $versions = implode(', ', static::PROTOCOL_VERSIONS);
+            $message = 'Unknown HTTP version "%s". Supported values: %s.';
+            throw new \InvalidArgumentException(
+                sprintf($message, $version, $versions),
+            );
+        }
+        $this->protocolVersion = $version;
+        
+        return $this;
+    }
 }

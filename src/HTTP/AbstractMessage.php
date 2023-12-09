@@ -12,29 +12,36 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Stored message body.
      */
-    protected StringSource $body;
+    protected null|StringSource $body = null;
 
     /**
      * Stored headers.
      * 
      * @var array<string, string>
      */
-    protected array $headers;
+    protected array $headers = [];
+
+    /**
+     * HTTP protocol version.
+     */
+    protected null|string $protocolVersion = null;
 
     /**
      * Get the message body.
      */
-    public function getBody(): ?StringSource
+    public function getBody(): null|StringSource
     {
-        return $this->body ?? null;
+        return $this->body;
     }
 
     /**
      * Get a header value.
      */
-    public function getHeader(string $name): ?string
+    public function getHeader(string $name): null|string
     {
-        return $this->headers[$name] ?? null;
+        return array_key_exists($name, $this->headers)
+            ? $this->headers[$name]
+            : null;
     }
 
     /**
@@ -42,7 +49,7 @@ abstract class AbstractMessage implements MessageInterface
      * 
      * @return string[]
      */
-    public function getHeaderAsList(string $name): ?array
+    public function getHeaderAsList(string $name): null|array
     {
         $header = $this->getHeader($name);
         if ($header === null) {
@@ -51,5 +58,13 @@ abstract class AbstractMessage implements MessageInterface
 
         $values = explode(',', $this->headers[$name]);
         return array_map('trim', $values);
+    }
+
+    /**
+     * Get the HTTP protocol version.
+     */
+    public function getProtocolVersion(): null|string
+    {
+        return $this->protocolVersion;
     }
 }
