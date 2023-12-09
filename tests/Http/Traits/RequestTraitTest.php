@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Covaleski\Framework\HTTP\Traits\RequestTrait;
+use Covaleski\Framework\Http\Traits\RequestTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\HTTP\Traits\RequestTrait
+ * @coversDefaultClass \Covaleski\Framework\Http\Traits\RequestTrait
  */
 class RequestTraitTest extends TestCase
 {

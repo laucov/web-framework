@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\HTTP;
+namespace Tests\Http;
 
 use Covaleski\Framework\Files\StringSource;
-use Covaleski\Framework\HTTP\AbstractOutgoingMessage;
+use Covaleski\Framework\Http\AbstractOutgoingMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\HTTP\AbstractOutgoingMessage
+ * @coversDefaultClass \Covaleski\Framework\Http\AbstractOutgoingMessage
  */
 class AbstractOutgoingMessageTest extends TestCase
 {
@@ -25,7 +25,7 @@ class AbstractOutgoingMessageTest extends TestCase
      * @covers ::addHeader
      * @covers ::getHeader
      * @covers ::getHeaderAsList
-     * @uses Covaleski\Framework\HTTP\AbstractOutgoingMessage::setHeader
+     * @uses Covaleski\Framework\Http\AbstractOutgoingMessage::setHeader
      */
     public function testCanAddHeaders(): void
     {
@@ -58,7 +58,7 @@ class AbstractOutgoingMessageTest extends TestCase
 
     /**
      * @covers ::setHeader
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader
+     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
      */
     public function testCanSetHeader(): void
     {
@@ -68,7 +68,7 @@ class AbstractOutgoingMessageTest extends TestCase
 
     /**
      * @covers ::setProtocolVersion
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getProtocolVersion
+     * @uses Covaleski\Framework\Http\AbstractMessage::getProtocolVersion
      */
     public function testCanSetProtocolVersion(): void
     {
@@ -82,8 +82,8 @@ class AbstractOutgoingMessageTest extends TestCase
     /**
      * @covers ::addHeader
      * @covers ::setHeader
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeaderAsList
+     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
+     * @uses Covaleski\Framework\Http\AbstractMessage::getHeaderAsList
      */
     public function testFiltersValues(): void
     {

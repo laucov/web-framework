@@ -1,8 +1,8 @@
 <?php
 
-namespace Covaleski\Framework\HTTP;
+namespace Covaleski\Framework\Http;
 
-use Covaleski\Framework\HTTP\Traits\ResponseTrait;
+use Covaleski\Framework\Http\Traits\ResponseTrait;
 
 /**
  * Stores information about an outgoing response.

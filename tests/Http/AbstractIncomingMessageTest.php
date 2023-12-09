@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Covaleski\Framework\HTTP\AbstractIncomingMessage;
+use Covaleski\Framework\Http\AbstractIncomingMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\HTTP\AbstractIncomingMessage
+ * @coversDefaultClass \Covaleski\Framework\Http\AbstractIncomingMessage
  */
 class AbstractIncomingMessageTest extends TestCase
 {
@@ -16,9 +16,9 @@ class AbstractIncomingMessageTest extends TestCase
      * @covers ::__construct
      * @uses Covaleski\Framework\Files\StringSource::__construct
      * @uses Covaleski\Framework\Files\StringSource::read
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getBody
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader
-     * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeaderAsList
+     * @uses Covaleski\Framework\Http\AbstractMessage::getBody
+     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
+     * @uses Covaleski\Framework\Http\AbstractMessage::getHeaderAsList
      */
     public function testCanInstantiate(): void
     {

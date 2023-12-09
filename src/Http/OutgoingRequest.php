@@ -1,8 +1,8 @@
 <?php
 
-namespace Covaleski\Framework\HTTP;
+namespace Covaleski\Framework\Http;
 
-use Covaleski\Framework\HTTP\Traits\RequestTrait;
+use Covaleski\Framework\Http\Traits\RequestTrait;
 
 /**
  * Stores information about an outgoing request.

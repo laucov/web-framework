@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\HTTP;
+namespace Covaleski\Framework\Http;
 
 /**
  * Stores information about an HTTP request.

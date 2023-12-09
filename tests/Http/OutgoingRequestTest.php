@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Covaleski\Framework\HTTP\OutgoingRequest;
+use Covaleski\Framework\Http\OutgoingRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\HTTP\OutgoingRequest
+ * @coversDefaultClass \Covaleski\Framework\Http\OutgoingRequest
  */
 class OutgoingRequestTest extends TestCase
 {

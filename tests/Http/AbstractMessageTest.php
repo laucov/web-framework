@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Covaleski\Framework\HTTP\AbstractMessage;
+use Covaleski\Framework\Http\AbstractMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\HTTP\AbstractMessage
+ * @coversDefaultClass \Covaleski\Framework\Http\AbstractMessage
  */
 final class AbstractMessageTest extends TestCase
 {

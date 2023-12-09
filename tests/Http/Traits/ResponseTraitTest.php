@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Covaleski\Framework\HTTP\Traits\ResponseTrait;
+use Covaleski\Framework\Http\Traits\ResponseTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\HTTP\Traits\ResponseTrait
+ * @coversDefaultClass \Covaleski\Framework\Http\Traits\ResponseTrait
  */
 class ResponseTraitTest extends TestCase
 {
