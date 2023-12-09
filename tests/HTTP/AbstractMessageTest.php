@@ -37,4 +37,12 @@ final class AbstractMessageTest extends TestCase
     {
         $this->assertNull($this->message->getBody());
     }
+
+    /**
+     * @covers ::getProtocolVersion
+     */
+    public function testCanGetProtocolVersion(): void
+    {
+        $this->assertNull($this->message->getProtocolVersion());
+    }
 }

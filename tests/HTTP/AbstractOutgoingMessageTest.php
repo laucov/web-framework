@@ -67,6 +67,19 @@ class AbstractOutgoingMessageTest extends TestCase
     }
 
     /**
+     * @covers ::setProtocolVersion
+     * @uses Covaleski\Framework\HTTP\AbstractMessage::getProtocolVersion
+     */
+    public function testCanSetProtocolVersion(): void
+    {
+        $this->message->setProtocolVersion('1.1');
+        $this->assertSame('1.1', $this->message->getProtocolVersion());
+        
+        $this->expectException(\InvalidArgumentException::class);
+        $this->message->setProtocolVersion('1.9');
+    }
+
+    /**
      * @covers ::addHeader
      * @covers ::setHeader
      * @uses Covaleski\Framework\HTTP\AbstractMessage::getHeader

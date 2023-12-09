@@ -45,4 +45,8 @@ class RequestTraitTest extends TestCase
     {
         $this->assertSame(null, $this->request->getParameterList('foobars'));
     }
+
+    // /**
+    //  * @covers ::getURL
+    //  */
 }
