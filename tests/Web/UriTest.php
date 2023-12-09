@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass Covaleski\Framework\Web\Uri
+ * @todo ::validate
  */
 class UriTest extends TestCase
 {

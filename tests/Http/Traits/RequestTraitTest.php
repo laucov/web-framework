@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Covaleski\Framework\Http\Traits\RequestTrait
+ * @todo ::getUri
  */
 class RequestTraitTest extends TestCase
 {
@@ -45,8 +46,4 @@ class RequestTraitTest extends TestCase
     {
         $this->assertSame(null, $this->request->getParameterList('foobars'));
     }
-
-    // /**
-    //  * @covers ::getURL
-    //  */
 }
