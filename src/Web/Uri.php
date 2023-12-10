@@ -21,134 +21,181 @@ class Uri
         // Get user info parts.
         $user = $components['user'] ?? '';
         $pass = $components['pass'] ?? '';
-        $user_info = $user || $pass
-            ? ($user . ($user && $pass ? ':' : '') . $pass)
-            : null;
+        $user_info = $user . ($user && $pass ? ':' : '') . $pass;
 
         // Create object.
         $object = new Uri(
-            scheme: $components['scheme'] ?? null,
+            scheme: $components['scheme'] ?? '',
             user_info: $user_info,
-            host: $components['host'] ?? null,
+            host: $components['host'] ?? '',
             port: $components['port'] ?? null,
-            path: $components['path'] ?? null,
-            query: $components['query'] ?? null,
-            fragment: $components['fragment'] ?? null,
+            path: $components['path'] ?? '',
+            query: $components['query'] ?? '',
+            fragment: $components['fragment'] ?? '',
         );
 
         return $object;
     }
 
     /**
-     * Host.
+     * URI fragment.
+     * 
+     * Idenfifies a secondary resource within the primary resource.
+     * 
+     * Does not contain a leading '#'.
      */
-    public readonly null|string $host;
+    public readonly string $fragment;
 
     /**
-     * Fragment.
+     * Host (lower-case).
+     * 
+     * Does not contain leading "//".
      */
-    public readonly null|string $fragment;
+    public readonly string $host;
 
     /**
      * Path.
+     * 
+     * Contains hierarchical data identifying the resource.
+     * 
+     * Does not contain a leading or trailing "/".
      */
-    public readonly null|string $path;
+    public readonly string $path;
 
     /**
-     * Port.
+     * Port number within the host.
+     * 
+     * Either `null` or a positive integer.
      */
     public readonly null|int $port;
 
     /**
-     * Scheme.
+     * Scheme name (lower-case).
+     * 
+     * Does not contain a trailing ":".
      */
-    public readonly null|string $scheme;
+    public readonly string $scheme;
 
     /**
      * Query.
+     * 
+     * Contains non-hierarchical data which complements the path.
+     * 
+     * Does not contain a leading "?".
      */
-    public readonly null|string $query;
+    public readonly string $query;
 
     /**
      * User.
+     * 
+     * May consist of a user name and authorization information.
+     * 
+     * Does not contain a trailing "@".
      */
-    public readonly null|string $userInfo;
+    public readonly string $userInfo;
 
     /**
      * Create the URI instance.
+     * 
+     * @param $scheme Scheme name (e.g. `http`); case-insensitive.
+     * @param $user_info User name and authorization data (e.g. `user:pass`).
+     * @param $host Host name (e.g. `example.com`); case-insensitive.
+     * @param $port Port number (e.g. `8080`); positive integer.
+     * @param $path Resource path (e.g. `path/to/resource`).
+     * @param $query Query string (e.g. `search=Flowers&page=2`).
+     * @param $fragment Secondary resource identification (e.g. `section-3`).
      */
     public function __construct(
-        ?string $scheme = null,
-        ?string $user_info = null,
-        ?string $host = null,
+        string $scheme = '',
+        string $user_info = '',
+        string $host = '',
         ?int $port = null,
-        ?string $path = null,
-        ?string $query = null,
-        ?string $fragment = null,
+        string $path = '',
+        string $query = '',
+        string $fragment = '',
     ) {
-        $this->scheme = empty($scheme) ? null : strtolower($scheme);
+        $this->scheme = strtolower($scheme);
         $this->userInfo = $user_info;
-        $this->host = empty($host) ? null : strtolower($host);
-        $this->port = $port;
+        $this->host = strtolower($host);
+        $this->port = is_int($port) && $port > 0 ? $port : null;
         $this->path = trim($path, '/');
         $this->query = $query;
         $this->fragment = $fragment;
     }
 
-    // /**
-    //  * Get the URI string from this object.
-    //  */
-    // public function __toString(): string
-    // {
-    //     // Check if we have either a host or path.
-    //     if (empty($this->host) && empty($this->path)) {
-    //         $message = 'Cannot build URI without host or path.';
-    //         throw new \RuntimeException($message);
-    //     }
+    /**
+     * Get an URI string from this object.
+     */
+    public function __toString(): string
+    {
+        // Initialize result.
+        $result = '';
 
-    //     // Initialize URI.
-    //     $uri = '';
-        
-    //     // Add scheme.
-    //     if ($this->scheme !== null) {
-    //         $uri .= $this->scheme . ':';
-    //     }
+        // Set reusable tests.
+        $has_scheme = strlen($this->scheme) > 0;
+        $has_host = strlen($this->host) > 0;
 
-    //     // Add authority.
-    //     if ($this->host !== null) {
-    //         $uri .= '//';
-    //         // Add user and password.
-    //         if ($this->user !== null) {
-    //             $uri .= $this->user;
-    //             if ($this->password !== null) {
-    //                 $uri .= ':' . $this->password;
-    //             }
-    //             $uri .= '@';
-    //         }
-    //         $uri .= $this->host;
-    //         if ($this->port !== null) {
-    //             $uri .= ':' . $this->port;
-    //         }
-    //     }
+        // Prepend scheme.
+        if ($has_scheme) {
+            $result .= $this->scheme . ':';
+        }
 
-    //     // Add path.
-    //     if ($this->path !== null) {
-    //         if ($this->host !== null) {
-    //             $uri .= '/';
-    //         }
-    //         $uri .= $this->path;
-    //     }
+        // Add authority.
+        $authority = $this->getAuthority();
+        if ($authority !== null) {
+            $result .= '//' . $authority;
+        }
 
-    //     // Add query.
-    //     if ($this->query !== null) {
-    //         $uri .= '?' . $this->query;
-    //     }
+        // Add path.
+        if (strlen($this->path) > 0) {
+            if ($has_host) {
+                $result .= '/';
+            }
+            $result .= $this->path;
+        }
 
-    //     // Add fragment.
-    //     if ($this->fragment !== null) {
-    //         $uri .= '#' . $this->fragment;
-    //     }
+        // Add query.
+        if (strlen($this->query) > 0) {
+            $result .= '?' . $this->query;
+        }
 
-    //     return $uri;
-    // }
+        // Add fragment.
+        if (strlen($this->fragment) > 0) {
+            $result .= '#' . $this->fragment;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get the URI authority, if a host name is present.
+     * 
+     * The following structure is used, as defined in RFC 3986:
+     * 
+     * `[ userinfo "@" ] host [ ":" port ]`
+     * 
+     * Example: `john.doe@foobar.com:8080`.
+     * 
+     * Returns `null` if no host is found.
+     */
+    public function getAuthority(): null|string
+    {
+        if (strlen($this->host) < 1) {
+            return null;
+        }
+
+        $result = '';
+
+        if (strlen($this->userInfo)) {
+            $result .= $this->userInfo . '@';
+        }
+
+        $result .= $this->host;
+
+        if ($this->port !== null) {
+            $result .= ':' . strval($this->port);
+        }
+
+        return $result;
+    }
 }
