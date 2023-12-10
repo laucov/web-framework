@@ -35,37 +35,84 @@ class UriTest extends TestCase
 
         // Test with partial URI.
         $uri_b = Uri::fromString('/path/to/resource');
-        $this->assertNull($uri_b->scheme);
-        $this->assertNull($uri_b->userInfo);
-        $this->assertNull($uri_b->host);
+        $this->assertSame('', $uri_b->scheme);
+        $this->assertSame('', $uri_b->userInfo);
+        $this->assertSame('', $uri_b->host);
         $this->assertNull($uri_b->port);
         $this->assertSame('path/to/resource', $uri_b->path);
-        $this->assertNull($uri_b->query);
-        $this->assertNull($uri_b->fragment);
+        $this->assertSame('', $uri_b->query);
+        $this->assertSame('', $uri_b->fragment);
 
         // Test with e-mail.
         $uri_c = Uri::fromString('mailto:jonh.doe@example.com');
         $this->assertSame('mailto', $uri_c->scheme);
-        $this->assertNull($uri_c->userInfo);
-        $this->assertNull($uri_c->host);
+        $this->assertSame('', $uri_c->userInfo);
+        $this->assertSame('', $uri_c->host);
         $this->assertNull($uri_c->port);
         $this->assertSame('jonh.doe@example.com', $uri_c->path);
-        $this->assertNull($uri_c->query);
-        $this->assertNull($uri_c->fragment);
+        $this->assertSame('', $uri_c->query);
+        $this->assertSame('', $uri_c->fragment);
 
         // Test without scheme.
         $uri_d = Uri::fromString('//example.com/path/to/resource?foo=bar&baz');
-        $this->assertNull($uri_d->scheme);
-        $this->assertNull($uri_d->userInfo);
+        $this->assertSame('', $uri_d->scheme);
+        $this->assertSame('', $uri_d->userInfo);
         $this->assertSame('example.com', $uri_d->host);
         $this->assertNull($uri_d->port);
         $this->assertSame('path/to/resource', $uri_d->path);
         $this->assertSame('foo=bar&baz', $uri_d->query);
-        $this->assertNull($uri_d->fragment);
+        $this->assertSame('', $uri_d->fragment);
+    }
+
+    /**
+     * @covers ::getAuthority
+     * @uses Covaleski\Framework\Web\Uri::__construct
+     * @uses Covaleski\Framework\Web\Uri::fromString
+     */
+    public function testCanGetAuthority(): void
+    {
+        $uri = new Uri(user_info: 'john:123');
+        $this->assertNull($uri->getAuthority());
+        $uri = new Uri(user_info: 'john:123', port: 8080);
+        $this->assertNull($uri->getAuthority());
+        $uri = new Uri(user_info: 'john:123', host: 'example.com');
+        $this->assertSame('john:123@example.com', $uri->getAuthority());
+        $uri = new Uri(user_info: 'john:123', host: 'example.com', port: 8080);
+        $this->assertSame('john:123@example.com:8080', $uri->getAuthority());
     }
 
     /**
      * @covers ::__toString
+     * @uses Covaleski\Framework\Web\Uri::__construct
+     * @uses Covaleski\Framework\Web\Uri::getAuthority
+     */
+    public function testCanUseAsString(): void
+    {
+        // Test multiple combinations.
+        $uri = new Uri();
+        $this->assertSame('', "{$uri}");
+        $uri = new Uri(host: 'news.com', path: 'blog');
+        $this->assertSame('//news.com/blog', "{$uri}");
+        $uri = new Uri(scheme: 'mailto', path: 'john.doe@example.com');
+        $this->assertSame('mailto:john.doe@example.com', "{$uri}");
+        $uri = new Uri(scheme: 'https', host: 'news.com');
+        $this->assertSame('https://news.com', "{$uri}");
+        $uri = new Uri(scheme: 'foo');
+        $this->assertSame('foo:', "{$uri}");
+        $uri = new Uri(path: 'path/to/resource');
+        $this->assertSame('path/to/resource', "{$uri}");
+        $uri = new Uri(query: 'name=john', fragment: 'experience');
+        $this->assertSame('?name=john#experience', "{$uri}");
+        $uri = new Uri(scheme: 'foo', query: 'name=john');
+        $this->assertSame('foo:?name=john', "{$uri}");
+        $uri = new Uri(user_info: 'john:1234', port: 8080);
+        $this->assertSame('', "{$uri}");
+        $uri = new Uri(user_info: 'john:1234', host: 'site.com', port: 8080);
+        $this->assertSame('//john:1234@site.com:8080', "{$uri}");
+    }
+
+    /**
+     * @covers ::fromString
      */
     public function testMustUseValidUriToCreateFromString(): void
     {
@@ -99,40 +146,4 @@ class UriTest extends TestCase
             $this->assertSame('path/to/resource', $uri->path);
         }
     }
-
-    // /**
-    //  * @covers ::__toString
-    //  */
-    // public function testCanUseAsString(): void
-    // {
-    //     // Create and fill object.
-    //     $uri = new Uri();
-    //     $uri->host = 'company.com';
-    //     $uri->path = 'blog';
-    //     $this->assertSame('//company.com/blog', "{$uri}");
-    // }
-
-    // /**
-    //  * Get an URI instance with fallback scheme and host.
-    //  */
-    // protected function getInstance(
-    //     ?string $scheme = null,
-    //     ?string $user_info = null,
-    //     ?string $host = 'php.net',
-    //     ?int $port = null,
-    //     ?string $path = null,
-    //     ?string $query = null,
-    //     ?string $fragment = null,
-    // ): Uri
-    // {
-    //     return new Uri(
-    //         scheme: $scheme,
-    //         user_info: $user_info,
-    //         host: $host,
-    //         port: $port,
-    //         path: $path,
-    //         query: $query,
-    //         fragment: $fragment,
-    //     );
-    // }
 }
