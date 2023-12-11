@@ -41,11 +41,11 @@ trait RequestTrait
     {
         $value = $this->parameters[$name] ?? null;
 
-        if (is_int($value) || is_string($value)) {
-            return $value;
-        } else {
+        if (!is_int($value) && !is_string($value)) {
             return null;
         }
+        
+        return $value;
     }
 
     /**
@@ -59,12 +59,6 @@ trait RequestTrait
 
         if (!is_array($list) || !array_is_list($list)) {
             return null;
-        }
-
-        foreach ($list as $item) {
-            if (!is_string($item)) {
-                return null;
-            }
         }
 
         return $list;

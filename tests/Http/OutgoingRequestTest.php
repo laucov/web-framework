@@ -37,6 +37,27 @@ class OutgoingRequestTest extends TestCase
     }
 
     /**
+     * @covers ::getParameter
+     * @covers ::setParameter
+     * @uses Covaleski\Framework\Http\Traits\RequestTrait::getParameter
+     * @uses Covaleski\Framework\Http\Traits\RequestTrait::getParameterList
+     */
+    public function testCanSetParameter(): void
+    {
+        $this->request->setParameter('name', 'john');
+        $this->assertSame('john', $this->request->getParameter('name'));
+        $this->assertNull($this->request->getParameterList('name'));
+
+        $this->request->setParameter('ids', ['1', '2']);
+        $expected = ['1', '2'];
+        $actual = $this->request->getParameterList('ids');
+        $this->assertSameSize($expected, $actual);
+        $this->assertSame($expected[0], $actual[0]);
+        $this->assertSame($expected[1], $actual[1]);
+        $this->assertNull($this->request->getParameter('ids'));
+    }
+
+    /**
      * @covers ::setUri
      * @covers ::getUri
      * @uses Covaleski\Framework\Web\Uri::fromString
@@ -47,5 +68,23 @@ class OutgoingRequestTest extends TestCase
         $uri = Uri::fromString('http://example.com');
         $this->request->setUri($uri);
         $this->assertSame($uri, $this->request->getUri());
+    }
+
+    /**
+     * @covers ::setParameter
+     */
+    public function testMustSetParameterListWithLists(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->request->setParameter('ids', ['foo', 'bar' => 'baz']);
+    }
+
+    /**
+     * @covers ::setParameter
+     */
+    public function testMustSetParameterListWithStringArrays(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->request->setParameter('ids', [1, 2, 3]);
     }
 }
