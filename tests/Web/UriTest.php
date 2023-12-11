@@ -125,7 +125,7 @@ class UriTest extends TestCase
      */
     public function testSchemeAndHostAreCaseInsensitive(): void
     {
-        $uri = new Uri (scheme: 'HTTP', host: 'ExAmPlE.com');
+        $uri = new Uri(scheme: 'HTTP', host: 'ExAmPlE.com');
         $this->assertSame('http', $uri->scheme);
         $this->assertSame('example.com', $uri->host);
     }

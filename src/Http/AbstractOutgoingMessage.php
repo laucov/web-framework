@@ -58,7 +58,7 @@ abstract class AbstractOutgoingMessage extends AbstractMessage
             );
         }
         $this->protocolVersion = $version;
-        
+
         return $this;
     }
 }

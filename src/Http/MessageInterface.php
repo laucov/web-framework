@@ -12,7 +12,7 @@ interface MessageInterface
     /**
      * Supported protocol versions.
      */
-    const PROTOCOL_VERSIONS = ['1.0', '1.1', '2', '3'];
+    public const PROTOCOL_VERSIONS = ['1.0', '1.1', '2', '3'];
 
     /**
      * Get the message body.
