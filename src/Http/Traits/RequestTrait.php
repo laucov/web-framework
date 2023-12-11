@@ -45,7 +45,7 @@ trait RequestTrait
             return null;
         }
         
-        return $value;
+        return (string) $value;
     }
 
     /**
@@ -61,7 +61,7 @@ trait RequestTrait
             return null;
         }
 
-        return $list;
+        return array_map('strval', $list);
     }
 
     /**
