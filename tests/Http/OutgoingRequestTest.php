@@ -38,9 +38,8 @@ class OutgoingRequestTest extends TestCase
 
     /**
      * @covers ::getParameter
+     * @covers ::getParameterList
      * @covers ::setParameter
-     * @uses Covaleski\Framework\Http\Traits\RequestTrait::getParameter
-     * @uses Covaleski\Framework\Http\Traits\RequestTrait::getParameterList
      */
     public function testCanSetParameter(): void
     {
@@ -58,10 +57,10 @@ class OutgoingRequestTest extends TestCase
     }
 
     /**
-     * @covers ::setUri
      * @covers ::getUri
-     * @uses Covaleski\Framework\Web\Uri::fromString
+     * @covers ::setUri
      * @uses Covaleski\Framework\Web\Uri::__construct
+     * @uses Covaleski\Framework\Web\Uri::fromString
      */
     public function testCanSetUri(): void
     {
