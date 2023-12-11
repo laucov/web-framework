@@ -2,6 +2,8 @@
 
 namespace Covaleski\Framework\Http\Traits;
 
+use Covaleski\Framework\Web\Uri;
+
 /**
  * Has properties and methods common to request objects.
  */
@@ -13,9 +15,14 @@ trait RequestTrait
     protected string $method = 'GET';
 
     /**
-     * URL parameters.
+     * URI parameters.
      */
     protected array $parameters = [];
+
+    /**
+     * URI object.
+     */
+    protected null|Uri $uri = null;
 
     /**
      * Get the request method.
@@ -61,5 +68,17 @@ trait RequestTrait
         }
 
         return $list;
+    }
+
+    /**
+     * Get the URI object.
+     */
+    public function getUri(): Uri
+    {
+        if ($this->uri === null) {
+            throw new \RuntimeException('Request URI is not defined.');
+        }
+
+        return $this->uri;
     }
 }

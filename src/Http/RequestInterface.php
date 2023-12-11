@@ -2,6 +2,8 @@
 
 namespace Covaleski\Framework\Http;
 
+use Covaleski\Framework\Web\Uri;
+
 /**
  * Stores information about an HTTP request.
  */
@@ -23,4 +25,9 @@ interface RequestInterface extends MessageInterface
      * @var null|string[]
      */
     public function getParameterList(string $name): null|array;
+
+    /**
+     * Get the URI object.
+     */
+    public function getUri(): Uri;
 }

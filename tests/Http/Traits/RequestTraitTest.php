@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Covaleski\Framework\Http\Traits\RequestTrait
- * @todo ::getUri
  */
 class RequestTraitTest extends TestCase
 {
@@ -36,7 +35,7 @@ class RequestTraitTest extends TestCase
      */
     public function testCanGetParameter(): void
     {
-        $this->assertSame(null, $this->request->getParameter('foobar'));
+        $this->assertNull($this->request->getParameter('foobar'));
     }
 
     /**
@@ -44,6 +43,15 @@ class RequestTraitTest extends TestCase
      */
     public function testCanGetParameterList(): void
     {
-        $this->assertSame(null, $this->request->getParameterList('foobars'));
+        $this->assertNull($this->request->getParameterList('foobars'));
+    }
+
+    /**
+     * @covers ::getUri
+     */
+    public function testCanGetUri(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->request->getUri();
     }
 }

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tests\Http;
 
 use Covaleski\Framework\Http\OutgoingRequest;
+use Covaleski\Framework\Web\Uri;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Covaleski\Framework\Http\OutgoingRequest
  * @todo ::addParameter
  * @todo ::setParameter
- * @todo ::setUri
  */
 class OutgoingRequestTest extends TestCase
 {
@@ -34,5 +34,18 @@ class OutgoingRequestTest extends TestCase
         $this->assertSame('GET', $this->request->getMethod());
         $this->request->setMethod('PaTcH');
         $this->assertSame('PATCH', $this->request->getMethod());
+    }
+
+    /**
+     * @covers ::setUri
+     * @covers ::getUri
+     * @uses Covaleski\Framework\Web\Uri::fromString
+     * @uses Covaleski\Framework\Web\Uri::__construct
+     */
+    public function testCanSetUri(): void
+    {
+        $uri = Uri::fromString('http://example.com');
+        $this->request->setUri($uri);
+        $this->assertSame($uri, $this->request->getUri());
     }
 }
