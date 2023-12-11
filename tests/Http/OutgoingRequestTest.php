@@ -46,7 +46,15 @@ class OutgoingRequestTest extends TestCase
         $this->request->setParameter('name', 'john');
         $this->assertSame('john', $this->request->getParameter('name'));
         $this->assertNull($this->request->getParameterList('name'));
+    }
 
+    /**
+     * @covers ::getParameter
+     * @covers ::getParameterList
+     * @covers ::setParameter
+     */
+    public function testCanSetParameterList(): void
+    {
         $this->request->setParameter('ids', ['1', '2']);
         $expected = ['1', '2'];
         $actual = $this->request->getParameterList('ids');
