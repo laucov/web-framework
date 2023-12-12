@@ -15,11 +15,6 @@ trait RequestTrait
     protected string $method = 'GET';
 
     /**
-     * URI parameters.
-     */
-    protected array $parameters = [];
-
-    /**
      * URI object.
      */
     protected null|Uri $uri = null;
@@ -32,36 +27,6 @@ trait RequestTrait
     public function getMethod(): string
     {
         return $this->method;
-    }
-
-    /**
-     * Get a URL parameter.
-     */
-    public function getParameter(string $name): null|string
-    {
-        $value = $this->parameters[$name] ?? null;
-
-        if (!is_int($value) && !is_string($value)) {
-            return null;
-        }
-        
-        return (string) $value;
-    }
-
-    /**
-     * Get a list of URL parameters.
-     * 
-     * @var null|string[]
-     */
-    public function getParameterList(string $name): null|array
-    {
-        $list = $this->parameters[$name] ?? null;
-
-        if (!is_array($list) || !array_is_list($list)) {
-            return null;
-        }
-
-        return array_map('strval', $list);
     }
 
     /**
