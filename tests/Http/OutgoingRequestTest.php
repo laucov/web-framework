@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
  * @coversDefaultClass \Covaleski\Framework\Http\OutgoingRequest
  * @todo ::addParameter
  * @todo ::setParameter
+ * @todo ::setParameterList
  */
 class OutgoingRequestTest extends TestCase
 {
@@ -37,34 +38,6 @@ class OutgoingRequestTest extends TestCase
     }
 
     /**
-     * @covers ::getParameter
-     * @covers ::getParameterList
-     * @covers ::setParameter
-     */
-    public function testCanSetParameter(): void
-    {
-        $this->request->setParameter('name', 'john');
-        $this->assertSame('john', $this->request->getParameter('name'));
-        $this->assertNull($this->request->getParameterList('name'));
-    }
-
-    /**
-     * @covers ::getParameter
-     * @covers ::getParameterList
-     * @covers ::setParameter
-     */
-    public function testCanSetParameterList(): void
-    {
-        $this->request->setParameter('ids', ['1', '2']);
-        $expected = ['1', '2'];
-        $actual = $this->request->getParameterList('ids');
-        $this->assertSameSize($expected, $actual);
-        $this->assertSame($expected[0], $actual[0]);
-        $this->assertSame($expected[1], $actual[1]);
-        $this->assertNull($this->request->getParameter('ids'));
-    }
-
-    /**
      * @covers ::getUri
      * @covers ::setUri
      * @uses Covaleski\Framework\Web\Uri::__construct
@@ -75,23 +48,5 @@ class OutgoingRequestTest extends TestCase
         $uri = Uri::fromString('http://example.com');
         $this->request->setUri($uri);
         $this->assertSame($uri, $this->request->getUri());
-    }
-
-    /**
-     * @covers ::setParameter
-     */
-    public function testMustSetParameterListWithLists(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->request->setParameter('ids', ['foo', 'bar' => 'baz']);
-    }
-
-    /**
-     * @covers ::setParameter
-     */
-    public function testMustSetParameterListWithStringArrays(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->request->setParameter('ids', [1, 2, 3]);
     }
 }

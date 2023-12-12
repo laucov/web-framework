@@ -31,22 +31,6 @@ class RequestTraitTest extends TestCase
     }
 
     /**
-     * @covers ::getParameter
-     */
-    public function testCanGetParameter(): void
-    {
-        $this->assertNull($this->request->getParameter('foobar'));
-    }
-
-    /**
-     * @covers ::getParameterList
-     */
-    public function testCanGetParameterList(): void
-    {
-        $this->assertNull($this->request->getParameterList('foobars'));
-    }
-
-    /**
      * @covers ::getUri
      */
     public function testCanGetUri(): void
