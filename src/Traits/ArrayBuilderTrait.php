@@ -37,6 +37,36 @@ trait ArrayBuilderTrait
 
         return $value;
     }
+
+    /**
+     * Remove an array value.
+     */
+    protected function removeArrayValue(
+        array &$array,
+        int|string|array $name,
+    ): void {
+        // Remove single key.
+        if (!is_array($name)) {
+            unset($array[$name]);
+            return;
+        }
+
+        // Check keys.
+        if (!$this->validateArrayKeys($name)) {
+            $message = 'All keys must be integers or strings.';
+            throw new \InvalidArgumentException($message);
+        }
+
+        // Remove nested value.
+        $last_key = array_pop($name);
+        foreach ($name as $key) {
+            if (!array_key_exists($key, $array)) {
+                return;
+            }
+            $array = &$array[$key];
+        }
+        unset($array[$last_key]);
+    }
     
     /**
      * Set an array value.
@@ -74,6 +104,10 @@ trait ArrayBuilderTrait
      */
     protected function validateArrayKeys(array $keys): bool
     {
+        if (count($keys) < 1) {
+            return false;
+        }
+
         foreach ($keys as $key) {
             if (!is_int($key) && !is_string($key)) {
                 return false;
