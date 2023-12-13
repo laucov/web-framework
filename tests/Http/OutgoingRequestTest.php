@@ -10,9 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Covaleski\Framework\Http\OutgoingRequest
- * @todo ::addParameter
- * @todo ::setParameter
- * @todo ::setParameterList
  */
 class OutgoingRequestTest extends TestCase
 {
