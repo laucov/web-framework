@@ -30,6 +30,22 @@ class RequestTraitTest extends TestCase
         $this->assertSame('GET', $this->request->getMethod());
     }
 
+    // /**
+    //  * @covers ::getParameter
+    //  */
+    // public function testCanGetParameters(): void
+    // {
+    //     // @todo Get array builder for parameters.
+    // }
+
+    // /**
+    //  * @covers ::getPostVariable
+    //  */
+    // public function testCanGetPostVariables(): void
+    // {
+    //     // @todo Get array builder for POST variables.
+    // }
+
     /**
      * @covers ::getUri
      */
