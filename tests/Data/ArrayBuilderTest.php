@@ -33,6 +33,20 @@ class ArrayBuilderTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getArray
+     */
+    public function testCanGetArray(): void
+    {
+        $input = [
+            'foo' => 'bar',
+        ];
+        $builder = new ArrayBuilder($input);
+        $output = $builder->getArray();
+        $this->assertSame('bar', $output['foo']);
+    }
+
+    /**
+     * @covers ::__construct
      * @covers ::getValue
      * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
      */
@@ -44,6 +58,16 @@ class ArrayBuilderTest extends TestCase
         );
         $this->assertSame(42, $this->builder->getValue(['user', 'age']));
     }
+
+    // /**
+    //  * @covers ::__construct
+    //  * @covers ::setValue
+    //  * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
+    //  */
+    // public function testCanSetValue(): void
+    // {
+    //     $this->builder->setValue('message', 'Hello, Earth!');
+    // }
 
     /**
      * @covers ::getValue
