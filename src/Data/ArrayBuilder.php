@@ -21,6 +21,14 @@ class ArrayBuilder
     }
 
     /**
+     * Get the array.
+     */
+    public function getArray(): array
+    {
+        return $this->array;
+    }
+
+    /**
      * Get a value.
      */
     public function getValue(
@@ -55,6 +63,12 @@ class ArrayBuilder
 
         return $array[$last_key] ?? $default_value;
     }
+
+    // /**
+    //  * Set a value.
+    //  */
+    // public function setValue(): void
+    // {}
 
     /**
      * Validate an array of array keys.
