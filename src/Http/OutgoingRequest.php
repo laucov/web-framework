@@ -2,6 +2,7 @@
 
 namespace Covaleski\Framework\Http;
 
+use Covaleski\Framework\Data\ArrayBuilder;
 use Covaleski\Framework\Http\Traits\RequestTrait;
 use Covaleski\Framework\Web\Uri;
 
@@ -12,6 +13,14 @@ class OutgoingRequest extends AbstractOutgoingMessage implements
     RequestInterface
 {
     use RequestTrait;
+
+    /**
+     * Create the outgoing request instance.
+     */
+    public function __construct()
+    {
+        $this->parameters = new ArrayBuilder([]);
+    }
 
     /**
      * Set the request method.

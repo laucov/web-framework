@@ -2,6 +2,7 @@
 
 namespace Covaleski\Framework\Http\Traits;
 
+use Covaleski\Framework\Data\ArrayBuilder;
 use Covaleski\Framework\Web\Uri;
 
 /**
@@ -9,6 +10,11 @@ use Covaleski\Framework\Web\Uri;
  */
 trait RequestTrait
 {
+    /**
+     * Parsed URI parameters.
+     */
+    public readonly ArrayBuilder $parameters;
+
     /**
      * HTTP method.
      */
