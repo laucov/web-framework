@@ -4,6 +4,10 @@
          beStrictAboutCoversAnnotation="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          bootstrap="vendor/autoload.php"
+         convertDeprecationsToExceptions="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
          failOnEmptyTestSuite="true"
          failOnIncomplete="true"
          failOnRisky="true"
@@ -17,7 +21,7 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <text outputFile="php://stdout"/>
+            <text outputFile=".phpunit.coverage"/>
         </report>
     </coverage>
     <testsuites>
