@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Covaleski\Framework\Data\ArrayBuilder;
 use Covaleski\Framework\Http\Traits\RequestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -30,16 +31,21 @@ class RequestTraitTest extends TestCase
         $this->assertSame('GET', $this->request->getMethod());
     }
 
-    // /**
-    //  * @covers ::getParameter
-    //  */
-    // public function testCanGetParameters(): void
-    // {
-    //     // @todo Get array builder for parameters.
-    // }
+    /**
+     * @coversNothing
+     */
+    public function testParametersMustBeInitialized(): void
+    {
+        set_error_handler(static function ($code, $message) {
+            throw new \Exception($message, $code);
+        }, E_ALL);
+        $this->expectException(\Error::class);
+        $this->request->parameters;
+        restore_error_handler();
+    }
 
     // /**
-    //  * @covers ::getPostVariable
+    //  * @covers ::getPostVariables
     //  */
     // public function testCanGetPostVariables(): void
     // {
@@ -49,7 +55,7 @@ class RequestTraitTest extends TestCase
     /**
      * @covers ::getUri
      */
-    public function testCanGetUri(): void
+    public function testUriMustBeInitialized(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->request->getUri();

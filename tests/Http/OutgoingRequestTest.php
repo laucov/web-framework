@@ -21,8 +21,21 @@ class OutgoingRequestTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
+     */
+    public function testCanGetParameters(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $this->request->parameters;
+    }
+
+    /**
      * @covers ::getMethod
      * @covers ::setMethod
+     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
      */
     public function testCanSetMethod(): void
     {
@@ -37,6 +50,8 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::getUri
      * @covers ::setUri
+     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
      * @uses Covaleski\Framework\Web\Uri::__construct
      * @uses Covaleski\Framework\Web\Uri::fromString
      */
