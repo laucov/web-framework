@@ -41,10 +41,7 @@ class ArrayBuilder
         }
 
         // Check keys.
-        if (!$this->validateKeys($keys)) {
-            $message = 'Array keys must be strings or integers.';
-            throw new \InvalidArgumentException($message);
-        }
+        $keys = $this->validateKeys($keys);
 
         // Get the last key.
         $last_key = array_pop($keys);
@@ -52,41 +49,40 @@ class ArrayBuilder
         // Find intermediary keys.
         $array = &$this->array;
         foreach ($keys as $key) {
-            if (!array_key_exists($key, $array)) {
+            if (!array_key_exists($key, $array) || !is_array($array[$key])) {
                 return $default_value;
             }
             $array = &$array[$key];
-            if (!is_array($array)) {
-                return $default_value;
-            }
         }
 
-        return $array[$last_key] ?? $default_value;
+        return array_key_exists($last_key, $array)
+            ? $array[$last_key]
+            : $default_value;
     }
-
-    // /**
-    //  * Set a value.
-    //  */
-    // public function setValue(): void
-    // {}
-
+    
     /**
-     * Validate an array of array keys.
+     * Validate a list of array keys.
+     * 
+     * @throws \InvalidArgumentException if invalid keys are passed.
+     * 
+     * @return array<int|string>
      */
-    protected function validateKeys(array $keys): bool
+    protected function validateKeys(array $keys): array
     {
         // Check array size.
         if (count($keys) < 1) {
-            return false;
+            $message = 'Empty list of keys given.';
+            throw new \InvalidArgumentException($message);
         }
 
         // Check each key.
         foreach ($keys as $key) {
             if (!is_int($key) && !is_string($key)) {
-                return false;
+                $message = 'Array keys must be strings or integers.';
+                throw new \InvalidArgumentException($message);
             }
         }
 
-        return true;
+        return $keys;
     }
 }
