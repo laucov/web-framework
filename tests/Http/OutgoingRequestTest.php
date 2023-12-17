@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Covaleski\Framework\Data\ArrayBuilder;
 use Covaleski\Framework\Http\OutgoingRequest;
 use Covaleski\Framework\Web\Uri;
 use PHPUnit\Framework\TestCase;
@@ -22,13 +23,26 @@ class OutgoingRequestTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getParameters
      * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
      * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
      */
     public function testCanGetParameters(): void
     {
-        $this->expectNotToPerformAssertions();
-        $this->request->parameters;
+        $parameters = $this->request->getParameters();
+        $this->assertInstanceOf(ArrayBuilder::class, $parameters);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getPostVariables
+     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
+     */
+    public function testCanGetPostVariables(): void
+    {
+        $variables = $this->request->getPostVariables();
+        $this->assertInstanceOf(ArrayBuilder::class, $variables);
     }
 
     /**

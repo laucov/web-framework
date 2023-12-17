@@ -32,25 +32,22 @@ class RequestTraitTest extends TestCase
     }
 
     /**
-     * @coversNothing
+     * @covers ::getParameters
      */
     public function testParametersMustBeInitialized(): void
     {
-        set_error_handler(static function ($code, $message) {
-            throw new \Exception($message, $code);
-        }, E_ALL);
-        $this->expectException(\Error::class);
-        $this->request->parameters;
-        restore_error_handler();
+        $this->expectException(\RuntimeException::class);
+        $this->request->getParameters();
     }
 
-    // /**
-    //  * @covers ::getPostVariables
-    //  */
-    // public function testCanGetPostVariables(): void
-    // {
-    //     // @todo Get array builder for POST variables.
-    // }
+    /**
+     * @covers ::getPostVariables
+     */
+    public function testCanGetPostVariables(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->request->getPostVariables();
+    }
 
     /**
      * @covers ::getUri
