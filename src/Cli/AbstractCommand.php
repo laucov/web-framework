@@ -13,6 +13,11 @@ abstract class AbstractCommand
     abstract public function run(): void;
 
     /**
+     * CLI printer instance.
+     */
+    protected Printer $printer;
+
+    /**
      * Create the command instance.
      */
     public function __construct(
@@ -21,5 +26,6 @@ abstract class AbstractCommand
          */
         protected AbstractRequest $request,
     ) {
+        $this->printer = new Printer();
     }
 }
