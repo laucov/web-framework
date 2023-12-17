@@ -11,14 +11,19 @@ use Covaleski\Framework\Web\Uri;
 trait RequestTrait
 {
     /**
-     * Parsed URI parameters.
-     */
-    public readonly ArrayBuilder $parameters;
-
-    /**
      * HTTP method.
      */
     protected string $method = 'GET';
+
+    /**
+     * Parsed URI parameters.
+     */
+    protected null|ArrayBuilder $parameters = null;
+
+    /**
+     * Parsed POST variables.
+     */
+    protected null|ArrayBuilder $postVariables = null;
 
     /**
      * URI object.
@@ -33,6 +38,31 @@ trait RequestTrait
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    /**
+     * Get the parameters.
+     */
+    public function getParameters(): ArrayBuilder
+    {
+        if ($this->parameters === null) {
+            throw new \RuntimeException('Request parameters are not defined.');
+        }
+
+        return $this->parameters;
+    }
+
+    /**
+     * Get the POST variables.
+     */
+    public function getPostVariables(): ArrayBuilder
+    {
+        if ($this->postVariables === null) {
+            $message = 'Request POST variables are not defined.';
+            throw new \RuntimeException($message);
+        }
+
+        return $this->postVariables;
     }
 
     /**

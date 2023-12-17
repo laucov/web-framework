@@ -20,6 +20,7 @@ class OutgoingRequest extends AbstractOutgoingMessage implements
     public function __construct()
     {
         $this->parameters = new ArrayBuilder([]);
+        $this->postVariables = new ArrayBuilder([]);
     }
 
     /**

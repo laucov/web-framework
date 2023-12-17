@@ -2,6 +2,7 @@
 
 namespace Covaleski\Framework\Http;
 
+use Covaleski\Framework\Data\ArrayBuilder;
 use Covaleski\Framework\Web\Uri;
 
 /**
@@ -13,6 +14,16 @@ interface RequestInterface extends MessageInterface
      * Get the request method.
      */
     public function getMethod(): string;
+
+    /**
+     * Get the request parameters.
+     */
+    public function getParameters(): ArrayBuilder;
+
+    /**
+     * Get the request POST variables.
+     */
+    public function getPostVariables(): ArrayBuilder;
 
     /**
      * Get the URI object.
