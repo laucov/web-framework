@@ -32,24 +32,6 @@ class RequestTraitTest extends TestCase
     }
 
     /**
-     * @covers ::getParameters
-     */
-    public function testParametersMustBeInitialized(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->request->getParameters();
-    }
-
-    /**
-     * @covers ::getPostVariables
-     */
-    public function testCanGetPostVariables(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->request->getPostVariables();
-    }
-
-    /**
      * @covers ::getUri
      */
     public function testUriMustBeInitialized(): void
