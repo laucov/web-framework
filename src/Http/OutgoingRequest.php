@@ -15,12 +15,38 @@ class OutgoingRequest extends AbstractOutgoingMessage implements
     use RequestTrait;
 
     /**
+     * Parsed URI parameters.
+     */
+    protected ArrayBuilder $parameters;
+
+    /**
+     * Parsed POST variables.
+     */
+    protected ArrayBuilder $postVariables;
+
+    /**
      * Create the outgoing request instance.
      */
     public function __construct()
     {
         $this->parameters = new ArrayBuilder([]);
         $this->postVariables = new ArrayBuilder([]);
+    }
+
+    /**
+     * Get the parameters.
+     */
+    public function getParameters(): ArrayBuilder
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Get the POST variables.
+     */
+    public function getPostVariables(): ArrayBuilder
+    {
+        return $this->postVariables;
     }
 
     /**
