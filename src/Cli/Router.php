@@ -16,6 +16,8 @@ class Router
 
     /**
      * Add a command.
+     * 
+     * @param class-string $class_string
      */
     public function addCommand(string $name, string $class_string): static
     {
