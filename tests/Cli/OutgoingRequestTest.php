@@ -26,7 +26,10 @@ final class OutgoingRequestTest extends TestCase
     public function testCanSetArguments(): void
     {
         $input = ['arg1', 'arg2', 'arg3'];
-        $this->request->setArguments($input);
+        $this->assertSame(
+            $this->request,
+            $this->request->setArguments($input),
+        );
 
         $output = $this->request->getArguments();
         $this->assertSameSize($input, $output);
@@ -38,21 +41,16 @@ final class OutgoingRequestTest extends TestCase
         $this->request->setArguments(['arg1', 0, true]);
     }
 
-    // public function testCanAddParameter(): void
-    // {
-    // }
-
     /**
      * @covers ::setCommand
      * @uses Covaleski\Framework\Cli\AbstractRequest::getCommand
      */
     public function testCanSetCommand(): void
     {
-        $this->request->setCommand('do-something');
+        $this->assertSame(
+            $this->request,
+            $this->request->setCommand('do-something'),
+        );
         $this->assertSame('do-something', $this->request->getCommand());
     }
-
-    // public function testCanSetParameter(): void
-    // {
-    // }
 }

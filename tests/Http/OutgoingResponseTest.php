@@ -26,7 +26,10 @@ class OutgoingResponseTest extends TestCase
      */
     public function testCanSetStatus(): void
     {
-        $this->response->setStatus(201, 'Created');
+        $this->assertSame(
+            $this->response,
+            $this->response->setStatus(201, 'Created'),
+        );
         $this->assertSame(201, $this->response->getStatusCode());
         $this->assertSame('Created', $this->response->getStatusText());
     }

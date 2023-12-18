@@ -79,7 +79,13 @@ final class PrinterTest extends TestCase
             . $this->printer->colorize($text, $colors)
             . PHP_EOL;
         $this->expectOutputString($expected);
-        $this->printer->print($text, $colors);
-        $this->printer->printLine($text, $colors);
+        $this->assertSame(
+            $this->printer,
+            $this->printer->print($text, $colors),
+        );
+        $this->assertSame(
+            $this->printer,
+            $this->printer->printLine($text, $colors),
+        );
     }
 }

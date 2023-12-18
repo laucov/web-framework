@@ -28,6 +28,34 @@ class ArrayBuilderTest extends TestCase
     }
 
     /**
+     * @coversNothing
+     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Covaleski\Framework\Data\ArrayBuilder::getValue
+     * @uses Covaleski\Framework\Data\ArrayBuilder::removeValue
+     * @uses Covaleski\Framework\Data\ArrayBuilder::setValue
+     * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
+     */
+    public function testCanChainMethods(): void
+    {
+        $this->assertSame(
+            $this->builder,
+            $this->builder->setValue('ip_address', '192.168.0.2')
+        );
+        $this->assertSame(
+            $this->builder,
+            $this->builder->setValue(['user', 'id'], 123)
+        );
+        $this->assertSame(
+            $this->builder,
+            $this->builder->removeValue('message'),
+        );
+        $this->assertSame(
+            $this->builder,
+            $this->builder->removeValue(['user', 'email']),
+        );
+    }
+
+    /**
      * @covers ::removeValue
      * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
      * @uses Covaleski\Framework\Data\ArrayBuilder::getValue

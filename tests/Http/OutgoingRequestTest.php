@@ -53,7 +53,10 @@ class OutgoingRequestTest extends TestCase
      */
     public function testCanSetMethod(): void
     {
-        $this->request->setMethod('PUT');
+        $this->assertSame(
+            $this->request,
+            $this->request->setMethod('PUT'),
+        );
         $this->assertSame('PUT', $this->request->getMethod());
         $this->request->setMethod('get');
         $this->assertSame('GET', $this->request->getMethod());
@@ -72,7 +75,10 @@ class OutgoingRequestTest extends TestCase
     public function testCanSetUri(): void
     {
         $uri = Uri::fromString('http://example.com');
-        $this->request->setUri($uri);
+        $this->assertSame(
+            $this->request,
+            $this->request->setUri($uri),
+        );
         $this->assertSame($uri, $this->request->getUri());
     }
 }

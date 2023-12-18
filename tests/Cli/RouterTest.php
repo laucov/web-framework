@@ -26,7 +26,10 @@ final class RouterTest extends TestCase
      */
     public function testCanAddCommand(): void
     {
-        $this->router->addCommand('valid-class', AbstractCommand::class);
+        $this->assertSame(
+            $this->router,
+            $this->router->addCommand('valid-class', AbstractCommand::class),
+        );
         $this->expectException(\InvalidArgumentException::class);
         $this->router->addCommand('invalid-class', \stdClass::class);
     }
@@ -45,18 +48,19 @@ final class RouterTest extends TestCase
         // Get a request instance.
         $request = new OutgoingRequest();
 
-        // Add example command.
+        // Create example command.
         $mock = $this
             ->getMockBuilder(AbstractCommand::class)
             ->setConstructorArgs(['request' => $request])
             ->setMockClassName('RouterCommandTest')
             ->getMockForAbstractClass();
-        $this->router->addCommand('test-the-router', $mock::class);
 
         // Route with valid command.
         $request->setCommand('test-the-router');
         $request->setArguments([]);
-        $command = $this->router->route($request);
+        $command = $this->router
+            ->addCommand('test-the-router', $mock::class)
+            ->route($request);
         $this->assertInstanceOf($mock::class, $command);
 
         // Route with invalid command.
