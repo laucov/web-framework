@@ -17,7 +17,7 @@ class Router
     /**
      * Add a command.
      */
-    public function addCommand(string $name, string $class_string): void
+    public function addCommand(string $name, string $class_string): static
     {
         if (!is_a($class_string, AbstractCommand::class, true)) {
             $class_name = AbstractCommand::class;
@@ -26,6 +26,7 @@ class Router
         }
 
         $this->commands[$name] = $class_string;
+        return $this;
     }
 
     /**

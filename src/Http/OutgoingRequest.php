@@ -52,16 +52,18 @@ class OutgoingRequest extends AbstractOutgoingMessage implements
     /**
      * Set the request method.
      */
-    public function setMethod(string $method): void
+    public function setMethod(string $method): static
     {
         $this->method = strtoupper($method);
+        return $this;
     }
 
     /**
      * Set the request URI.
      */
-    public function setUri(Uri $uri): void
+    public function setUri(Uri $uri): static
     {
         $this->uri = $uri;
+        return $this;
     }
 }

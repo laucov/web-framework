@@ -15,12 +15,12 @@ class ArrayBuilder extends ArrayReader
     /**
      * Remove a value.
      */
-    public function removeValue(int|string|array $keys): void
+    public function removeValue(int|string|array $keys): static
     {
         // Resolve single key.
         if (!is_array($keys)) {
             unset($this->array[$keys]);
-            return;
+            return $this;
         }
 
         // Check keys.
@@ -33,24 +33,26 @@ class ArrayBuilder extends ArrayReader
         $array = &$this->array;
         foreach ($keys as $key) {
             if (!array_key_exists($key, $array) || !is_array($array[$key])) {
-                return;
+                return $this;
             }
             $array = &$array[$key];
         }
 
-        // Set value.
+        // Remove value.
         unset($array[$last_key]);
+
+        return $this;
     }
 
     /**
      * Set a value.
      */
-    public function setValue(int|string|array $keys, mixed $value): void
+    public function setValue(int|string|array $keys, mixed $value): static
     {
         // Resolve single key.
         if (!is_array($keys)) {
             $this->array[$keys] = $value;
-            return;
+            return $this;
         }
 
         // Check keys.
@@ -70,5 +72,7 @@ class ArrayBuilder extends ArrayReader
 
         // Set value.
         $array[$last_key] = $value;
+
+        return $this;
     }
 }

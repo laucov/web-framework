@@ -10,7 +10,7 @@ class OutgoingRequest extends AbstractRequest
     /**
      * Set the arguments.
      */
-    public function setArguments(array $arguments): void
+    public function setArguments(array $arguments): static
     {
         foreach ($arguments as $argument) {
             if (!is_string($argument)) {
@@ -20,13 +20,15 @@ class OutgoingRequest extends AbstractRequest
         }
 
         $this->arguments = $arguments;
+        return $this;
     }
 
     /**
      * Set the command name.
      */
-    public function setCommand(string $name): void
+    public function setCommand(string $name): static
     {
         $this->command = $name;
+        return $this;
     }
 }

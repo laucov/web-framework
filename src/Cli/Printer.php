@@ -95,17 +95,19 @@ class Printer
     /**
      * Print the given text using the given colors.
      */
-    public function print(string $text, array $colors = []): void
+    public function print(string $text, array $colors = []): static
     {
         echo $this->colorize($text, $colors);
+        return $this;
     }
 
     /**
      * Print an individual line with the given text using the given colors.
      */
-    public function printLine(string $text, array $colors = []): void
+    public function printLine(string $text, array $colors = []): static
     {
         $this->print($text, $colors);
         echo PHP_EOL;
+        return $this;
     }
 }
