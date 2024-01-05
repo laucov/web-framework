@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Data\ArrayBuilder;
-use Covaleski\Framework\Http\OutgoingRequest;
-use Covaleski\Framework\Web\Uri;
+use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\WebFramework\Http\OutgoingRequest;
+use Laucov\WebFramework\Web\Uri;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\OutgoingRequest
+ * @coversDefaultClass \Laucov\WebFramework\Http\OutgoingRequest
  */
 class OutgoingRequestTest extends TestCase
 {
@@ -24,8 +24,8 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getParameters
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      */
     public function testCanGetParameters(): void
     {
@@ -36,8 +36,8 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getPostVariables
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      */
     public function testCanGetPostVariables(): void
     {
@@ -48,8 +48,8 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::getMethod
      * @covers ::setMethod
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      */
     public function testCanSetMethod(): void
     {
@@ -67,10 +67,10 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::getUri
      * @covers ::setUri
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Http\OutgoingRequest::__construct
-     * @uses Covaleski\Framework\Web\Uri::__construct
-     * @uses Covaleski\Framework\Web\Uri::fromString
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
      */
     public function testCanSetUri(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\Web;
+namespace Laucov\WebFramework\Web;
 
 /**
  * Stores information from a Unique Resource Identifier.

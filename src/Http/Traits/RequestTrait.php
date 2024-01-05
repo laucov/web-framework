@@ -1,9 +1,9 @@
 <?php
 
-namespace Covaleski\Framework\Http\Traits;
+namespace Laucov\WebFramework\Http\Traits;
 
-use Covaleski\Framework\Data\ArrayReader;
-use Covaleski\Framework\Web\Uri;
+use Laucov\WebFramework\Data\ArrayReader;
+use Laucov\WebFramework\Web\Uri;
 
 /**
  * Has properties and methods common to request objects.

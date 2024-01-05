@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\Data;
+namespace Laucov\WebFramework\Data;
 
 /**
  * Reads the contents of an array.

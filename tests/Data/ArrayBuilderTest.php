@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Data\ArrayBuilder;
+use Laucov\WebFramework\Data\ArrayBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Data\ArrayBuilder
+ * @coversDefaultClass \Laucov\WebFramework\Data\ArrayBuilder
  */
 class ArrayBuilderTest extends TestCase
 {
@@ -29,11 +29,11 @@ class ArrayBuilderTest extends TestCase
 
     /**
      * @coversNothing
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Data\ArrayBuilder::getValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::removeValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::setValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::getValue
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::removeValue
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::validateKeys
      */
     public function testCanChainMethods(): void
     {
@@ -57,9 +57,9 @@ class ArrayBuilderTest extends TestCase
 
     /**
      * @covers ::removeValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Data\ArrayBuilder::getValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::getValue
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::validateKeys
      */
     public function testCanRemoveValue(): void
     {
@@ -90,8 +90,8 @@ class ArrayBuilderTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::setValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::getValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::getValue
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::validateKeys
      */
     public function testCanSetValue(): void
     {
@@ -120,7 +120,7 @@ class ArrayBuilderTest extends TestCase
     /**
      * @covers ::removeValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
      */
     public function testMustRemoveWithValidKeys(): void
     {
@@ -132,7 +132,7 @@ class ArrayBuilderTest extends TestCase
     /**
      * @covers ::removeValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
      */
     public function testMustRemoveWithAtLeastOneKey(): void
     {
@@ -144,7 +144,7 @@ class ArrayBuilderTest extends TestCase
     /**
      * @covers ::setValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
      */
     public function testMustSetWithValidKeys(): void
     {
@@ -156,7 +156,7 @@ class ArrayBuilderTest extends TestCase
     /**
      * @covers ::setValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
      */
     public function testMustSetWithAtLeastOneKey(): void
     {
@@ -167,8 +167,8 @@ class ArrayBuilderTest extends TestCase
 
     /**
      * @covers ::getValue
-     * @uses Covaleski\Framework\Data\ArrayBuilder::__construct
-     * @uses Covaleski\Framework\Data\ArrayBuilder::validateKeys
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::validateKeys
      */
     public function testReturnsDefaultValues(): void
     {

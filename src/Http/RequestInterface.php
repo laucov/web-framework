@@ -1,9 +1,9 @@
 <?php
 
-namespace Covaleski\Framework\Http;
+namespace Laucov\WebFramework\Http;
 
-use Covaleski\Framework\Data\ArrayReader;
-use Covaleski\Framework\Web\Uri;
+use Laucov\WebFramework\Data\ArrayReader;
+use Laucov\WebFramework\Web\Uri;
 
 /**
  * Stores information about an HTTP request.

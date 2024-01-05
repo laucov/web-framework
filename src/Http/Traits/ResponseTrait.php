@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\Http\Traits;
+namespace Laucov\WebFramework\Http\Traits;
 
 /**
  * Has properties and methods common to response objects.

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Files;
 
-use Covaleski\Framework\Files\StringSource;
+use Laucov\WebFramework\Files\StringSource;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Files\StringSource
+ * @coversDefaultClass \Laucov\WebFramework\Files\StringSource
  */
 final class StringSourceTest extends TestCase
 {
@@ -39,7 +39,7 @@ final class StringSourceTest extends TestCase
      * @covers ::read
      * @covers ::seek
      * @covers ::tell
-     * @uses Covaleski\Framework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
      */
     public function testCanRead(): void
     {
@@ -90,7 +90,7 @@ final class StringSourceTest extends TestCase
 
     /**
      * @covers ::read
-     * @uses Covaleski\Framework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
      */
     public function testMustReadPositiveLenghts(): void
     {
@@ -101,8 +101,8 @@ final class StringSourceTest extends TestCase
 
     /**
      * @covers ::seek
-     * @uses Covaleski\Framework\Files\StringSource::getSize
-     * @uses Covaleski\Framework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::getSize
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
      */
     public function testMustSeekValidFilePosition(): void
     {
@@ -113,8 +113,8 @@ final class StringSourceTest extends TestCase
 
     /**
      * @covers ::seek
-     * @uses Covaleski\Framework\Files\StringSource::getSize
-     * @uses Covaleski\Framework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::getSize
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
      */
     public function testMustSeekValidStringPosition(): void
     {

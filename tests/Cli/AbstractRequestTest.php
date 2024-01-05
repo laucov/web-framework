@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Cli;
 
-use Covaleski\Framework\Cli\AbstractRequest;
+use Laucov\WebFramework\Cli\AbstractRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Cli\AbstractRequest
+ * @coversDefaultClass \Laucov\WebFramework\Cli\AbstractRequest
  */
 final class AbstractRequestTest extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Covaleski\Framework\Http;
+namespace Laucov\WebFramework\Http;
 
-use Covaleski\Framework\Files\StringSource;
+use Laucov\WebFramework\Files\StringSource;
 
 /**
  * Stores information about an HTTP incoming message.

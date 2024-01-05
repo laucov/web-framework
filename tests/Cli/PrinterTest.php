@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Cli;
 
-use Covaleski\Framework\Cli\Printer;
+use Laucov\WebFramework\Cli\Printer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Cli\Printer
+ * @coversDefaultClass \Laucov\WebFramework\Cli\Printer
  */
 final class PrinterTest extends TestCase
 {
@@ -66,7 +66,7 @@ final class PrinterTest extends TestCase
     /**
      * @covers ::print
      * @covers ::printLine
-     * @uses Covaleski\Framework\Cli\Printer::colorize
+     * @uses Laucov\WebFramework\Cli\Printer::colorize
      */
     public function testCanPrintText(): void
     {

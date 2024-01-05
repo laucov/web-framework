@@ -1,10 +1,10 @@
 <?php
 
-namespace Covaleski\Framework\Http;
+namespace Laucov\WebFramework\Http;
 
-use Covaleski\Framework\Data\ArrayBuilder;
-use Covaleski\Framework\Http\Traits\RequestTrait;
-use Covaleski\Framework\Web\Uri;
+use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\WebFramework\Http\Traits\RequestTrait;
+use Laucov\WebFramework\Web\Uri;
 
 /**
  * Stores information about an outgoing request.

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Cli;
 
-use Covaleski\Framework\Cli\IncomingRequest;
+use Laucov\WebFramework\Cli\IncomingRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Cli\IncomingRequest
+ * @coversDefaultClass \Laucov\WebFramework\Cli\IncomingRequest
  */
 final class IncomingRequestTest extends TestCase
 {
@@ -48,7 +48,7 @@ final class IncomingRequestTest extends TestCase
 
     /**
      * @covers ::getArguments
-     * @uses Covaleski\Framework\Cli\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Cli\IncomingRequest::__construct
      */
     public function testCanGetArguments(): void
     {
@@ -61,7 +61,7 @@ final class IncomingRequestTest extends TestCase
 
     /**
      * @covers ::getCommand
-     * @uses Covaleski\Framework\Cli\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Cli\IncomingRequest::__construct
      */
     public function testCanGetCommand(): void
     {
@@ -74,7 +74,7 @@ final class IncomingRequestTest extends TestCase
 
     /**
      * @covers ::getFilename
-     * @uses Covaleski\Framework\Cli\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Cli\IncomingRequest::__construct
      */
     public function testCanGetFilename(): void
     {

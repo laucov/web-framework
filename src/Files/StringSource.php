@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\Files;
+namespace Laucov\WebFramework\Files;
 
 /**
  * Provides type-agnostic read operations on strings and resources.

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Files\StringSource;
-use Covaleski\Framework\Http\AbstractOutgoingMessage;
+use Laucov\WebFramework\Files\StringSource;
+use Laucov\WebFramework\Http\AbstractOutgoingMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\AbstractOutgoingMessage
+ * @coversDefaultClass \Laucov\WebFramework\Http\AbstractOutgoingMessage
  */
 class AbstractOutgoingMessageTest extends TestCase
 {
@@ -25,7 +25,7 @@ class AbstractOutgoingMessageTest extends TestCase
      * @covers ::addHeader
      * @covers ::getHeader
      * @covers ::getHeaderAsList
-     * @uses Covaleski\Framework\Http\AbstractOutgoingMessage::setHeader
+     * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setHeader
      */
     public function testCanAddHeaders(): void
     {
@@ -44,8 +44,8 @@ class AbstractOutgoingMessageTest extends TestCase
     /**
      * @covers ::getBody
      * @covers ::setBody
-     * @uses Covaleski\Framework\Files\StringSource::__construct
-     * @uses Covaleski\Framework\Files\StringSource::read
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::read
      */
     public function testCanSetBody(): void
     {
@@ -58,7 +58,7 @@ class AbstractOutgoingMessageTest extends TestCase
 
     /**
      * @covers ::setHeader
-     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
      */
     public function testCanSetHeader(): void
     {
@@ -68,7 +68,7 @@ class AbstractOutgoingMessageTest extends TestCase
 
     /**
      * @covers ::setProtocolVersion
-     * @uses Covaleski\Framework\Http\AbstractMessage::getProtocolVersion
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getProtocolVersion
      */
     public function testCanSetProtocolVersion(): void
     {
@@ -82,8 +82,8 @@ class AbstractOutgoingMessageTest extends TestCase
     /**
      * @covers ::addHeader
      * @covers ::setHeader
-     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
-     * @uses Covaleski\Framework\Http\AbstractMessage::getHeaderAsList
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeaderAsList
      */
     public function testFiltersValues(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\Cli;
+namespace Laucov\WebFramework\Cli;
 
 /**
  * Stores routes and provides `AbstractCommand` instances.

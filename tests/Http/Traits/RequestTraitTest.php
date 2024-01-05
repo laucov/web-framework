@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Data\ArrayBuilder;
-use Covaleski\Framework\Http\Traits\RequestTrait;
+use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\WebFramework\Http\Traits\RequestTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\Traits\RequestTrait
+ * @coversDefaultClass \Laucov\WebFramework\Http\Traits\RequestTrait
  */
 class RequestTraitTest extends TestCase
 {

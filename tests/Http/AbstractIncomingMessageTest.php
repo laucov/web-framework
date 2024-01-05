@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Http\AbstractIncomingMessage;
+use Laucov\WebFramework\Http\AbstractIncomingMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\AbstractIncomingMessage
+ * @coversDefaultClass \Laucov\WebFramework\Http\AbstractIncomingMessage
  */
 class AbstractIncomingMessageTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @uses Covaleski\Framework\Files\StringSource::__construct
-     * @uses Covaleski\Framework\Files\StringSource::read
-     * @uses Covaleski\Framework\Http\AbstractMessage::getBody
-     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
-     * @uses Covaleski\Framework\Http\AbstractMessage::getHeaderAsList
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeaderAsList
      */
     public function testCanInstantiate(): void
     {
@@ -32,7 +32,7 @@ class AbstractIncomingMessageTest extends TestCase
         ]);
 
         // Check body.
-        /** @var \Covaleski\Framework\Files\StringSource */
+        /** @var \Laucov\WebFramework\Files\StringSource */
         $body = $message->getBody();
         $this->assertNotNull($body);
         $this->assertSame('The quick', $body->read(9));
@@ -47,7 +47,7 @@ class AbstractIncomingMessageTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @uses Covaleski\Framework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
      */
     public function testMustPassStringHeaders(): void
     {

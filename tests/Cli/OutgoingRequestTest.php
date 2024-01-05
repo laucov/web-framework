@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Cli;
 
-use Covaleski\Framework\Cli\OutgoingRequest;
+use Laucov\WebFramework\Cli\OutgoingRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Cli\OutgoingRequest
+ * @coversDefaultClass \Laucov\WebFramework\Cli\OutgoingRequest
  */
 final class OutgoingRequestTest extends TestCase
 {
@@ -21,7 +21,7 @@ final class OutgoingRequestTest extends TestCase
 
     /**
      * @covers ::setArguments
-     * @uses Covaleski\Framework\Cli\AbstractRequest::getArguments
+     * @uses Laucov\WebFramework\Cli\AbstractRequest::getArguments
      */
     public function testCanSetArguments(): void
     {
@@ -43,7 +43,7 @@ final class OutgoingRequestTest extends TestCase
 
     /**
      * @covers ::setCommand
-     * @uses Covaleski\Framework\Cli\AbstractRequest::getCommand
+     * @uses Laucov\WebFramework\Cli\AbstractRequest::getCommand
      */
     public function testCanSetCommand(): void
     {

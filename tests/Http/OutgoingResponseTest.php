@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Http\OutgoingResponse;
+use Laucov\WebFramework\Http\OutgoingResponse;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\OutgoingResponse
+ * @coversDefaultClass \Laucov\WebFramework\Http\OutgoingResponse
  */
 class OutgoingResponseTest extends TestCase
 {

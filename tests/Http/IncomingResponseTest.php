@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Http\IncomingResponse;
+use Laucov\WebFramework\Http\IncomingResponse;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\IncomingResponse
+ * @coversDefaultClass \Laucov\WebFramework\Http\IncomingResponse
  */
 class IncomingResponseTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @uses Covaleski\Framework\Files\StringSource::__construct
-     * @uses Covaleski\Framework\Files\StringSource::read
-     * @uses Covaleski\Framework\Http\AbstractIncomingMessage::__construct
-     * @uses Covaleski\Framework\Http\AbstractMessage::getBody
-     * @uses Covaleski\Framework\Http\AbstractMessage::getHeader
-     * @uses Covaleski\Framework\Http\Traits\ResponseTrait::getStatusCode
-     * @uses Covaleski\Framework\Http\Traits\ResponseTrait::getStatusText
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
+     * @uses Laucov\WebFramework\Http\Traits\ResponseTrait::getStatusCode
+     * @uses Laucov\WebFramework\Http\Traits\ResponseTrait::getStatusText
      */
     public function testCanInstantiate(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Covaleski\Framework\Data;
+namespace Laucov\WebFramework\Data;
 
 /**
  * Controls the contents of an array.

@@ -2,11 +2,11 @@
 
 namespace Tests\Web;
 
-use Covaleski\Framework\Web\Uri;
+use Laucov\WebFramework\Web\Uri;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass Covaleski\Framework\Web\Uri
+ * @coversDefaultClass Laucov\WebFramework\Web\Uri
  * @todo ::validate
  */
 class UriTest extends TestCase
@@ -66,8 +66,8 @@ class UriTest extends TestCase
 
     /**
      * @covers ::getAuthority
-     * @uses Covaleski\Framework\Web\Uri::__construct
-     * @uses Covaleski\Framework\Web\Uri::fromString
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
      */
     public function testCanGetAuthority(): void
     {
@@ -83,8 +83,8 @@ class UriTest extends TestCase
 
     /**
      * @covers ::__toString
-     * @uses Covaleski\Framework\Web\Uri::__construct
-     * @uses Covaleski\Framework\Web\Uri::getAuthority
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::getAuthority
      */
     public function testCanUseAsString(): void
     {

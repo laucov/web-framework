@@ -1,9 +1,9 @@
 <?php
 
-namespace Covaleski\Framework\Http;
+namespace Laucov\WebFramework\Http;
 
-use Covaleski\Framework\Data\ArrayReader;
-use Covaleski\Framework\Http\Traits\RequestTrait;
+use Laucov\WebFramework\Data\ArrayReader;
+use Laucov\WebFramework\Http\Traits\RequestTrait;
 
 /**
  * Stores information about an incoming request.

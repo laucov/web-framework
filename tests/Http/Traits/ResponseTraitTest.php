@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Http\Traits\ResponseTrait;
+use Laucov\WebFramework\Http\Traits\ResponseTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Http\Traits\ResponseTrait
+ * @coversDefaultClass \Laucov\WebFramework\Http\Traits\ResponseTrait
  */
 class ResponseTraitTest extends TestCase
 {

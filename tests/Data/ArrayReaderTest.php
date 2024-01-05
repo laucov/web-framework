@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Covaleski\Framework\Data\ArrayReader;
+use Laucov\WebFramework\Data\ArrayReader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Covaleski\Framework\Data\ArrayReader
+ * @coversDefaultClass \Laucov\WebFramework\Data\ArrayReader
  */
 class ArrayReaderTest extends TestCase
 {
@@ -29,8 +29,8 @@ class ArrayReaderTest extends TestCase
 
     /**
      * @covers ::hasValue
-     * @uses Covaleski\Framework\Data\ArrayReader::__construct
-     * @uses Covaleski\Framework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
      */
     public function testCanCheckValue(): void
     {
@@ -71,7 +71,7 @@ class ArrayReaderTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getValue
-     * @uses Covaleski\Framework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
      */
     public function testCanGetValue(): void
     {
@@ -88,7 +88,7 @@ class ArrayReaderTest extends TestCase
     /**
      * @covers ::hasValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
      */
     public function testMustCheckWithValidKeys(): void
     {
@@ -100,7 +100,7 @@ class ArrayReaderTest extends TestCase
     /**
      * @covers ::hasValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
      */
     public function testMustCheckWithAtLeastOneKey(): void
     {
@@ -112,7 +112,7 @@ class ArrayReaderTest extends TestCase
     /**
      * @covers ::getValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
      */
     public function testMustGetWithValidKeys(): void
     {
@@ -124,7 +124,7 @@ class ArrayReaderTest extends TestCase
     /**
      * @covers ::getValue
      * @covers ::validateKeys
-     * @uses Covaleski\Framework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
      */
     public function testMustGetWithAtLeastOneKey(): void
     {
