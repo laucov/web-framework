@@ -27,7 +27,7 @@ interface MessageInterface
     /**
      * Get a message header.
      * 
-     * @return string[]
+     * @return null|string[]
      */
     public function getHeaderAsList(string $name): null|array;
 
