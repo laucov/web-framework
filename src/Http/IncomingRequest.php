@@ -30,6 +30,7 @@ namespace Laucov\WebFramework\Http;
 
 use Laucov\WebFramework\Data\ArrayReader;
 use Laucov\WebFramework\Http\Traits\RequestTrait;
+use Laucov\WebFramework\Web\Uri;
 
 /**
  * Stores information about an incoming request.
@@ -55,10 +56,16 @@ class IncomingRequest extends AbstractIncomingMessage implements
     public function __construct(
         mixed $content_or_post,
         array $headers,
+        null|string $protocol_version,
+        string $method,
+        string|Uri $uri,
         array $parameters,
     ) {
         // Set parameters.
         $this->parameters = new ArrayReader($parameters);
+        $this->protocolVersion = $protocol_version;
+        $this->method = $method;
+        $this->uri = is_string($uri) ? Uri::fromString($uri) : $uri;
 
         // Set POST variables and run the parent's constructor.
         if (is_array($content_or_post)) {

@@ -49,6 +49,8 @@ class IncomingRequestTest extends TestCase
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
      */
     public function testCanInstantiateWithPostVariablesArray(): void
     {
@@ -72,6 +74,8 @@ class IncomingRequestTest extends TestCase
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
      */
     public function testCanInstantiateWithTextAndFile(): void
     {
@@ -92,13 +96,33 @@ class IncomingRequestTest extends TestCase
      * @uses Laucov\WebFramework\Data\ArrayReader::getValue
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getProtocolVersion
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
      */
-    public function testCanGetParameters(): void
+    public function testConstructorSavesInformation(): void
     {
         $request = $this->getInstance('Any content.');
+
+        $protocol_version = $request->getProtocolVersion();
+        $this->assertSame('1.0', $protocol_version);
+
+        $method = $request->getMethod();
+        $this->assertSame('POST', $method);
+
+        $uri = $request->getUri();
+        $this->assertSame('http', $uri->scheme);
+        $this->assertSame('foobar.com', $uri->host);
+
         $parameter = $request->getParameters()->getValue('search');
         $this->assertSame('foobar', $parameter);
+
+        $header = $request->getHeader('Authorization');
+        $this->assertSame('Basic john.doe:1234', $header);
     }
 
     /**
@@ -121,6 +145,9 @@ class IncomingRequestTest extends TestCase
         return new IncomingRequest(
             content_or_post: $content,
             headers: $headers,
+            protocol_version: '1.0',
+            method: 'POST',
+            uri: 'http://foobar.com/hello-world',
             parameters: $parameters,
         );
     }
