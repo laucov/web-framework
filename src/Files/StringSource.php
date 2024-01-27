@@ -76,6 +76,27 @@ class StringSource
     }
 
     /**
+     * Convert all the contents of this source to a string.
+     */
+    public function __toString(): string
+    {
+        // Return the string.
+        if (!$this->isResource) {
+            return $this->string;
+        }
+
+        // Remember and reset the pointer's position.
+        $position = $this->tell();
+        $this->seek(0);
+
+        // Read all the content and load back the pointer's position.
+        $string = $this->read($this->getSize());
+        $this->seek($position);
+
+        return $string;
+    }
+
+    /**
      * Get the source size in bytes.
      */
     public function getSize(): int

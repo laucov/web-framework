@@ -106,6 +106,21 @@ final class StringSourceTest extends TestCase
     }
 
     /**
+     * @covers ::__toString
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::getSize
+     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\WebFramework\Files\StringSource::seek
+     * @uses Laucov\WebFramework\Files\StringSource::tell
+     */
+    public function testCanUseAsString(): void
+    {
+        $this->assertSame($this->text, "{$this->sourceA}");
+        $this->assertSame($this->text, "{$this->sourceB}");
+        $this->assertSame(file_get_contents(__FILE__), "{$this->sourceC}");
+    }
+
+    /**
      * @covers ::__construct
      */
     public function testMustInstantiateWithResourceOrString(): void
