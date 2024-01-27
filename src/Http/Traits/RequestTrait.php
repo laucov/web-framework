@@ -28,7 +28,6 @@
 
 namespace Laucov\WebFramework\Http\Traits;
 
-use Laucov\WebFramework\Data\ArrayReader;
 use Laucov\WebFramework\Web\Uri;
 
 /**
