@@ -34,30 +34,104 @@ namespace Laucov\WebFramework\Http;
 class Router
 {
     /**
+     * Allowed route closure return types.
+     */
+    public const CLOSURE_RETURN_TYPES = [
+        'string',
+        ResponseInterface::class,
+        \Stringable::class,
+    ];
+
+    /**
      * Registered routes.
      * 
-     * @var array<string, callable>
+     * @var array<string, \Closure>
      */
     protected array $routes = [];
 
     /**
-     * Add a new route.
+     * Add a route.
      */
-    public function addRoute(string $path, callable $callback): static
+    public function addRoute(string $path, \Closure $closure): static
     {
-        $this->routes[$path] = $callback;
+        // Check closure return type.
+        foreach ($this->getClosureReturnTypes($closure) as $return_type) {
+            if (!in_array($return_type, static::CLOSURE_RETURN_TYPES)) {
+                $message = sprintf(
+                    'Invalid route closure return type. Allowed types are: %s.',
+                    implode(', ', static::CLOSURE_RETURN_TYPES),
+                );
+                throw new \InvalidArgumentException($message);
+            }
+        }
+
+        // Add closure to routes.
+        $this->routes[$path] = $closure;
+
         return $this;
     }
 
     /**
-     * Route a request to get a response.
+     * Route a request.
      */
     public function route(RequestInterface $request): ResponseInterface
     {
         $path = $request->getUri()->path;
-        $route = $this->routes[$path];
-        $response = ($route)();
+        $closure = $this->routes[$path];
+        $result = $closure();
 
-        return $response;
+        if (is_string($result) || $result instanceof \Stringable) {
+            $response = new OutgoingResponse();
+            return $response->setBody("{$result}");
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get the return types names from a given closure.
+     * 
+     * @return array<string>
+     */
+    protected function getClosureReturnTypes(\Closure $closure): array
+    {
+        // Get the reflection object.
+        $reflection = new \ReflectionFunction($closure);
+        $return_type = $reflection->getReturnType();
+
+        // Return type names.
+        return $return_type !== null
+            ? $this->getReflectionTypeNames($return_type)
+            : [];
+    }
+
+    /**
+     * Get the names of types represented by a `ReflectionType` object.
+     * 
+     * @return array<string>
+     */
+    protected function getReflectionTypeNames(\ReflectionType $type): array
+    {
+        // Get single return type name.
+        if ($type instanceof \ReflectionNamedType) {
+            return [$type->getName()];
+        }
+
+        // Get multiple return type names.
+        if (
+            $type instanceof \ReflectionUnionType
+            || $type instanceof \ReflectionIntersectionType
+        ) {
+            return array_merge(...array_map(
+                [$this, 'getReflectionTypeNames'],
+                $type->getTypes(),
+            ));
+        }
+
+        // Unexpected ReflectionType found.
+        // @codeCoverageIgnoreStart
+        $message = 'Unsupported ReflectionType class %s.';
+        throw new \RuntimeException(sprintf($message, get_class($type)));
+        // @codeCoverageIgnoreEnd
     }
 }
