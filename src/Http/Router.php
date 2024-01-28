@@ -34,7 +34,7 @@ namespace Laucov\WebFramework\Http;
 class Router
 {
     /**
-     * Allowed route closure return types.
+     * Allowed return types for route closures.
      */
     public const CLOSURE_RETURN_TYPES = [
         'string',
@@ -73,6 +73,7 @@ class Router
         }
 
         // Add closure to routes.
+        $path = trim($path, '/');
         if (count($this->prefixes) > 0) {
             $path = implode('/', $this->prefixes) . '/' . $path;
         }
@@ -86,6 +87,7 @@ class Router
      */
     public function popPrefix(): static
     {
+        // Remove last prefix.
         array_pop($this->prefixes);
         return $this;
     }
@@ -97,7 +99,8 @@ class Router
      */
     public function pushPrefix(string $path): static
     {
-        $this->prefixes[] = $path;
+        // Add new prefix.
+        $this->prefixes[] = trim($path, '/');
         return $this;
     }
 
@@ -106,19 +109,43 @@ class Router
      */
     public function route(RequestInterface $request): ResponseInterface
     {
+        // Find the route.
         $path = $request->getUri()->path;
         $closure = $this->routes[$path];
-        $result = $closure();
 
+        // Fill arguments.
+        $arguments = [];
+        $reflection = new \ReflectionFunction($closure);
+        $parameters = $reflection->getParameters();
+        foreach ($parameters as $parameter) {
+            /** @var \ReflectionNamedType */
+            $type = $parameter->getType();
+            $type_name = $type->getName();
+            switch (true) {
+                case is_a($type_name, RequestInterface::class, true):
+                    $arguments[] = $request;
+                    break;
+                default:
+                    $message = 'Unsupported route argument of type %s.';
+                    throw new \RuntimeException(sprintf($message, $type_name));
+            }
+        }
+
+        // Run the function.
+        $result = call_user_func_array($closure, $arguments);
+
+        // Check if returned a string.
         if (is_string($result) || $result instanceof \Stringable) {
             $response = new OutgoingResponse();
             return $response->setBody("{$result}");
         }
 
+        // Check if returned a response.
         if ($result instanceof ResponseInterface) {
             return $result;
         }
 
+        // Unexpected value returned.
         // @codeCoverageIgnoreStart
         $message = 'Unsupported route return type %s.';
         throw new \RuntimeException(sprintf($message, gettype($result)));

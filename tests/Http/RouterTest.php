@@ -32,6 +32,7 @@ namespace Tests\Http;
 
 use Laucov\WebFramework\Http\IncomingRequest;
 use Laucov\WebFramework\Http\OutgoingResponse;
+use Laucov\WebFramework\Http\RequestInterface;
 use Laucov\WebFramework\Http\ResponseInterface;
 use Laucov\WebFramework\Http\Router;
 use PHPUnit\Framework\TestCase;
@@ -59,7 +60,6 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
-     * @uses Laucov\WebFramework\Http\Router::addRoute
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::route
@@ -67,7 +67,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
      */
-    public function testCanGroupWithPrefixes(): void
+    public function testCanPrefix(): void
     {
         // Test pushing prefixes.
         $this->assertSame($this->router, $this->router->pushPrefix('prefix'));
@@ -160,6 +160,80 @@ class RouterTest extends TestCase
         $this->router->addRoute('route-e', function (): string|array {
             return ['not', 'a', 'valid', 'result'];
         });
+    }
+
+    /**
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__toString
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Router::addRoute
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testPassesDependencies(): void
+    {
+        // Add routes.
+        $closure = fn (RequestInterface $request): string => 'Foo!';
+        $this->router->addRoute('foo', $closure);
+
+        // Test routes.
+        $response_a = $this->router->route($this->getRequest('foo'));
+        $this->assertSame('Foo!', (string) $response_a->getBody());
+
+        // Check if fails with unsupported dependencies.
+        $closure = fn (Router $router): string => 'I received a router!';
+        $this->router->addRoute('router', $closure);
+        $this->expectException(\RuntimeException::class);
+        $this->router->route($this->getRequest('router'));
+    }
+
+    /**
+     * @covers ::addRoute
+     * @covers ::popPrefix
+     * @covers ::pushPrefix
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__toString
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::route
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testTrimsAllPaths(): void
+    {
+        // Add routes.
+        $this->router
+            ->pushPrefix('foo/')
+                ->addRoute('/bar', fn (): string => 'Bar!')
+                ->addRoute('/baz/', fn (): string => 'Baz.')
+            ->popPrefix()
+            ->pushPrefix('/hello/')
+                ->addRoute('world', fn (): string => 'Hello, World!')
+                ->addRoute('people/', fn (): string => 'Hello, People!');
+        
+        // Test routes.
+        $response_a = $this->router->route($this->getRequest('foo/bar'));
+        $this->assertSame('Bar!', (string) $response_a->getBody());
+        $response_b = $this->router->route($this->getRequest('foo/baz'));
+        $this->assertSame('Baz.', (string) $response_b->getBody());
+        $response_c = $this->router->route($this->getRequest('hello/world'));
+        $this->assertSame('Hello, World!', (string) $response_c->getBody());
+        $response_d = $this->router->route($this->getRequest('hello/people'));
+        $this->assertSame('Hello, People!', (string) $response_d->getBody());
     }
 
     /**
