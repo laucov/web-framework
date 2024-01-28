@@ -202,7 +202,7 @@ class ArrayBuilderTest extends TestCase
         $this->assertNull($this->builder->getValue('id'));
         $this->assertNull($this->builder->getValue(['user', 'id']));
         $this->assertNull($this->builder->getValue(['date', 'id']));
-        
+
         // Test with custom fallback value.
         $default_value = 'Not found';
         $this->assertSame(

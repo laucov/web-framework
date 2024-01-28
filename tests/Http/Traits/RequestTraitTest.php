@@ -30,7 +30,6 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Laucov\WebFramework\Data\ArrayBuilder;
 use Laucov\WebFramework\Http\Traits\RequestTrait;
 use PHPUnit\Framework\TestCase;
 

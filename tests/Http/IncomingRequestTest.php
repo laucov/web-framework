@@ -61,7 +61,7 @@ class IncomingRequestTest extends TestCase
         ]);
 
         $this->assertSame('', $request->getBody()->read(10));
-        
+
         $fruit = $request->getPostVariables()->getValue(['fruits', 1]);
         $this->assertSame('tomato', $fruit);
     }
