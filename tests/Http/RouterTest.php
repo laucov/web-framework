@@ -50,6 +50,60 @@ class RouterTest extends TestCase
 
     /**
      * @covers ::addRoute
+     * @covers ::popPrefix
+     * @covers ::pushPrefix
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__toString
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Router::addRoute
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::route
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testCanGroupWithPrefixes(): void
+    {
+        // Test pushing prefixes.
+        $this->assertSame($this->router, $this->router->pushPrefix('prefix'));
+        $this->router->addRoute('some-route', function (): string {
+            return 'Some output.';
+        });
+        $this->router
+            ->pushPrefix('foobar')
+            ->addRoute('the-route', fn (): string => 'The output.');
+        
+        // Test popping prefixes.
+        $this->assertSame($this->router, $this->router->popPrefix());
+        $this->router->addRoute('another-route', function (): string {
+            return 'Another output.';
+        });
+        $this->router
+            ->popPrefix()
+            ->addRoute('final-route', fn (): string => 'Final output.');
+
+        // Test routes.
+        $request_a = $this->getRequest('prefix/some-route');
+        $response_a = $this->router->route($request_a);
+        $this->assertSame('Some output.', (string) $response_a->getBody());
+        $request_b = $this->getRequest('prefix/foobar/the-route');
+        $response_b = $this->router->route($request_b);
+        $this->assertSame('The output.', (string) $response_b->getBody());
+        $request_c = $this->getRequest('prefix/another-route');
+        $response_c = $this->router->route($request_c);
+        $this->assertSame('Another output.', (string) $response_c->getBody());
+        $request_d = $this->getRequest('final-route');
+        $response_d = $this->router->route($request_d);
+        $this->assertSame('Final output.', (string) $response_d->getBody());
+    }
+
+    /**
+     * @covers ::addRoute
      * @covers ::getClosureReturnTypes
      * @covers ::getReflectionTypeNames
      * @covers ::route
@@ -103,7 +157,7 @@ class RouterTest extends TestCase
 
         // Test invalid closure.
         $this->expectException(\InvalidArgumentException::class);
-        $this->router->addRoute('route-d', function (): array {
+        $this->router->addRoute('route-e', function (): string|array {
             return ['not', 'a', 'valid', 'result'];
         });
     }

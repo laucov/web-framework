@@ -43,6 +43,13 @@ class Router
     ];
 
     /**
+     * Active path prefixes.
+     * 
+     * @var array<string>
+     */
+    protected array $prefixes = [];
+
+    /**
      * Registered routes.
      * 
      * @var array<string, \Closure>
@@ -66,8 +73,31 @@ class Router
         }
 
         // Add closure to routes.
+        if (count($this->prefixes) > 0) {
+            $path = implode('/', $this->prefixes) . '/' . $path;
+        }
         $this->routes[$path] = $closure;
 
+        return $this;
+    }
+
+    /**
+     * Remove the last pushed path prefix.
+     */
+    public function popPrefix(): static
+    {
+        array_pop($this->prefixes);
+        return $this;
+    }
+
+    /**
+     * Prefix the path for the next registered routes.
+     * 
+     * Active prefixes will not be replaced but incremented.
+     */
+    public function pushPrefix(string $path): static
+    {
+        $this->prefixes[] = $path;
         return $this;
     }
 
@@ -85,7 +115,14 @@ class Router
             return $response->setBody("{$result}");
         }
 
-        return $result;
+        if ($result instanceof ResponseInterface) {
+            return $result;
+        }
+
+        // @codeCoverageIgnoreStart
+        $message = 'Unsupported route return type %s.';
+        throw new \RuntimeException(sprintf($message, gettype($result)));
+        // @codeCoverageIgnoreEnd
     }
 
     /**
