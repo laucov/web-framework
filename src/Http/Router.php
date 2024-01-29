@@ -29,6 +29,7 @@
 namespace Laucov\WebFramework\Http;
 
 use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\WebFramework\Http\Exceptions\NotFoundException;
 
 /**
  * Stores routes and assign them to HTTP requests.
@@ -103,7 +104,7 @@ class Router
         $route = $this->findRoute($path);
         $closure = $route->closure;
         if ($closure === null) {
-            throw new \RuntimeException('Route not found.');
+            throw new NotFoundException('Route not found.');
         }
 
         // Get captured paramteres.

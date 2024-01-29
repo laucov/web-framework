@@ -30,6 +30,7 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Laucov\WebFramework\Http\Exceptions\NotFoundException;
 use Laucov\WebFramework\Http\IncomingRequest;
 use Laucov\WebFramework\Http\OutgoingResponse;
 use Laucov\WebFramework\Http\RequestInterface;
@@ -217,6 +218,31 @@ class RouterTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::findRoute
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testDifferentiatesIntermediaryAndFinalSegments(): void
+    {
+        $this->router->setRoute('foo/bar', fn (): string => 'You found me!');
+        $this->expectException(NotFoundException::class);
+        $this->router->route($this->getRequest('foo'));
+    }
+
+    /**
+     * @covers ::__construct
      * @covers ::route
      * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
      * @uses Laucov\WebFramework\Data\ArrayReader::__construct
@@ -252,6 +278,31 @@ class RouterTest extends TestCase
         $this->router->setRoute('router', $closure);
         $this->expectException(\RuntimeException::class);
         $this->router->route($this->getRequest('router'));
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::findRoute
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testThrowsACustomExceptionIfARouteIsNotFound(): void
+    {
+        $this->router->setRoute('foo/bar', fn (): string => 'You found me!');
+        $this->expectException(NotFoundException::class);
+        $this->router->route($this->getRequest('foo/baz'));
     }
 
     /**
