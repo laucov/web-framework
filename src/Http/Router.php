@@ -28,8 +28,10 @@
 
 namespace Laucov\WebFramework\Http;
 
+use Laucov\WebFramework\Data\ArrayBuilder;
+
 /**
- * Stores information about an HTTP route.
+ * Stores routes and assign them to HTTP requests.
  */
 class Router
 {
@@ -43,6 +45,13 @@ class Router
     ];
 
     /**
+     * Active patterns.
+     * 
+     * @var array<string, string>
+     */
+    protected array $patterns = [];
+
+    /**
      * Active path prefixes.
      * 
      * @var array<string>
@@ -51,35 +60,15 @@ class Router
 
     /**
      * Registered routes.
-     * 
-     * @var array<string, \Closure>
      */
-    protected array $routes = [];
+    protected ArrayBuilder $routes;
 
     /**
-     * Add a route.
+     * Create the router instance.
      */
-    public function addRoute(string $path, \Closure $closure): static
+    public function __construct()
     {
-        // Check closure return type.
-        foreach ($this->getClosureReturnTypes($closure) as $return_type) {
-            if (!in_array($return_type, static::CLOSURE_RETURN_TYPES)) {
-                $message = sprintf(
-                    'Invalid route closure return type. Allowed types are: %s.',
-                    implode(', ', static::CLOSURE_RETURN_TYPES),
-                );
-                throw new \InvalidArgumentException($message);
-            }
-        }
-
-        // Add closure to routes.
-        $path = trim($path, '/');
-        if (count($this->prefixes) > 0) {
-            $path = implode('/', $this->prefixes) . '/' . $path;
-        }
-        $this->routes[$path] = $closure;
-
-        return $this;
+        $this->routes = new ArrayBuilder([]);
     }
 
     /**
@@ -111,7 +100,15 @@ class Router
     {
         // Find the route.
         $path = $request->getUri()->path;
-        $closure = $this->routes[$path];
+        $route = $this->findRoute($path);
+        $closure = $route->closure;
+        if ($closure === null) {
+            throw new \RuntimeException('Route not found.');
+        }
+
+        // Get captured paramteres.
+        $captured = $route->getParameters();
+        $index = 0;
 
         // Fill arguments.
         $arguments = [];
@@ -124,6 +121,10 @@ class Router
             switch (true) {
                 case is_a($type_name, RequestInterface::class, true):
                     $arguments[] = $request;
+                    break;
+                case $type_name === 'string':
+                    $arguments[] = $captured[$index];
+                    $index++;
                     break;
                 default:
                     $message = 'Unsupported route argument of type %s.';
@@ -150,6 +151,95 @@ class Router
         $message = 'Unsupported route return type %s.';
         throw new \RuntimeException(sprintf($message, gettype($result)));
         // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Add a path pattern.
+     */
+    public function setPattern(string $name, string $pattern): static
+    {
+        $this->patterns[$name] = $pattern;
+        return $this;
+    }
+
+    /**
+     * Add a route.
+     */
+    public function setRoute(string $path, \Closure $closure): static
+    {
+        // Check closure return type.
+        foreach ($this->getClosureReturnTypes($closure) as $return_type) {
+            if (!in_array($return_type, static::CLOSURE_RETURN_TYPES)) {
+                $message = sprintf(
+                    'Invalid route closure return type. Allowed types are: %s.',
+                    implode(', ', static::CLOSURE_RETURN_TYPES),
+                );
+                throw new \InvalidArgumentException($message);
+            }
+        }
+
+        // Trim path.
+        $path = trim($path, '/');
+        if (count($this->prefixes) > 0) {
+            $path = implode('/', $this->prefixes) . '/' . $path;
+        }
+
+        // Add route.
+        $segments = explode('/', $path);
+        $segments[] = '/';
+        $this->routes->setValue($segments, $closure);
+
+        return $this;
+    }
+
+    /**
+     * Find a compatible route for a given path.
+     */
+    protected function findRoute(string $path): Route
+    {
+        // Split the path.
+        $segments = explode('/', $path);
+
+        // Dive the routes array.
+        $routes = $this->routes->getArray();
+        $route = new Route();
+        foreach ($segments as $segment) {
+            // Check for direct match.
+            if (array_key_exists($segment, $routes)) {
+                $routes = $routes[$segment];
+                continue;
+            }
+            // Match patterns.
+            foreach ($this->patterns as $name => $patt) {
+                if (!array_key_exists(':' . $name, $routes)) {
+                    continue;
+                }
+                if (preg_match($patt, $segment) === 1) {
+                    $routes = $routes[':' . $name];
+                    $route->addParameter($segment);
+                    continue 2;
+                }
+            }
+            // Could not find a match for this segment.
+            return $route;
+        }
+
+        // Check if a closure exists.
+        if (!array_key_exists('/', $routes)) {
+            return $route;
+        }
+        $closure = $routes['/'];
+
+        // Check if is a closure.
+        if (!($closure instanceof \Closure)) {
+            // @codeCoverageIgnoreStart
+            $message = 'Found a value of type %s stored as a route closure.';
+            throw new \RuntimeException($message);
+            // @codeCoverageIgnoreEnd
+        }
+
+        $route->closure = $closure;
+        return $route;
     }
 
     /**

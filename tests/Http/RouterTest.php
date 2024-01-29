@@ -50,16 +50,22 @@ class RouterTest extends TestCase
     }
 
     /**
-     * @covers ::addRoute
+     * @covers ::__construct
      * @covers ::popPrefix
      * @covers ::pushPrefix
+     * @covers ::setRoute
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
      * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::__toString
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::findRoute
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::route
@@ -71,21 +77,21 @@ class RouterTest extends TestCase
     {
         // Test pushing prefixes.
         $this->assertSame($this->router, $this->router->pushPrefix('prefix'));
-        $this->router->addRoute('some-route', function (): string {
+        $this->router->setRoute('some-route', function (): string {
             return 'Some output.';
         });
         $this->router
             ->pushPrefix('foobar')
-            ->addRoute('the-route', fn (): string => 'The output.');
+            ->setRoute('the-route', fn (): string => 'The output.');
         
         // Test popping prefixes.
         $this->assertSame($this->router, $this->router->popPrefix());
-        $this->router->addRoute('another-route', function (): string {
+        $this->router->setRoute('another-route', function (): string {
             return 'Another output.';
         });
         $this->router
             ->popPrefix()
-            ->addRoute('final-route', fn (): string => 'Final output.');
+            ->setRoute('final-route', fn (): string => 'Final output.');
 
         // Test routes.
         $request_a = $this->getRequest('prefix/some-route');
@@ -103,17 +109,64 @@ class RouterTest extends TestCase
     }
 
     /**
-     * @covers ::addRoute
-     * @covers ::getClosureReturnTypes
-     * @covers ::getReflectionTypeNames
+     * @covers ::__construct
+     * @covers ::findRoute
      * @covers ::route
+     * @covers ::setPattern
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
      * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::__toString
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Route::addParameter
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testCanSetPatterns(): void
+    {
+        // Add unused pattern.
+        $result = $this->router->setPattern('alpha', '/^[A-Za-z]+$/');
+        $this->assertSame($this->router, $result);
+
+        // Add used pattern.
+        $result = $this->router->setPattern('int', '/^[0-9]+$/');
+        $this->assertSame($this->router, $result);
+
+        // Test pattern.
+        $closure = fn (string $int): string => 'Foobar #' . $int;
+        $this->router->setRoute('foobars/:int', $closure);
+        $response_a = $this->router->route($this->getRequest('foobars/8'));
+        $this->assertSame('Foobar #8', (string) $response_a->getBody());
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::setRoute
+     * @covers ::getClosureReturnTypes
+     * @covers ::getReflectionTypeNames
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__toString
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::findRoute
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -121,18 +174,18 @@ class RouterTest extends TestCase
     public function testClosureMustReturnResponseOrStringOrStringable(): void
     {
         // Create response route.
-        $this->router->addRoute('route-a', function (): ResponseInterface {
+        $this->router->setRoute('route-a', function (): ResponseInterface {
             $response = new OutgoingResponse();
             return $response->setBody('This is a response.');
         });
 
         // Create string route.
-        $this->router->addRoute('route-b', function (): string {
+        $this->router->setRoute('route-b', function (): string {
             return 'This is a response.';
         });
 
         // Create Stringable route.
-        $this->router->addRoute('route-c', function (): \Stringable {
+        $this->router->setRoute('route-c', function (): \Stringable {
             return new class () implements \Stringable {
                 public function __toString(): string
                 {
@@ -151,27 +204,33 @@ class RouterTest extends TestCase
         $this->assertSame($expected, (string) $response_c->getBody());
 
         // Test closure with union type.
-        $this->router->addRoute('route-d', function (): string|\Stringable {
+        $this->router->setRoute('route-d', function (): string|\Stringable {
             return 'Testing with union types!';
         });
 
         // Test invalid closure.
         $this->expectException(\InvalidArgumentException::class);
-        $this->router->addRoute('route-e', function (): string|array {
+        $this->router->setRoute('route-e', function (): string|array {
             return ['not', 'a', 'valid', 'result'];
         });
     }
 
     /**
+     * @covers ::__construct
      * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
      * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::__toString
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
-     * @uses Laucov\WebFramework\Http\Router::addRoute
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::findRoute
+     * @uses Laucov\WebFramework\Http\Router::setRoute
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
@@ -182,7 +241,7 @@ class RouterTest extends TestCase
     {
         // Add routes.
         $closure = fn (RequestInterface $request): string => 'Foo!';
-        $this->router->addRoute('foo', $closure);
+        $this->router->setRoute('foo', $closure);
 
         // Test routes.
         $response_a = $this->router->route($this->getRequest('foo'));
@@ -190,22 +249,28 @@ class RouterTest extends TestCase
 
         // Check if fails with unsupported dependencies.
         $closure = fn (Router $router): string => 'I received a router!';
-        $this->router->addRoute('router', $closure);
+        $this->router->setRoute('router', $closure);
         $this->expectException(\RuntimeException::class);
         $this->router->route($this->getRequest('router'));
     }
 
     /**
-     * @covers ::addRoute
+     * @covers ::__construct
+     * @covers ::setRoute
      * @covers ::popPrefix
      * @covers ::pushPrefix
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
      * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::__toString
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::findRoute
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::route
@@ -218,12 +283,12 @@ class RouterTest extends TestCase
         // Add routes.
         $this->router
             ->pushPrefix('foo/')
-                ->addRoute('/bar', fn (): string => 'Bar!')
-                ->addRoute('/baz/', fn (): string => 'Baz.')
+                ->setRoute('/bar', fn (): string => 'Bar!')
+                ->setRoute('/baz/', fn (): string => 'Baz.')
             ->popPrefix()
             ->pushPrefix('/hello/')
-                ->addRoute('world', fn (): string => 'Hello, World!')
-                ->addRoute('people/', fn (): string => 'Hello, People!');
+                ->setRoute('world', fn (): string => 'Hello, World!')
+                ->setRoute('people/', fn (): string => 'Hello, People!');
         
         // Test routes.
         $response_a = $this->router->route($this->getRequest('foo/bar'));
