@@ -101,7 +101,8 @@ class Router
     {
         // Find the route.
         $path = $request->getUri()->path;
-        $route = $this->findRoute($path);
+        $method = $request->getMethod();
+        $route = $this->findRoute($method, $path);
         $closure = $route->closure;
         if ($closure === null) {
             throw new NotFoundException('Route not found.');
@@ -183,8 +184,11 @@ class Router
     /**
      * Add a route.
      */
-    public function setRoute(string $path, \Closure $closure): static
-    {
+    public function setRoute(
+        string $method,
+        string $path,
+        \Closure $closure,
+    ): static {
         // Check closure return type.
         foreach ($this->getClosureReturnTypes($closure) as $return_type) {
             if (!in_array($return_type, static::CLOSURE_RETURN_TYPES)) {
@@ -203,7 +207,7 @@ class Router
         }
 
         // Add route.
-        $segments = explode('/', $path);
+        $segments = array_merge([strtoupper($method)], explode('/', $path));
         $segments[] = '/';
         $this->routes->setValue($segments, $closure);
 
@@ -213,10 +217,10 @@ class Router
     /**
      * Find a compatible route for a given path.
      */
-    protected function findRoute(string $path): Route
+    protected function findRoute(string $method, string $path): Route
     {
         // Split the path.
-        $segments = explode('/', $path);
+        $segments = array_merge([$method], explode('/', $path));
 
         // Dive the routes array.
         $routes = $this->routes->getArray();

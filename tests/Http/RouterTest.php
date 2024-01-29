@@ -70,6 +70,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::route
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -78,33 +79,33 @@ class RouterTest extends TestCase
     {
         // Test pushing prefixes.
         $this->assertSame($this->router, $this->router->pushPrefix('prefix'));
-        $this->router->setRoute('some-route', function (): string {
+        $this->router->setRoute('POST', 'some-route', function (): string {
             return 'Some output.';
         });
         $this->router
             ->pushPrefix('foobar')
-            ->setRoute('the-route', fn (): string => 'The output.');
+            ->setRoute('PATCH', 'the-route', fn (): string => 'The output.');
         
         // Test popping prefixes.
         $this->assertSame($this->router, $this->router->popPrefix());
-        $this->router->setRoute('another-route', function (): string {
+        $this->router->setRoute('GET', 'another-route', function (): string {
             return 'Another output.';
         });
         $this->router
             ->popPrefix()
-            ->setRoute('final-route', fn (): string => 'Final output.');
+            ->setRoute('GET', 'final-route', fn (): string => 'Final output.');
 
         // Test routes.
-        $request_a = $this->getRequest('prefix/some-route');
+        $request_a = $this->getRequest('POST', 'prefix/some-route');
         $response_a = $this->router->route($request_a);
         $this->assertSame('Some output.', (string) $response_a->getBody());
-        $request_b = $this->getRequest('prefix/foobar/the-route');
+        $request_b = $this->getRequest('PATCH', 'prefix/foobar/the-route');
         $response_b = $this->router->route($request_b);
         $this->assertSame('The output.', (string) $response_b->getBody());
-        $request_c = $this->getRequest('prefix/another-route');
+        $request_c = $this->getRequest('GET', 'prefix/another-route');
         $response_c = $this->router->route($request_c);
         $this->assertSame('Another output.', (string) $response_c->getBody());
-        $request_d = $this->getRequest('final-route');
+        $request_d = $this->getRequest('GET', 'final-route');
         $response_d = $this->router->route($request_d);
         $this->assertSame('Final output.', (string) $response_d->getBody());
     }
@@ -129,6 +130,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -145,16 +147,18 @@ class RouterTest extends TestCase
 
         // Test pattern.
         $closure = fn (string $int): string => 'Foobar #' . $int;
-        $this->router->setRoute('foobars/:int', $closure);
-        $response_a = $this->router->route($this->getRequest('foobars/8'));
+        $this->router->setRoute('PUT', 'foobars/:int', $closure);
+        $request_a = $this->getRequest('PUT', 'foobars/8');
+        $response_a = $this->router->route($request_a);
         $this->assertSame('Foobar #8', (string) $response_a->getBody());
 
         // Test pattern with variadic parameters.
         $closure = function (string $a, string ...$b): string {
             return $a . ', ' . implode(', ', $b);
         };
-        $this->router->setRoute('foobars/:int/:int/bazes/:int', $closure);
-        $request_b = $this->getRequest('foobars/123/4/bazes/5');
+        $path = 'foobars/:int/:int/bazes/:int';
+        $this->router->setRoute('GET', $path, $closure);
+        $request_b = $this->getRequest('GET', 'foobars/123/4/bazes/5');
         $response_b = $this->router->route($request_b);
         $this->assertSame('123, 4, 5', (string) $response_b->getBody());
     }
@@ -176,6 +180,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::setPattern
      * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -188,9 +193,9 @@ class RouterTest extends TestCase
 
         // Test with invalid argument count.
         $closure = fn (string $a, string $b, string $c): string => 'Hello!';
-        $this->router->setRoute('foo/:int/:int', $closure);
+        $this->router->setRoute('PATCH', 'foo/:int/:int', $closure);
         $this->expectException(\RuntimeException::class);
-        $this->router->route($this->getRequest('foo/12/34'));
+        $this->router->route($this->getRequest('PATCH', 'foo/12/34'));
     }
 
     /**
@@ -211,6 +216,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
      * @uses Laucov\WebFramework\Http\Route::getParameters
      * @uses Laucov\WebFramework\Http\Router::findRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -218,18 +224,19 @@ class RouterTest extends TestCase
     public function testClosureMustReturnResponseOrStringOrStringable(): void
     {
         // Create response route.
-        $this->router->setRoute('route-a', function (): ResponseInterface {
+        $closure_a = function (): ResponseInterface {
             $response = new OutgoingResponse();
             return $response->setBody('This is a response.');
-        });
+        };
+        $this->router->setRoute('PATCH', 'route-a', $closure_a);
 
         // Create string route.
-        $this->router->setRoute('route-b', function (): string {
+        $this->router->setRoute('POST', 'route-b', function (): string {
             return 'This is a response.';
         });
 
         // Create Stringable route.
-        $this->router->setRoute('route-c', function (): \Stringable {
+        $this->router->setRoute('PUT', 'route-c', function (): \Stringable {
             return new class () implements \Stringable {
                 public function __toString(): string
                 {
@@ -240,21 +247,25 @@ class RouterTest extends TestCase
 
         // Check results.
         $expected = 'This is a response.';
-        $response_a = $this->router->route($this->getRequest('route-a'));
+        $request_a = $this->getRequest('PATCH', 'route-a');
+        $response_a = $this->router->route($request_a);
         $this->assertSame($expected, (string) $response_a->getBody());
-        $response_b = $this->router->route($this->getRequest('route-b'));
+        $request_b = $this->getRequest('POST', 'route-b');
+        $response_b = $this->router->route($request_b);
         $this->assertSame($expected, (string) $response_b->getBody());
-        $response_c = $this->router->route($this->getRequest('route-c'));
+        $request_c = $this->getRequest('PUT', 'route-c');
+        $response_c = $this->router->route($request_c);
         $this->assertSame($expected, (string) $response_c->getBody());
 
         // Test closure with union type.
-        $this->router->setRoute('route-d', function (): string|\Stringable {
+        $closure_d = function (): string|\Stringable {
             return 'Testing with union types!';
-        });
+        };
+        $this->router->setRoute('GET', 'route-d', $closure_d);
 
         // Test invalid closure.
         $this->expectException(\InvalidArgumentException::class);
-        $this->router->setRoute('route-e', function (): string|array {
+        $this->router->setRoute('POST', 'route-e', function (): string|array {
             return ['not', 'a', 'valid', 'result'];
         });
     }
@@ -273,15 +284,17 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
      */
     public function testDifferentiatesIntermediaryAndFinalSegments(): void
     {
-        $this->router->setRoute('foo/bar', fn (): string => 'You found me!');
+        $closure = fn (): string => 'You found me!';
+        $this->router->setRoute('GET', 'foo/bar', $closure);
         $this->expectException(NotFoundException::class);
-        $this->router->route($this->getRequest('foo'));
+        $this->router->route($this->getRequest('GET', 'foo'));
     }
 
     /**
@@ -299,6 +312,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -306,9 +320,36 @@ class RouterTest extends TestCase
     public function testDoesNotSupportClosuresWithUnionOrIntersectTypes(): void
     {
         $closure = fn (string|RequestInterface $a): string => 'Some output';
-        $this->router->setRoute('foo', $closure);
+        $this->router->setRoute('POST', 'foo', $closure);
         $this->expectException(\RuntimeException::class);
-        $this->router->route($this->getRequest('foo'));
+        $this->router->route($this->getRequest('POST', 'foo'));
+    }
+
+    /**
+     * @covers ::findRoute
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Router::__construct
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testUsesMethodToRoute(): void
+    {
+        $closure = fn (string|RequestInterface $a): string => 'My output';
+        $this->router->setRoute('POST', 'bar', $closure);
+        $this->expectException(NotFoundException::class);
+        $this->router->route($this->getRequest('GET', 'bar'));
     }
 
     /**
@@ -329,6 +370,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::setRoute
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -337,17 +379,17 @@ class RouterTest extends TestCase
     {
         // Add routes.
         $closure = fn (RequestInterface $request): string => 'Foo!';
-        $this->router->setRoute('foo', $closure);
+        $this->router->setRoute('PATCH', 'foo', $closure);
 
         // Test routes.
-        $response_a = $this->router->route($this->getRequest('foo'));
+        $response_a = $this->router->route($this->getRequest('PATCH', 'foo'));
         $this->assertSame('Foo!', (string) $response_a->getBody());
 
         // Check if fails with unsupported dependencies.
         $closure = fn (Router $router): string => 'I received a router!';
-        $this->router->setRoute('router', $closure);
+        $this->router->setRoute('GET', 'router', $closure);
         $this->expectException(\RuntimeException::class);
-        $this->router->route($this->getRequest('router'));
+        $this->router->route($this->getRequest('GET', 'router'));
     }
 
     /**
@@ -364,15 +406,17 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
      */
     public function testThrowsACustomExceptionIfARouteIsNotFound(): void
     {
-        $this->router->setRoute('foo/bar', fn (): string => 'You found me!');
+        $closure = fn (): string => 'You found me!';
+        $this->router->setRoute('POST', 'foo/bar', $closure);
         $this->expectException(NotFoundException::class);
-        $this->router->route($this->getRequest('foo/baz'));
+        $this->router->route($this->getRequest('POST', 'foo/baz'));
     }
 
     /**
@@ -395,6 +439,7 @@ class RouterTest extends TestCase
      * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
      * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
      * @uses Laucov\WebFramework\Http\Router::route
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString
@@ -404,34 +449,40 @@ class RouterTest extends TestCase
         // Add routes.
         $this->router
             ->pushPrefix('foo/')
-                ->setRoute('/bar', fn (): string => 'Bar!')
-                ->setRoute('/baz/', fn (): string => 'Baz.')
+                ->setRoute('POST', '/bar', fn (): string => 'Bar!')
+                ->setRoute('PATCH', '/baz/', fn (): string => 'Baz.')
             ->popPrefix()
             ->pushPrefix('/hello/')
-                ->setRoute('world', fn (): string => 'Hello, World!')
-                ->setRoute('people/', fn (): string => 'Hello, People!');
+                ->setRoute('PUT', 'world', fn (): string => 'Hello, World!')
+                ->setRoute('GET', 'people/', fn (): string => 'Hi, People!');
         
         // Test routes.
-        $response_a = $this->router->route($this->getRequest('foo/bar'));
+        $request_a = $this->getRequest('POST', 'foo/bar');
+        $response_a = $this->router->route($request_a);
         $this->assertSame('Bar!', (string) $response_a->getBody());
-        $response_b = $this->router->route($this->getRequest('foo/baz'));
+        $request_b = $this->getRequest('PATCH', 'foo/baz');
+        $response_b = $this->router->route($request_b);
         $this->assertSame('Baz.', (string) $response_b->getBody());
-        $response_c = $this->router->route($this->getRequest('hello/world'));
+        $request_c = $this->getRequest('PUT', 'hello/world');
+        $response_c = $this->router->route($request_c);
         $this->assertSame('Hello, World!', (string) $response_c->getBody());
-        $response_d = $this->router->route($this->getRequest('hello/people'));
-        $this->assertSame('Hello, People!', (string) $response_d->getBody());
+        $request_d = $this->getRequest('GET', 'hello/people');
+        $response_d = $this->router->route($request_d);
+        $this->assertSame('Hi, People!', (string) $response_d->getBody());
     }
 
     /**
      * Get a request with a custom URI path.
      */
-    protected function getRequest(string $path): IncomingRequest
-    {
+    protected function getRequest(
+        string $method,
+        string $path,
+    ): IncomingRequest {
         return new IncomingRequest(
             content_or_post: '',
             headers: [],
             protocol_version: '1.0',
-            method: 'GET',
+            method: $method,
             uri: 'http://foobar.com/' . $path,
             parameters: [],
         );
