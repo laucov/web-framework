@@ -107,29 +107,46 @@ class Router
             throw new NotFoundException('Route not found.');
         }
 
-        // Get captured paramteres.
+        // Get captured parameters.
         $captured = $route->getParameters();
         $index = 0;
+        $total = count($captured);
 
-        // Fill arguments.
+        // Fill closure arguments.
         $arguments = [];
         $reflection = new \ReflectionFunction($closure);
-        $parameters = $reflection->getParameters();
-        foreach ($parameters as $parameter) {
-            /** @var \ReflectionNamedType */
+        foreach ($reflection->getParameters() as $parameter) {
+            // Get type and check if is a union or intersection type.
             $type = $parameter->getType();
+            if (!($type instanceof \ReflectionNamedType)) {
+                $message = 'Closures can not have union/intersection types.';
+                throw new \RuntimeException($message);
+            }
+            // Get type name.
             $type_name = $type->getName();
-            switch (true) {
-                case is_a($type_name, RequestInterface::class, true):
-                    $arguments[] = $request;
-                    break;
-                case $type_name === 'string':
+            // Fill argument.
+            if (is_a($type_name, RequestInterface::class, true)) {
+                // Add simple dependency.
+                $arguments[] = $request;
+            } elseif ($type_name === 'string') {
+                // Check if there are enough captured parameters.
+                if ($index >= $total) {
+                    $message = 'Could not find enough captured parameters.';
+                    throw new \RuntimeException($message);
+                }
+                // Add a single or all parameters.
+                if ($parameter->isVariadic()) {
+                    $values = array_slice($captured, $index);
+                    array_push($arguments, ...$values);
+                    $index = $total - 1;
+                } else {
                     $arguments[] = $captured[$index];
                     $index++;
-                    break;
-                default:
-                    $message = 'Unsupported route argument of type %s.';
-                    throw new \RuntimeException(sprintf($message, $type_name));
+                }
+            } else {
+                // Forbid other argument types.
+                $message = 'Unsupported route argument of type %s.';
+                throw new \RuntimeException(sprintf($message, $type_name));
             }
         }
 

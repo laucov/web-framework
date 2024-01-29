@@ -148,6 +148,49 @@ class RouterTest extends TestCase
         $this->router->setRoute('foobars/:int', $closure);
         $response_a = $this->router->route($this->getRequest('foobars/8'));
         $this->assertSame('Foobar #8', (string) $response_a->getBody());
+
+        // Test pattern with variadic parameters.
+        $closure = function (string $a, string ...$b): string {
+            return $a . ', ' . implode(', ', $b);
+        };
+        $this->router->setRoute('foobars/:int/:int/bazes/:int', $closure);
+        $request_b = $this->getRequest('foobars/123/4/bazes/5');
+        $response_b = $this->router->route($request_b);
+        $this->assertSame('123, 4, 5', (string) $response_b->getBody());
+    }
+
+    /**
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Route::addParameter
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::__construct
+     * @uses Laucov\WebFramework\Http\Router::findRoute
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::setPattern
+     * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testClosureArgumentCountMustBeCompatibleWithPath(): void
+    {
+        // Add pattern.
+        $result = $this->router->setPattern('int', '/^[0-9]+$/');
+        $this->assertSame($this->router, $result);
+
+        // Test with invalid argument count.
+        $closure = fn (string $a, string $b, string $c): string => 'Hello!';
+        $this->router->setRoute('foo/:int/:int', $closure);
+        $this->expectException(\RuntimeException::class);
+        $this->router->route($this->getRequest('foo/12/34'));
     }
 
     /**
@@ -238,6 +281,33 @@ class RouterTest extends TestCase
     {
         $this->router->setRoute('foo/bar', fn (): string => 'You found me!');
         $this->expectException(NotFoundException::class);
+        $this->router->route($this->getRequest('foo'));
+    }
+
+    /**
+     * @covers ::route
+     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
+     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\WebFramework\Data\ArrayReader::getArray
+     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
+     * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
+     * @uses Laucov\WebFramework\Http\Route::getParameters
+     * @uses Laucov\WebFramework\Http\Router::__construct
+     * @uses Laucov\WebFramework\Http\Router::findRoute
+     * @uses Laucov\WebFramework\Http\Router::getClosureReturnTypes
+     * @uses Laucov\WebFramework\Http\Router::getReflectionTypeNames
+     * @uses Laucov\WebFramework\Http\Router::setRoute
+     * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
+     * @uses Laucov\WebFramework\Web\Uri::__construct
+     * @uses Laucov\WebFramework\Web\Uri::fromString
+     */
+    public function testDoesNotSupportClosuresWithUnionOrIntersectTypes(): void
+    {
+        $closure = fn (string|RequestInterface $a): string => 'Some output';
+        $this->router->setRoute('foo', $closure);
+        $this->expectException(\RuntimeException::class);
         $this->router->route($this->getRequest('foo'));
     }
 
