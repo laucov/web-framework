@@ -26,11 +26,20 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Http\Exceptions;
+namespace Laucov\WebFramework\Http;
 
 /**
- * Represents a 404 HTTP error.
+ * Stores information about a route's closure parameter type;
  */
-class NotFoundException extends \Exception
+class RouteClosureType
 {
+    /**
+     * Type name.
+     */
+    public string $name = '';
+
+    /**
+     * Whether the type is variadic.
+     */
+    public bool $isVariadic = false;
 }

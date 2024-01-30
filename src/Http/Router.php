@@ -29,7 +29,6 @@
 namespace Laucov\WebFramework\Http;
 
 use Laucov\WebFramework\Data\ArrayBuilder;
-use Laucov\WebFramework\Http\Exceptions\NotFoundException;
 
 /**
  * Stores routes and assign them to HTTP requests.
@@ -37,30 +36,21 @@ use Laucov\WebFramework\Http\Exceptions\NotFoundException;
 class Router
 {
     /**
-     * Allowed return types for route closures.
-     */
-    public const CLOSURE_RETURN_TYPES = [
-        'string',
-        ResponseInterface::class,
-        \Stringable::class,
-    ];
-
-    /**
-     * Active patterns.
+     * Stored patterns.
      * 
      * @var array<string, string>
      */
     protected array $patterns = [];
 
     /**
-     * Active path prefixes.
+     * Active prefixes.
      * 
      * @var array<string>
      */
     protected array $prefixes = [];
 
     /**
-     * Registered routes.
+     * Stored routes.
      */
     protected ArrayBuilder $routes;
 
@@ -73,241 +63,134 @@ class Router
     }
 
     /**
-     * Remove the last pushed path prefix.
+     * Find a route for the given request object.
+     */
+    public function findRoute(RequestInterface $request): null|Route
+    {
+        // Get method and routes.
+        $method = $request->getMethod();
+        $routes = (array) $this->routes->getValue($method, []);
+
+        // Get path segments.
+        $path = $request->getUri()->path;
+        $segments = $path ? explode('/', $path) : [];
+        $segments[] = '/';
+
+        // Try to find a route.
+        $result = $routes;
+        $captured_segments = [];
+        foreach ($segments as $segment) {
+            // Check for direct match.
+            if (array_key_exists($segment, $result)) {
+                $result = $result[$segment];
+                continue;
+            }
+            // Check for pattern match.
+            foreach ($this->patterns as $name => $pattern) {
+                // Ignore unused pattern.
+                $key = ':' . $name;
+                if (!array_key_exists($key, $result)) {
+                    continue;
+                }
+                // Test the pattern and capture segment.
+                if (preg_match($pattern, $segment) === 1) {
+                    $result = $result[$key];
+                    $captured_segments[] = $segment;
+                    continue 2;
+                }
+            }
+            // Route does not exist.
+            return null;
+        }
+
+        // Check if is a route closure.
+        if (!($result instanceof RouteClosure)) {
+            // @codeCoverageIgnoreStart
+            $message = 'Found an unexpected [%s] stored as a route closure.';
+            throw new \RuntimeException(sprintf($message, gettype($result)));
+            // @codeCoverageIgnoreEnd
+        }
+
+        // Fill function parameters.
+        $parameters = [];
+        $capture_index = 0;
+        foreach ($result->parameterTypes as $type) {
+            if ($type->name === 'string') {
+                if ($type->isVariadic) {
+                    // Add variadic string argument.
+                    $slice = array_slice($captured_segments, $capture_index);
+                    array_push($parameters, ...$slice);
+                    $capture_index = count($captured_segments) - 1;
+                } else {
+                    // Add single string argument.
+                    $parameters[] = $captured_segments[$capture_index];
+                    $capture_index++;
+                }
+            } elseif (is_a($type->name, RequestInterface::class, true)) {
+                // Add request dependency.
+                $parameters[] = $request;
+            } else {
+                // @codeCoverageIgnoreStart
+                $message = 'Unexpected route closure parameter of type [%s].';
+                throw new \RuntimeException(sprintf($message, $type));
+                // @codeCoverageIgnoreEnd
+            }
+        }
+
+        return new Route($result, $parameters);
+    }
+
+    /**
+     * Remove the last pushed prefix.
      */
     public function popPrefix(): static
     {
-        // Remove last prefix.
         array_pop($this->prefixes);
         return $this;
     }
 
     /**
-     * Prefix the path for the next registered routes.
+     * Prefix the next routes with the given path.
      * 
-     * Active prefixes will not be replaced but incremented.
+     * Currently active prefixes will be added before the new prefix.
      */
     public function pushPrefix(string $path): static
     {
-        // Add new prefix.
         $this->prefixes[] = trim($path, '/');
         return $this;
     }
 
     /**
-     * Route a request.
+     * Set a new pattern for route searches.
      */
-    public function route(RequestInterface $request): ResponseInterface
+    public function setPattern(string $name, string $regex): static
     {
-        // Find the route.
-        $path = $request->getUri()->path;
-        $method = $request->getMethod();
-        $route = $this->findRoute($method, $path);
-        $closure = $route->closure;
-        if ($closure === null) {
-            throw new NotFoundException('Route not found.');
-        }
-
-        // Get captured parameters.
-        $captured = $route->getParameters();
-        $index = 0;
-        $total = count($captured);
-
-        // Fill closure arguments.
-        $arguments = [];
-        $reflection = new \ReflectionFunction($closure);
-        foreach ($reflection->getParameters() as $parameter) {
-            // Get type and check if is a union or intersection type.
-            $type = $parameter->getType();
-            if (!($type instanceof \ReflectionNamedType)) {
-                $message = 'Closures can not have union/intersection types.';
-                throw new \RuntimeException($message);
-            }
-            // Get type name.
-            $type_name = $type->getName();
-            // Fill argument.
-            if (is_a($type_name, RequestInterface::class, true)) {
-                // Add simple dependency.
-                $arguments[] = $request;
-            } elseif ($type_name === 'string') {
-                // Check if there are enough captured parameters.
-                if ($index >= $total) {
-                    $message = 'Could not find enough captured parameters.';
-                    throw new \RuntimeException($message);
-                }
-                // Add a single or all parameters.
-                if ($parameter->isVariadic()) {
-                    $values = array_slice($captured, $index);
-                    array_push($arguments, ...$values);
-                    $index = $total - 1;
-                } else {
-                    $arguments[] = $captured[$index];
-                    $index++;
-                }
-            } else {
-                // Forbid other argument types.
-                $message = 'Unsupported route argument of type %s.';
-                throw new \RuntimeException(sprintf($message, $type_name));
-            }
-        }
-
-        // Run the function.
-        $result = call_user_func_array($closure, $arguments);
-
-        // Check if returned a string.
-        if (is_string($result) || $result instanceof \Stringable) {
-            $response = new OutgoingResponse();
-            return $response->setBody("{$result}");
-        }
-
-        // Check if returned a response.
-        if ($result instanceof ResponseInterface) {
-            return $result;
-        }
-
-        // Unexpected value returned.
-        // @codeCoverageIgnoreStart
-        $message = 'Unsupported route return type %s.';
-        throw new \RuntimeException(sprintf($message, gettype($result)));
-        // @codeCoverageIgnoreEnd
-    }
-
-    /**
-     * Add a path pattern.
-     */
-    public function setPattern(string $name, string $pattern): static
-    {
-        $this->patterns[$name] = $pattern;
+        $this->patterns[$name] = $regex;
         return $this;
     }
 
     /**
-     * Add a route.
+     * Store a route for the given closure.
      */
     public function setRoute(
         string $method,
         string $path,
-        \Closure $closure,
+        \Closure $callback,
     ): static {
-        // Check closure return type.
-        foreach ($this->getClosureReturnTypes($closure) as $return_type) {
-            if (!in_array($return_type, static::CLOSURE_RETURN_TYPES)) {
-                $message = sprintf(
-                    'Invalid route closure return type. Allowed types are: %s.',
-                    implode(', ', static::CLOSURE_RETURN_TYPES),
-                );
-                throw new \InvalidArgumentException($message);
-            }
-        }
+        // Get prefix segments.
+        $prefix = implode('/', $this->prefixes);
+        $prefix_segments = strlen($prefix) > 0 ? explode('/', $prefix) : [];
 
-        // Trim path.
+        // Get path segments.
         $path = trim($path, '/');
-        if (count($this->prefixes) > 0) {
-            $path = implode('/', $this->prefixes) . '/' . $path;
-        }
-
-        // Add route.
-        $segments = array_merge([strtoupper($method)], explode('/', $path));
+        $segments = $path ? explode('/', $path) : [];
         $segments[] = '/';
-        $this->routes->setValue($segments, $closure);
 
+        // Store a new route closure.
+        $keys = [$method, ...$prefix_segments, ...$segments];
+        $route_closure = new RouteClosure($callback);
+        $this->routes->setValue($keys, $route_closure);
+        
         return $this;
-    }
-
-    /**
-     * Find a compatible route for a given path.
-     */
-    protected function findRoute(string $method, string $path): Route
-    {
-        // Split the path.
-        $segments = array_merge([$method], explode('/', $path));
-
-        // Dive the routes array.
-        $routes = $this->routes->getArray();
-        $route = new Route();
-        foreach ($segments as $segment) {
-            // Check for direct match.
-            if (array_key_exists($segment, $routes)) {
-                $routes = $routes[$segment];
-                continue;
-            }
-            // Match patterns.
-            foreach ($this->patterns as $name => $patt) {
-                if (!array_key_exists(':' . $name, $routes)) {
-                    continue;
-                }
-                if (preg_match($patt, $segment) === 1) {
-                    $routes = $routes[':' . $name];
-                    $route->addParameter($segment);
-                    continue 2;
-                }
-            }
-            // Could not find a match for this segment.
-            return $route;
-        }
-
-        // Check if a closure exists.
-        if (!array_key_exists('/', $routes)) {
-            return $route;
-        }
-        $closure = $routes['/'];
-
-        // Check if is a closure.
-        if (!($closure instanceof \Closure)) {
-            // @codeCoverageIgnoreStart
-            $message = 'Found a value of type %s stored as a route closure.';
-            throw new \RuntimeException($message);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $route->closure = $closure;
-        return $route;
-    }
-
-    /**
-     * Get the return types names from a given closure.
-     * 
-     * @return array<string>
-     */
-    protected function getClosureReturnTypes(\Closure $closure): array
-    {
-        // Get the reflection object.
-        $reflection = new \ReflectionFunction($closure);
-        $return_type = $reflection->getReturnType();
-
-        // Return type names.
-        return $return_type !== null
-            ? $this->getReflectionTypeNames($return_type)
-            : [];
-    }
-
-    /**
-     * Get the names of types represented by a `ReflectionType` object.
-     * 
-     * @return array<string>
-     */
-    protected function getReflectionTypeNames(\ReflectionType $type): array
-    {
-        // Get single return type name.
-        if ($type instanceof \ReflectionNamedType) {
-            return [$type->getName()];
-        }
-
-        // Get multiple return type names.
-        if (
-            $type instanceof \ReflectionUnionType
-            || $type instanceof \ReflectionIntersectionType
-        ) {
-            return array_merge(...array_map(
-                [$this, 'getReflectionTypeNames'],
-                $type->getTypes(),
-            ));
-        }
-
-        // Unexpected ReflectionType found.
-        // @codeCoverageIgnoreStart
-        $message = 'Unsupported ReflectionType class %s.';
-        throw new \RuntimeException(sprintf($message, get_class($type)));
-        // @codeCoverageIgnoreEnd
     }
 }

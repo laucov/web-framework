@@ -34,32 +34,46 @@ namespace Laucov\WebFramework\Http;
 class Route
 {
     /**
-     * Found closure.
+     * Execution parameters.
      */
-    public null|\Closure $closure = null;
+    protected array $parameters;
 
     /**
-     * Captured parameters.
-     * 
-     * @var array<string>
+     * Route closure.
      */
-    protected array $parameters = [];
+    protected RouteClosure $routeClosure;
 
     /**
-     * Add a parameter.
+     * Create the route instance.
      */
-    public function addParameter(string $parameter): void
+    public function __construct(RouteClosure $route_closure, array $parameters)
     {
-        $this->parameters[] = $parameter;
+        $this->routeClosure = $route_closure;
+        $this->parameters = $parameters;
     }
 
     /**
-     * Get captured parameters.
-     * 
-     * @var array<string>
+     * Run the route's closure with the given arguments.
      */
-    public function getParameters(): array
+    public function run(): ResponseInterface
     {
-        return $this->parameters;
+        // Get closure results.
+        $result = call_user_func_array(
+            $this->routeClosure->closure,
+            $this->parameters,
+        );
+
+        // Return result as a response.
+        if ($result instanceof ResponseInterface) {
+            return $result;
+        } elseif (is_string($result) || $result instanceof \Stringable) {
+            $response = new OutgoingResponse();
+            return $response->setBody((string) $result);
+        } else {
+            // @codeCoverageIgnoreStart
+            $message = 'Received an unexpected result from a route closure.';
+            throw new \RuntimeException($message);
+            // @codeCoverageIgnoreEnd
+        }
     }
 }

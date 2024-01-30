@@ -30,7 +30,10 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Laucov\WebFramework\Http\OutgoingResponse;
+use Laucov\WebFramework\Http\ResponseInterface;
 use Laucov\WebFramework\Http\Route;
+use Laucov\WebFramework\Http\RouteClosure;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,28 +42,49 @@ use PHPUnit\Framework\TestCase;
 class RouteTest extends TestCase
 {
     /**
-     * @coversNothing
+     * @covers ::__construct
+     * @covers ::run
+     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\WebFramework\Files\StringSource::__toString
+     * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
+     * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
+     * @uses Laucov\WebFramework\Http\RouteClosure::__construct
+     * @uses Laucov\WebFramework\Http\RouteClosure::findClosureParameterTypes
+     * @uses Laucov\WebFramework\Http\RouteClosure::findClosureReturnType
      */
-    public function testCanSetProperties(): void
+    public function testCanRun(): void
     {
-        $this->expectNotToPerformAssertions();
-        $route = new Route();
-        $route->closure = fn () => 'Hello, World!';
-        $route->closure = null;
-    }
+        // Create closure with string return type.
+        $closure_a = new RouteClosure(fn (string $a): string => $a);
+        $route_a = new Route($closure_a, ['Hello, World!']);
 
-    /**
-     * @covers ::addParameter
-     * @covers ::getParameters
-     */
-    public function testCanAddAndGetParameters(): void
-    {
-        $route = new Route();
-        $route->addParameter('foo');
-        $route->addParameter('bar');
+        // Create closure with Stringable return type.
+        $closure_b = new RouteClosure(function (string $b): \Stringable {
+            return new class ($b) implements \Stringable
+            {
+                public function __construct(protected string $b)
+                {
+                }
+                public function __toString(): string
+                {
+                    return $this->b;
+                }
+            };
+        });
+        $route_b = new Route($closure_b, ['Hello, World!']);
 
-        $parameters = $route->getParameters();
-        $this->assertSame('foo', $parameters[0]);
-        $this->assertSame('bar', $parameters[1]);
+        // Create closure with ResponseInterface return type.
+        $closure_c = new RouteClosure(function (string $c): ResponseInterface {
+            $response = new OutgoingResponse();
+            return $response->setBody($c);
+        });
+        $route_c = new Route($closure_c, ['Hello, World!']);
+
+        // Check each output.
+        foreach ([$route_a, $route_b, $route_c] as $route) {
+            $response = $route->run();
+            $this->assertInstanceOf(ResponseInterface::class, $response);
+            $this->assertSame('Hello, World!', (string) $response->getBody());
+        }
     }
 }

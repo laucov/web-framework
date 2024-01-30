@@ -58,7 +58,7 @@ class RouteClosure
     /**
      * Closure parameter types.
      * 
-     * @var array<string>
+     * @var array<RouteClosureType>
      */
     public readonly array $parameterTypes;
 
@@ -127,12 +127,12 @@ class RouteClosure
      * 
      * Will return `false` if the closure has invalid parameter types.
      * 
-     * @return false|array<string>
+     * @return false|array<RouteClosureType>
      */
     protected function findClosureParameterTypes(): false|array
     {
         // Initialize type array.
-        $names = [];
+        $types = [];
         
         // Get and validate parameters.
         $parameters = $this->reflection->getParameters();
@@ -147,9 +147,13 @@ class RouteClosure
             if (!in_array($name, static::ALLOWED_PARAMETER_TYPES)) {
                 return false;
             }
-            $names[] = $name;
+            // Add type to array.
+            $result = new RouteClosureType();
+            $result->name = $name;
+            $result->isVariadic = $parameter->isVariadic();
+            $types[] = $result;
         }
 
-        return $names;
+        return $types;
     }
 }

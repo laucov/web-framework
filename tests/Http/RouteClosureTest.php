@@ -48,13 +48,15 @@ class RouteClosureTest extends TestCase
      */
     public function testCanAccessClosureAndParameterTypesAndReturnType(): void
     {
-        $closure = function (string $a, string $b): string {
-            return sprintf('Hello, %s and %s!', $a, $b);
+        $closure = function (string $a, string ...$b): string {
+            return sprintf('Hello, %s and %s!', $a, implode(', ', $b));
         };
         $object = new RouteClosure($closure);
 
-        $this->assertSame('string', $object->parameterTypes[0]);
-        $this->assertSame('string', $object->parameterTypes[1]);
+        $this->assertSame('string', $object->parameterTypes[0]->name);
+        $this->assertSame(false, $object->parameterTypes[0]->isVariadic);
+        $this->assertSame('string', $object->parameterTypes[1]->name);
+        $this->assertSame(true, $object->parameterTypes[1]->isVariadic);
         $this->assertSame('string', $object->returnType);
         $this->assertSame($closure, $object->closure);
     }
