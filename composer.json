@@ -18,9 +18,5 @@
     "require-dev": {
         "phpunit/phpunit": "^9.6",
         "laravel/pint": "^1.13"
-    },
-    "require": {
-        "laucov/arrays": "^1.0",
-        "laucov/files": "^1.0"
     }
 }
