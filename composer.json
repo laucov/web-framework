@@ -1,6 +1,6 @@
 {
     "name": "laucov/web-framework",
-    "description": "Simple framework to route CLI and HTTP requests.",
+    "description": "Minimalist web framework for MVC architectures.",
     "type": "library",
     "license": "Apache-2.0",
     "autoload": {
@@ -10,8 +10,8 @@
     },
     "authors": [
         {
-            "name": "Rafael Covaleski",
-            "email": "covaleski23@gmail.com"
+            "name": "Rafael Covaleski Pereira",
+            "email": "rafael.covaleski@laucov.com"
         }
     ],
     "minimum-stability": "stable",
