@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\Arrays\ArrayBuilder;
 use Laucov\WebFramework\Http\OutgoingRequest;
 use Laucov\WebFramework\Web\Uri;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getParameters
-     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\Arrays\ArrayBuilder::__construct
      * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      */
     public function testCanGetParameters(): void
@@ -62,7 +62,7 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getPostVariables
-     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\Arrays\ArrayBuilder::__construct
      * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      */
     public function testCanGetPostVariables(): void
@@ -74,7 +74,7 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::getMethod
      * @covers ::setMethod
-     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\Arrays\ArrayBuilder::__construct
      * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      */
     public function testCanSetMethod(): void
@@ -93,7 +93,7 @@ class OutgoingRequestTest extends TestCase
     /**
      * @covers ::getUri
      * @covers ::setUri
-     * @uses Laucov\WebFramework\Data\ArrayBuilder::__construct
+     * @uses Laucov\Arrays\ArrayBuilder::__construct
      * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
      * @uses Laucov\WebFramework\Web\Uri::__construct
      * @uses Laucov\WebFramework\Web\Uri::fromString

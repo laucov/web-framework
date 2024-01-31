@@ -59,10 +59,10 @@ class RouterTest extends TestCase
      * @covers ::pushPrefix
      * @covers ::setPattern
      * @covers ::setRoute
-     * @uses Laucov\WebFramework\Data\ArrayBuilder::setValue
-     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
-     * @uses Laucov\WebFramework\Data\ArrayReader::getValue
-     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\Arrays\ArrayBuilder::setValue
+     * @uses Laucov\Arrays\ArrayReader::__construct
+     * @uses Laucov\Arrays\ArrayReader::getValue
+     * @uses Laucov\Arrays\ArrayReader::validateKeys
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::__toString
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct

@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Http;
 
-use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\Arrays\ArrayBuilder;
 
 /**
  * Stores routes and assign them to HTTP requests.

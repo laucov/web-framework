@@ -41,9 +41,9 @@ class IncomingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getPostVariables
-     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
-     * @uses Laucov\WebFramework\Data\ArrayReader::getValue
-     * @uses Laucov\WebFramework\Data\ArrayReader::validateKeys
+     * @uses Laucov\Arrays\ArrayReader::__construct
+     * @uses Laucov\Arrays\ArrayReader::getValue
+     * @uses Laucov\Arrays\ArrayReader::validateKeys
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::read
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
@@ -68,7 +68,7 @@ class IncomingRequestTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
+     * @uses Laucov\Arrays\ArrayReader::__construct
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Files\StringSource::read
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
@@ -92,8 +92,8 @@ class IncomingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getParameters
-     * @uses Laucov\WebFramework\Data\ArrayReader::__construct
-     * @uses Laucov\WebFramework\Data\ArrayReader::getValue
+     * @uses Laucov\Arrays\ArrayReader::__construct
+     * @uses Laucov\Arrays\ArrayReader::getValue
      * @uses Laucov\WebFramework\Files\StringSource::__construct
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader

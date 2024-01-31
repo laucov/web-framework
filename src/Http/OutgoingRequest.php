@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Http;
 
-use Laucov\WebFramework\Data\ArrayBuilder;
+use Laucov\Arrays\ArrayBuilder;
 use Laucov\WebFramework\Http\Traits\RequestTrait;
 use Laucov\WebFramework\Web\Uri;
 

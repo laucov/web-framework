@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Http;
 
-use Laucov\WebFramework\Data\ArrayReader;
+use Laucov\Arrays\ArrayReader;
 use Laucov\WebFramework\Web\Uri;
 
 /**
