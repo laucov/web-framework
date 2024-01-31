@@ -40,8 +40,8 @@ class AbstractIncomingMessageTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\Files\Resource\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::read
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
      * @uses Laucov\WebFramework\Http\AbstractMessage::getHeaderAsList
@@ -58,7 +58,7 @@ class AbstractIncomingMessageTest extends TestCase
         ]);
 
         // Check body.
-        /** @var \Laucov\WebFramework\Files\StringSource */
+        /** @var \Laucov\Files\Resource\StringSource */
         $body = $message->getBody();
         $this->assertNotNull($body);
         $this->assertSame('The quick', $body->read(9));
@@ -73,7 +73,7 @@ class AbstractIncomingMessageTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::__construct
      */
     public function testMustPassStringHeaders(): void
     {

@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Http\Traits;
 
-use Laucov\WebFramework\Web\Uri;
+use Laucov\Files\Resource\Uri;
 
 /**
  * Has properties and methods common to request objects.

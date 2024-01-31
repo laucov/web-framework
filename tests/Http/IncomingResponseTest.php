@@ -40,8 +40,8 @@ class IncomingResponseTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\Files\Resource\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::read
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader

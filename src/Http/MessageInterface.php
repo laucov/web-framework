@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Http;
 
-use Laucov\WebFramework\Files\StringSource;
+use Laucov\Files\Resource\StringSource;
 
 /**
  * Stores information about an HTTP message.

@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Laucov\WebFramework\Files\StringSource;
+use Laucov\Files\Resource\StringSource;
 use Laucov\WebFramework\Http\AbstractOutgoingMessage;
 use PHPUnit\Framework\TestCase;
 
@@ -70,8 +70,8 @@ class AbstractOutgoingMessageTest extends TestCase
     /**
      * @covers ::getBody
      * @covers ::setBody
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\Files\Resource\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::read
      */
     public function testCanSetBody(): void
     {

@@ -30,7 +30,7 @@ namespace Laucov\WebFramework\Http;
 
 use Laucov\Arrays\ArrayBuilder;
 use Laucov\WebFramework\Http\Traits\RequestTrait;
-use Laucov\WebFramework\Web\Uri;
+use Laucov\Files\Resource\Uri;
 
 /**
  * Stores information about an outgoing request.

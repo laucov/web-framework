@@ -32,7 +32,7 @@ namespace Tests\Http;
 
 use Laucov\Arrays\ArrayBuilder;
 use Laucov\WebFramework\Http\OutgoingRequest;
-use Laucov\WebFramework\Web\Uri;
+use Laucov\Files\Resource\Uri;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -95,8 +95,8 @@ class OutgoingRequestTest extends TestCase
      * @covers ::setUri
      * @uses Laucov\Arrays\ArrayBuilder::__construct
      * @uses Laucov\WebFramework\Http\OutgoingRequest::__construct
-     * @uses Laucov\WebFramework\Web\Uri::__construct
-     * @uses Laucov\WebFramework\Web\Uri::fromString
+     * @uses Laucov\Files\Resource\Uri::__construct
+     * @uses Laucov\Files\Resource\Uri::fromString
      */
     public function testCanSetUri(): void
     {

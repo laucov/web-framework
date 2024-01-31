@@ -44,13 +44,13 @@ class IncomingRequestTest extends TestCase
      * @uses Laucov\Arrays\ArrayReader::__construct
      * @uses Laucov\Arrays\ArrayReader::getValue
      * @uses Laucov\Arrays\ArrayReader::validateKeys
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\Files\Resource\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::read
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
-     * @uses Laucov\WebFramework\Web\Uri::__construct
-     * @uses Laucov\WebFramework\Web\Uri::fromString
+     * @uses Laucov\Files\Resource\Uri::__construct
+     * @uses Laucov\Files\Resource\Uri::fromString
      */
     public function testCanInstantiateWithPostVariablesArray(): void
     {
@@ -69,13 +69,13 @@ class IncomingRequestTest extends TestCase
     /**
      * @covers ::__construct
      * @uses Laucov\Arrays\ArrayReader::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::read
+     * @uses Laucov\Files\Resource\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::read
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
-     * @uses Laucov\WebFramework\Web\Uri::__construct
-     * @uses Laucov\WebFramework\Web\Uri::fromString
+     * @uses Laucov\Files\Resource\Uri::__construct
+     * @uses Laucov\Files\Resource\Uri::fromString
      */
     public function testCanInstantiateWithTextAndFile(): void
     {
@@ -94,15 +94,15 @@ class IncomingRequestTest extends TestCase
      * @covers ::getParameters
      * @uses Laucov\Arrays\ArrayReader::__construct
      * @uses Laucov\Arrays\ArrayReader::getValue
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::__construct
      * @uses Laucov\WebFramework\Http\AbstractIncomingMessage::__construct
      * @uses Laucov\WebFramework\Http\AbstractMessage::getHeader
      * @uses Laucov\WebFramework\Http\AbstractMessage::getProtocolVersion
      * @uses Laucov\WebFramework\Http\IncomingRequest::__construct
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getMethod
      * @uses Laucov\WebFramework\Http\Traits\RequestTrait::getUri
-     * @uses Laucov\WebFramework\Web\Uri::__construct
-     * @uses Laucov\WebFramework\Web\Uri::fromString
+     * @uses Laucov\Files\Resource\Uri::__construct
+     * @uses Laucov\Files\Resource\Uri::fromString
      */
     public function testConstructorSavesInformation(): void
     {

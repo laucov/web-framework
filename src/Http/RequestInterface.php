@@ -29,7 +29,7 @@
 namespace Laucov\WebFramework\Http;
 
 use Laucov\Arrays\ArrayReader;
-use Laucov\WebFramework\Web\Uri;
+use Laucov\Files\Resource\Uri;
 
 /**
  * Stores information about an HTTP request.

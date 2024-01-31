@@ -44,8 +44,8 @@ class RouteTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::run
-     * @uses Laucov\WebFramework\Files\StringSource::__construct
-     * @uses Laucov\WebFramework\Files\StringSource::__toString
+     * @uses Laucov\Files\Resource\StringSource::__construct
+     * @uses Laucov\Files\Resource\StringSource::__toString
      * @uses Laucov\WebFramework\Http\AbstractMessage::getBody
      * @uses Laucov\WebFramework\Http\AbstractOutgoingMessage::setBody
      * @uses Laucov\WebFramework\Http\RouteClosure::__construct
