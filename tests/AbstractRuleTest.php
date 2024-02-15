@@ -65,32 +65,21 @@ abstract class AbstractRuleTest extends TestCase
     protected abstract function getValues(): array;
 
     /**
-     * @covers ::__construct
-     * @covers ::validate
-     * @dataProvider ruleProvider
+     * Assert that a class can be used as a property attribute.
      */
-    public function testCanValidate(RuleInterface $rule, array $expected): void
-    {
-        $actual = array_filter($this->getValues(), [$rule, 'validate']);
-        $actual = '[' . implode(', ', array_keys($actual)) . ']';
-        $expected = '[' . implode(', ', $expected) . ']';
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @coversNothing
-     */
-    public function testIsAnAttribute(): void
+    protected function assertIsPropertyAttribute(string $class_name): void
     {
         // Get class attributes.
-        $reflection = new \ReflectionClass($this->className);
+        $reflection = new \ReflectionClass($class_name);
         $attributes = $reflection->getAttributes();
         
         // Check if the class is a property attribute.
         foreach ($attributes as $attribute) {
+            // Check if is an attribute.
             if ($attribute->getName() !== \Attribute::class) {
                 continue;
             }
+            // Check if targets properties.
             $argument = $attribute->getArguments()[0] ?? null;
             if ($argument !== \Attribute::TARGET_PROPERTY) {
                 continue;
@@ -98,14 +87,16 @@ abstract class AbstractRuleTest extends TestCase
             $this->assertTrue(true);
             return;
         }
+
+        // Fail if couldn't find an `Attribute` attribute.
         $message = 'Failed to assert that %s is a property attribute.';
-        $this->fail(sprintf($message, $this->className));
+        $this->fail(sprintf($message, $class_name));
     }
 
     /**
-     * Create non-scalar test values.
+     * Assert that a rule invalidates non-scalar values.
      */
-    public function assertRejectsNonScalarValues(RuleInterface $rule): void
+    protected function assertRejectsNonScalarValues(RuleInterface $rule): void
     {
         // Set example values.
         $values = [
@@ -134,5 +125,21 @@ abstract class AbstractRuleTest extends TestCase
         }
 
         $this->assertTrue(true);
+    }
+
+    /**
+     * Test all values from `ruleProvider()` with `$rule->validate()`.
+     * 
+     * Assert that the valid values correspond to the indexes in `$expected`.
+     * 
+     * @param RuleInterface $rule Rule to test validation
+     * @param array $expected Valid indexes from `ruleProvider()`'s values
+     */
+    protected function assertValidation(RuleInterface $rule, array $expected): void
+    {
+        $actual = array_filter($this->getValues(), [$rule, 'validate']);
+        $actual = '[' . implode(', ', array_keys($actual)) . ']';
+        $expected = '[' . implode(', ', $expected) . ']';
+        $this->assertSame($expected, $actual);
     }
 }

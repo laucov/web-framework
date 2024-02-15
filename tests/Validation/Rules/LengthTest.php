@@ -38,8 +38,6 @@ use Tests\AbstractRuleTest;
  */
 class LengthTest extends AbstractRuleTest
 {
-    protected string $className = Length::class;
-
     public function ruleProvider(): array
     {
         return [
@@ -49,6 +47,33 @@ class LengthTest extends AbstractRuleTest
             [new Length(14), [1, 2, 3]],
             [new Length(14, 14), [1, 2]],
         ];
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::validate
+     * @dataProvider ruleProvider
+     */
+    public function testCanValidate(Length $rule, array $expected): void
+    {
+        $this->assertValidation($rule, $expected);
+    }
+
+    /**
+     * @covers ::validate
+     * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
+     */
+    public function testDoesNotAcceptNonScalarValues(): void
+    {
+        $this->assertRejectsNonScalarValues(new Length());
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function testIsPropertyAttribute(): void
+    {
+        $this->assertIsPropertyAttribute(Length::class);
     }
 
     protected function getValues(): array
@@ -64,14 +89,5 @@ class LengthTest extends AbstractRuleTest
             7 => 111222,
             8 => 111222.0000,
         ];
-    }
-
-    /**
-     * @covers ::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
-     */
-    public function testDoesNotAcceptNonScalarValues(): void
-    {
-        $this->assertRejectsNonScalarValues(new Length());
     }
 }
