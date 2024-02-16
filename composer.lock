@@ -4,8 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb56578a26173e7e27ac1b4cd1781bd7",
-    "packages": [],
+    "content-hash": "07ad55b3b521ae6ae5cf351f447875c6",
+    "packages": [
+        {
+            "name": "laucov/db",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laucov/db.git",
+                "reference": "4360e0f7295e406262fbf87361569fb9c7aa3bed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laucov/db/zipball/4360e0f7295e406262fbf87361569fb9c7aa3bed",
+                "reference": "4360e0f7295e406262fbf87361569fb9c7aa3bed",
+                "shasum": ""
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laucov\\Db\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Covaleski Pereira",
+                    "email": "rafael.covaleski@laucov.com"
+                }
+            ],
+            "description": "Library for database management and operation.",
+            "support": {
+                "issues": "https://github.com/laucov/db/issues",
+                "source": "https://github.com/laucov/db/tree/v1.0.0"
+            },
+            "time": "2024-02-13T19:24:12+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
