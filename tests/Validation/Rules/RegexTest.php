@@ -74,7 +74,7 @@ class RegexTest extends AbstractRuleTest
      */
     public function testIsPropertyAttribute(): void
     {
-        $this->assertIsPropertyAttribute(Regex::class);
+        $this->assertIsPropertyAttribute(Regex::class, true);
     }
 
     protected function getValues(): array
