@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "laucov/db",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/db.git",
-                "reference": "cc8cd8b069209b7058982f7ba54410bf9824aff1"
+                "reference": "2b36257ca00f6ebe8f8172c77cc5f44363a7e708"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/db/zipball/cc8cd8b069209b7058982f7ba54410bf9824aff1",
-                "reference": "cc8cd8b069209b7058982f7ba54410bf9824aff1",
+                "url": "https://api.github.com/repos/laucov/db/zipball/2b36257ca00f6ebe8f8172c77cc5f44363a7e708",
+                "reference": "2b36257ca00f6ebe8f8172c77cc5f44363a7e708",
                 "shasum": ""
             },
             "require-dev": {
@@ -43,9 +43,9 @@
             "description": "Library for database management and operation.",
             "support": {
                 "issues": "https://github.com/laucov/db/issues",
-                "source": "https://github.com/laucov/db/tree/v1.1.0"
+                "source": "https://github.com/laucov/db/tree/v1.1.1"
             },
-            "time": "2024-02-16T19:21:18+00:00"
+            "time": "2024-02-16T21:09:04+00:00"
         }
     ],
     "packages-dev": [
