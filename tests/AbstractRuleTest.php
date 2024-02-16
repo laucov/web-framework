@@ -67,11 +67,18 @@ abstract class AbstractRuleTest extends TestCase
     /**
      * Assert that a class can be used as a property attribute.
      */
-    protected function assertIsPropertyAttribute(string $class_name): void
-    {
+    protected function assertIsPropertyAttribute(
+        string $class_name,
+        bool $is_repeatable = false,
+    ): void {
         // Get class attributes.
         $reflection = new \ReflectionClass($class_name);
         $attributes = $reflection->getAttributes();
+
+        // Set expected bitmask.
+        $bitmask = $is_repeatable
+            ? \Attribute::TARGET_PROPERTY|\Attribute::IS_REPEATABLE
+            : \Attribute::TARGET_PROPERTY;
         
         // Check if the class is a property attribute.
         foreach ($attributes as $attribute) {
@@ -81,7 +88,7 @@ abstract class AbstractRuleTest extends TestCase
             }
             // Check if targets properties.
             $argument = $attribute->getArguments()[0] ?? null;
-            if ($argument !== \Attribute::TARGET_PROPERTY) {
+            if ($argument !== $bitmask) {
                 continue;
             }
             $this->assertTrue(true);
@@ -89,8 +96,9 @@ abstract class AbstractRuleTest extends TestCase
         }
 
         // Fail if couldn't find an `Attribute` attribute.
-        $message = 'Failed to assert that %s is a property attribute.';
-        $this->fail(sprintf($message, $class_name));
+        $message = 'Failed to assert that %s is a %s property attribute.';
+        $repeatable = $is_repeatable ? 'repeatable' : 'non-repeatable';
+        $this->fail(sprintf($message, $class_name, $repeatable));
     }
 
     /**
