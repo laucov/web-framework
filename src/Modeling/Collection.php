@@ -50,7 +50,7 @@ class Collection implements \Countable, \Iterator
     /**
      * Create the collection instance.
      * 
-     * @param array<T> $entities
+     * @param T $entities
      */
     public function __construct(
         /**
@@ -61,7 +61,7 @@ class Collection implements \Countable, \Iterator
         /**
          * Maximum number of records shown by each page.
          */
-        public readonly int $pageLength,
+        public readonly null|int $pageLength,
 
         /**
          * Number of records that match this collection's filter.
@@ -93,9 +93,19 @@ class Collection implements \Countable, \Iterator
      * 
      * @return T
      */
-    public function current(): Entity
+    public function current(): mixed
     {
         return $this->entities[$this->key];
+    }
+
+    /**
+     * Returns the value at specified offset.
+     * 
+     * @return T
+     */
+    public function get(int $offset): mixed
+    {
+        return $this->entities[$offset];
     }
 
     /**
@@ -108,18 +118,14 @@ class Collection implements \Countable, \Iterator
 
     /**
      * Move forward to next entity.
-     * 
-     * Moves the current position to the next entity.
      */
     public function next(): void
     {
         $this->key++;
     }
-
+    
     /**
-     * Rewind the Iterator to the first entity.
-     * 
-     * Rewinds back to the first entity of the Collection.
+     * Rewind the collection to the first entity.
      */
     public function rewind(): void
     {

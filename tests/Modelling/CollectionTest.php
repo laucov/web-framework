@@ -43,6 +43,7 @@ class CollectionTest extends TestCase
      * @covers ::__construct
      * @covers ::count
      * @covers ::current
+     * @covers ::get
      * @covers ::key
      * @covers ::next
      * @covers ::rewind
@@ -79,6 +80,12 @@ class CollectionTest extends TestCase
         foreach ($expected as $i => $v) {
             $this->assertSame($v[0], $actual[$i][0] ?? null);
             $this->assertSame($v[1], $actual[$i][1] ?? null);
+        }
+
+        // Test index access.
+        foreach ($expected as $i => $v) {
+            $this->assertSame($v[0], $collection->get($i)->code ?? null);
+            $this->assertSame($v[1], $collection->get($i)->price ?? null);
         }
     }
 
