@@ -38,25 +38,25 @@ use Tests\AbstractRuleTest;
  */
 class LengthTest extends AbstractRuleTest
 {
-    public function ruleProvider(): array
+    public function dataProvider(): array
     {
         return [
-            [new Length(6), [0, 1, 2, 3, 6, 7, 8]],
-            [new Length(0, 6), [0, 4, 5, 6, 7, 8]],
-            [new Length(6, 6), [0, 6, 7, 8]],
-            [new Length(14), [1, 2, 3]],
-            [new Length(14, 14), [1, 2]],
+            [[6], [0, 1, 2, 3, 6, 7, 8]],
+            [[0, 6], [0, 4, 5, 6, 7, 8]],
+            [[6, 6], [0, 6, 7, 8]],
+            [[14], [1, 2, 3]],
+            [[14, 14], [1, 2]],
         ];
     }
 
     /**
      * @covers ::__construct
      * @covers ::validate
-     * @dataProvider ruleProvider
+     * @dataProvider dataProvider
      */
-    public function testCanValidate(Length $rule, array $expected): void
+    public function testCanValidate(array $arguments, array $expected): void
     {
-        $this->assertValidation($rule, $expected);
+        $this->assertValidation(new Length(...$arguments), $expected);
     }
 
     /**

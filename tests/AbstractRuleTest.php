@@ -39,25 +39,6 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractRuleTest extends TestCase
 {
     /**
-     * Rule class name.
-     */
-    protected string $className;
-
-    /**
-     * Get rules to test.
-     * 
-     * This function must return an array in the following format:
-     * 
-     * `[RuleInterface, array<int>][]`
-     * 
-     * Where:
-     * 
-     * - `RuleInterface` is the rule instance to filter `getValues()` values;
-     * - `array<int>` is a list of expected indexes for the filtered array.
-     */
-    public abstract function ruleProvider(): array;
-
-    /**
      * Get values to validate.
      * 
      * This function must return key-value pairs for filtering.

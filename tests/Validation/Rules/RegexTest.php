@@ -40,24 +40,24 @@ class RegexTest extends AbstractRuleTest
 {
     protected string $className = Regex::class;
 
-    public function ruleProvider(): array
+    public function dataProvider(): array
     {
         return [
-            [new Regex('/^\p{L}+$/'), [8]],
-            [new Regex('/\.com$/'), [2, 3]],
-            [new Regex('/^[A-Za-z\d\s\.]+$/'), [0, 1, 6, 7, 8]],
-            [new Regex('/^.+[@\?\.]+.+$/'), [2, 3, 4, 5]],
+            [['/^\p{L}+$/'], [8]],
+            [['/\.com$/'], [2, 3]],
+            [['/^[A-Za-z\d\s\.]+$/'], [0, 1, 6, 7, 8]],
+            [['/^.+[@\?\.]+.+$/'], [2, 3, 4, 5]],
         ];
     }
 
     /**
      * @covers ::__construct
      * @covers ::validate
-     * @dataProvider ruleProvider
+     * @dataProvider dataProvider
      */
-    public function testCanValidate(Regex $rule, array $expected): void
+    public function testCanValidate(array $arguments, array $expected): void
     {
-        $this->assertValidation($rule, $expected);
+        $this->assertValidation(new Regex(...$arguments), $expected);
     }
 
     /**

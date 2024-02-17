@@ -38,24 +38,24 @@ use Tests\AbstractRuleTest;
  */
 class ContainsTest extends AbstractRuleTest
 {
-    public function ruleProvider(): array
+    public function dataProvider(): array
     {
         return [
-            [new Contains('quick'), [0]],
-            [new Contains(' '), [0, 1]],
-            [new Contains('.'), [0, 2]],
-            [new Contains('@', '.'), [0, 2, 3]],
+            [['quick'], [0]],
+            [[' '], [0, 1]],
+            [['.'], [0, 2]],
+            [['@', '.'], [0, 2, 3]],
         ];
     }
 
     /**
      * @covers ::__construct
      * @covers ::validate
-     * @dataProvider ruleProvider
+     * @dataProvider dataProvider
      */
-    public function testCanValidate(Contains $rule, array $expected): void
+    public function testCanValidate(array $arguments, array $expected): void
     {
-        $this->assertValidation($rule, $expected);
+        $this->assertValidation(new Contains(...$arguments), $expected);
     }
 
     /**
