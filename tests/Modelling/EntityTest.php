@@ -31,7 +31,6 @@ declare(strict_types=1);
 namespace Tests\Modeling;
 
 use Laucov\WebFramework\Modeling\Entity;
-use Laucov\WebFramework\Validation\Rules\Contains;
 use Laucov\WebFramework\Validation\Rules\Length;
 use Laucov\WebFramework\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
@@ -43,11 +42,11 @@ class EntityTest extends TestCase
 {
     /**
      * @covers ::__construct
+     * @covers ::cacheRules
      * @covers ::getErrors
+     * @covers ::getRuleset
      * @covers ::toArray
      * @covers ::validate
-     * @uses Laucov\WebFramework\Modeling\Entity::cacheRules
-     * @uses Laucov\WebFramework\Modeling\Entity::getRuleset
      * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
      * @uses Laucov\WebFramework\Validation\Rules\Length::validate
      * @uses Laucov\WebFramework\Validation\Rules\Regex::__construct
