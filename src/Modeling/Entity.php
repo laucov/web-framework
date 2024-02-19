@@ -37,6 +37,15 @@ use Laucov\WebFramework\Validation\Ruleset;
 abstract class Entity
 {
     /**
+     * Cached data.
+     * 
+     * Stores the current "original" state of this entity.
+     * 
+     * Used to check if there are any entities
+     */
+    protected Entity $cache;
+
+    /**
      * Errors found.
      * 
      * @var array<string, RuleInterface[]>
@@ -56,19 +65,37 @@ abstract class Entity
     protected bool $rulesAreCached = false;
 
     /**
-     * Anonymous function to get the entity's public values.
-     */
-    protected \Closure $valuesGetter;
-
-    /**
      * Create the entity instance.
      */
     public function __construct()
     {
-        // Set the getter function.
-        // Necessary to get only the entity's public properties.
-        $values_getter = fn (Entity $e): array => get_object_vars($e);
-        $this->valuesGetter = $values_getter->bindTo($this, null);
+        // Cache for the first time.
+        $this->cache = clone $this;
+    }
+
+    /**
+     * Set the value of an inaccessible or non-existing property.
+     */
+    public function __set(string $name, mixed $value): void
+    {
+    }
+
+    /**
+     * Set the current entity state as the cached one.
+     */
+    public function cache(): void
+    {
+        foreach ($this->cache as $name => $value) {
+            $this->cache->$name = $this->$name;
+        }
+    }
+
+    /**
+     * Get values which are different from the cached ones.
+     */
+    public function getEntries(): \stdClass
+    {
+        return ObjectReader::diff($this, $this->cache);
     }
 
     /**
@@ -80,13 +107,23 @@ abstract class Entity
     }
 
     /**
+     * Check if the entity has errors.
+     */
+    public function hasErrors(null|string $name = null): bool
+    {
+        return $name !== null
+            ? (isset($this->errors[$name]) && count($this->errors[$name]))
+            : count($this->errors);
+    }
+
+    /**
      * Get the entity's data as an array.
      * 
      * @var array<string, mixed>
      */
     public function toArray(): array
     {
-        return ($this->valuesGetter)($this);
+        return ObjectReader::toArray($this);
     }
 
     /**

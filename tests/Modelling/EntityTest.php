@@ -41,12 +41,78 @@ use PHPUnit\Framework\TestCase;
 class EntityTest extends TestCase
 {
     /**
+     * @covers ::cache
+     * @covers ::getEntries
+     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     * @uses Laucov\WebFramework\Modeling\ObjectReader::diff
+     */
+    public function testCanCacheAndGetEntries(): void
+    {
+        // Create entity instance.
+        $entity = new class extends Entity
+        {
+            public string $firstName = 'John';
+            public string $lastName = 'Doe';
+            public int $age = 40;
+        };
+
+        // Test if caches default values.
+        $entries = $entity->getEntries();
+        $this->assertCount(0, (array) $entries);
+        $entity->firstName = 'Josef';
+        $entity->age = 45;
+        $entries = $entity->getEntries();
+        $this->assertCount(2, (array) $entries);
+        $this->assertSame('Josef', $entries->firstName);
+        $this->assertFalse(isset($entries->lastName));
+        $this->assertSame(45, $entries->age);
+
+        // Test caching.
+        $entity->cache();
+        $entity->lastName = 'Doevsky';
+        $entries = $entity->getEntries();
+        $this->assertCount(1, (array) $entries);
+        $this->assertFalse(isset($entries->firstName));
+        $this->assertSame('Doevsky', $entries->lastName);
+        $this->assertFalse(isset($entries->age));
+    }
+
+    /**
+     * @covers ::toArray
+     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
+     */
+    public function testCanGetAsArray(): void
+    {
+        // Create entity instance.
+        $entity = new class extends Entity
+        {
+            public int $user_id = 21;
+            public string $number = '5555555555554444';
+            public string $cvc = '123';
+            public string $expires_on = '2024-05-01';
+        };
+
+        // Get as array.
+        $array = $entity->toArray();
+        $this->assertIsArray($array);
+        $this->assertCount(4, $array);
+        $this->assertSame($array['user_id'], 21);
+        $this->assertSame($array['number'], '5555555555554444');
+        $this->assertSame($array['cvc'], '123');
+        $this->assertSame($array['expires_on'], '2024-05-01');
+    }
+
+    /**
      * @covers ::__construct
      * @covers ::cacheRules
+     * @covers ::hasErrors
      * @covers ::getErrors
      * @covers ::getRuleset
-     * @covers ::toArray
      * @covers ::validate
+     * @uses Laucov\WebFramework\Modeling\Entity::cache
+     * @uses Laucov\WebFramework\Modeling\Entity::toArray
+     * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
      * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
      * @uses Laucov\WebFramework\Validation\Rules\Length::validate
      * @uses Laucov\WebFramework\Validation\Rules\Regex::__construct
@@ -89,8 +155,11 @@ class EntityTest extends TestCase
         $entity->login = 'john.foobar';
         $entity->password = 'ABCDEF';
         $this->assertFalse($entity->validate());
+        $this->assertTrue($entity->hasErrors());
+        $this->assertFalse($entity->hasErrors('login'));
         $errors = $entity->getErrors('login');
         $this->assertCount(0, $errors);
+        $this->assertTrue($entity->hasErrors('password'));
         $errors = $entity->getErrors('password');
         $this->assertIsArray($errors);
         $this->assertCount(4, $errors);
@@ -102,11 +171,23 @@ class EntityTest extends TestCase
         // Fix again.
         $entity->password = 'SECUREpass@987654321';
         $this->assertTrue($entity->validate());
+    }
 
-        // Get as array.
-        $array = $entity->toArray();
-        $this->assertIsArray($array);
-        $this->assertSame($array['login'], 'john.foobar');
-        $this->assertSame($array['password'], 'SECUREpass@987654321');
-    } 
+    /**
+     * @covers ::__set
+     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     */
+    public function testIgnoresInexistentProperties(): void
+    {
+        // Create entity instance.
+        $entity = new class extends Entity
+        {
+            public string $title = 'Foobar: a study of Baz';
+            public string $author = 'Doe, John';
+        };
+
+        // Set invalid properties.
+        $entity->publisher = 'John Doe Printing Inc.';
+        $this->assertFalse(isset($entity->publisher));
+    }
 }
