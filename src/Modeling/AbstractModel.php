@@ -36,7 +36,7 @@ use Laucov\Db\Query\Table;
  * 
  * @template T of Entity
  */
-abstract class Model
+abstract class AbstractModel
 {
     /**
      * Whether to reset the deletion filter upon the next query.

@@ -36,12 +36,12 @@ use Laucov\WebFramework\Modeling\BatchUpdateResult;
 use Laucov\WebFramework\Modeling\Collection;
 use Laucov\WebFramework\Modeling\DeletionFilter;
 use Laucov\WebFramework\Modeling\Entity;
-use Laucov\WebFramework\Modeling\Model;
+use Laucov\WebFramework\Modeling\AbstractModel;
 use Laucov\WebFramework\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Modeling\Model
+ * @coversDefaultClass \Laucov\WebFramework\Modeling\AbstractModel
  */
 class ModelTest extends TestCase
 {
@@ -54,7 +54,7 @@ class ModelTest extends TestCase
      * @covers ::erase
      * @covers ::exists
      * @covers ::filterDeleted
-     * @uses Laucov\WebFramework\Modeling\Model::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
      */
     public function testCanDeleteAndErase(): void
     {
@@ -113,10 +113,10 @@ class ModelTest extends TestCase
      * @uses Laucov\WebFramework\Modeling\Entity::getRuleset
      * @uses Laucov\WebFramework\Modeling\Entity::toArray
      * @uses Laucov\WebFramework\Modeling\Entity::validate
-     * @uses Laucov\WebFramework\Modeling\Model::__construct
-     * @uses Laucov\WebFramework\Modeling\Model::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\Model::retrieve
-     * @uses Laucov\WebFramework\Modeling\Model::retrieveBatch
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieveBatch
      * @uses Laucov\WebFramework\Modeling\ObjectReader::count
      * @uses Laucov\WebFramework\Modeling\ObjectReader::diff
      * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
@@ -222,7 +222,7 @@ class ModelTest extends TestCase
      * @uses Laucov\WebFramework\Modeling\Collection::valid
      * @uses Laucov\WebFramework\Modeling\Entity::__construct
      * @uses Laucov\WebFramework\Modeling\Entity::__set
-     * @uses Laucov\WebFramework\Modeling\Model::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
      */
     public function testCanList(): void
     {
@@ -305,8 +305,8 @@ class ModelTest extends TestCase
      * @covers ::retrieveBatch
      * @uses Laucov\WebFramework\Modeling\Entity::__construct
      * @uses Laucov\WebFramework\Modeling\Entity::__set
-     * @uses Laucov\WebFramework\Modeling\Model::__construct
-     * @uses Laucov\WebFramework\Modeling\Model::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
      */
     public function testCanRetrieve(): void
     {
@@ -406,9 +406,9 @@ class ModelTest extends TestCase
 }
 
 /**
- * @extends Model<Airplane>
+ * @extends AbstractModel<Airplane>
  */
-class AirplaneModel extends Model
+class AirplaneModel extends AbstractModel
 {
     protected string $entityName = Airplane::class;
     protected string $primaryKey = 'id';
