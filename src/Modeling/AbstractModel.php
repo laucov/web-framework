@@ -34,7 +34,7 @@ use Laucov\Db\Query\Table;
 /**
  * Provides table data in form of entities and collections.
  * 
- * @template T of Entity
+ * @template T of AbstractEntity
  */
 abstract class AbstractModel
 {
@@ -49,7 +49,7 @@ abstract class AbstractModel
     protected DeletionFilter $deletionFilter = DeletionFilter::HIDE;
 
     /**
-     * Entity class name.
+     * AbstractEntity class name.
      * 
      * @var class-string<T>
      */

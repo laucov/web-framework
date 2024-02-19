@@ -31,7 +31,7 @@ declare(strict_types=1);
 namespace Tests\Modeling;
 
 use Laucov\WebFramework\Modeling\Collection;
-use Laucov\WebFramework\Modeling\Entity;
+use Laucov\WebFramework\Modeling\AbstractEntity;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +48,7 @@ class CollectionTest extends TestCase
      * @covers ::next
      * @covers ::rewind
      * @covers ::valid
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
      */
     public function testCanInstantiate(): void
     {
@@ -99,7 +99,7 @@ class CollectionTest extends TestCase
     }
 }
 
-class Product extends Entity
+class Product extends AbstractEntity
 {
     public string $code;
     public float $price = 0.00;

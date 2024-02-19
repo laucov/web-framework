@@ -30,26 +30,26 @@ declare(strict_types=1);
 
 namespace Tests\Modeling;
 
-use Laucov\WebFramework\Modeling\Entity;
+use Laucov\WebFramework\Modeling\AbstractEntity;
 use Laucov\WebFramework\Validation\Rules\Length;
 use Laucov\WebFramework\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Modeling\Entity
+ * @coversDefaultClass \Laucov\WebFramework\Modeling\AbstractEntity
  */
-class EntityTest extends TestCase
+class AbstractEntityTest extends TestCase
 {
     /**
      * @covers ::cache
      * @covers ::getEntries
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
      * @uses Laucov\WebFramework\Modeling\ObjectReader::diff
      */
     public function testCanCacheAndGetEntries(): void
     {
         // Create entity instance.
-        $entity = new class extends Entity
+        $entity = new class extends AbstractEntity
         {
             public string $firstName = 'John';
             public string $lastName = 'Doe';
@@ -79,13 +79,13 @@ class EntityTest extends TestCase
 
     /**
      * @covers ::toArray
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
      * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
      */
     public function testCanGetAsArray(): void
     {
         // Create entity instance.
-        $entity = new class extends Entity
+        $entity = new class extends AbstractEntity
         {
             public int $user_id = 21;
             public string $number = '5555555555554444';
@@ -110,8 +110,8 @@ class EntityTest extends TestCase
      * @covers ::getErrors
      * @covers ::getRuleset
      * @covers ::validate
-     * @uses Laucov\WebFramework\Modeling\Entity::cache
-     * @uses Laucov\WebFramework\Modeling\Entity::toArray
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::cache
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::toArray
      * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
      * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
      * @uses Laucov\WebFramework\Validation\Rules\Length::validate
@@ -124,7 +124,7 @@ class EntityTest extends TestCase
     public function testCanValidate(): void
     {
         // Create entity instance.
-        $entity = new class extends Entity
+        $entity = new class extends AbstractEntity
         {
             #[Length(8, 16)]
             public string $login;
@@ -175,12 +175,12 @@ class EntityTest extends TestCase
 
     /**
      * @covers ::__set
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
      */
     public function testIgnoresInexistentProperties(): void
     {
         // Create entity instance.
-        $entity = new class extends Entity
+        $entity = new class extends AbstractEntity
         {
             public string $title = 'Foobar: a study of Baz';
             public string $author = 'Doe, John';

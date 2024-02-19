@@ -31,7 +31,7 @@ namespace Laucov\WebFramework\Modeling;
 /**
  * Represents a list of database records.
  * 
- * @template T of Entity
+ * @template T of AbstractEntity
  */
 class Collection implements \Countable, \Iterator
 {
@@ -73,7 +73,7 @@ class Collection implements \Countable, \Iterator
          */
         public readonly int $storedCount,
 
-        Entity ...$entities,
+        AbstractEntity ...$entities,
     ) {
         $this->entities = $entities;
     }

@@ -35,7 +35,7 @@ use Laucov\Db\Data\Driver\DriverFactory;
 use Laucov\WebFramework\Modeling\BatchUpdateResult;
 use Laucov\WebFramework\Modeling\Collection;
 use Laucov\WebFramework\Modeling\DeletionFilter;
-use Laucov\WebFramework\Modeling\Entity;
+use Laucov\WebFramework\Modeling\AbstractEntity;
 use Laucov\WebFramework\Modeling\AbstractModel;
 use Laucov\WebFramework\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +43,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Laucov\WebFramework\Modeling\AbstractModel
  */
-class ModelTest extends TestCase
+class AbstractModelTest extends TestCase
 {
     protected Connection $conn;
     protected AirplaneModel $model;
@@ -106,13 +106,13 @@ class ModelTest extends TestCase
      * @covers ::update
      * @covers ::updateBatch
      * @covers ::withValue
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
-     * @uses Laucov\WebFramework\Modeling\Entity::__set
-     * @uses Laucov\WebFramework\Modeling\Entity::cacheRules
-     * @uses Laucov\WebFramework\Modeling\Entity::getEntries
-     * @uses Laucov\WebFramework\Modeling\Entity::getRuleset
-     * @uses Laucov\WebFramework\Modeling\Entity::toArray
-     * @uses Laucov\WebFramework\Modeling\Entity::validate
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::cacheRules
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::getEntries
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::getRuleset
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::toArray
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::validate
      * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
      * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
      * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
@@ -220,8 +220,8 @@ class ModelTest extends TestCase
      * @uses Laucov\WebFramework\Modeling\Collection::next
      * @uses Laucov\WebFramework\Modeling\Collection::rewind
      * @uses Laucov\WebFramework\Modeling\Collection::valid
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
-     * @uses Laucov\WebFramework\Modeling\Entity::__set
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
      * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
      */
     public function testCanList(): void
@@ -303,8 +303,8 @@ class ModelTest extends TestCase
      * @covers ::sort
      * @covers ::retrieve
      * @covers ::retrieveBatch
-     * @uses Laucov\WebFramework\Modeling\Entity::__construct
-     * @uses Laucov\WebFramework\Modeling\Entity::__set
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
      * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
      * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
      */
@@ -415,7 +415,7 @@ class AirplaneModel extends AbstractModel
     protected string $tableName = 'airplanes';
 }
 
-class Airplane extends Entity
+class Airplane extends AbstractEntity
 {
     public int $id;
     #[Regex('/^[A-Z]{2}\-[A-Z]{3}$/')]

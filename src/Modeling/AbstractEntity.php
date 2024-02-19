@@ -34,7 +34,7 @@ use Laucov\WebFramework\Validation\Ruleset;
 /**
  * Represents a database record.
  */
-abstract class Entity
+abstract class AbstractEntity
 {
     /**
      * Cached data.
@@ -43,7 +43,7 @@ abstract class Entity
      * 
      * Used to check if there are any entities
      */
-    protected Entity $cache;
+    protected AbstractEntity $cache;
 
     /**
      * Errors found.
