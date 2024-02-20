@@ -27,6 +27,7 @@
  */
 
 namespace Laucov\WebFramework\Database;
+
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Data\Driver\DriverFactory;
 
