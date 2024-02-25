@@ -28,8 +28,11 @@
 
 namespace Laucov\WebFramework\Http;
 
+use Laucov\Arrays\ArrayReader;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\WebFramework\Database\ConnectionProvider;
+use Laucov\WebFramework\Providers\ConfigProvider;
+use Laucov\WebFramework\Providers\ServiceProvider;
 
 /**
  * Represents a list of database records.
@@ -41,14 +44,19 @@ abstract class AbstractController
      */
     public function __construct(
         /**
-         * Request.
+         * Configuration provider.
          */
         protected RequestInterface $request,
 
         /**
-         * Connection provider.
+         * Configuration provider.
          */
-        protected ConnectionProvider $connectionProvider,
+        protected ConfigProvider $config,
+
+        /**
+         * Service provider.
+         */
+        protected ServiceProvider $services,
     ) {
     }
 }

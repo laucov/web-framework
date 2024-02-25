@@ -30,13 +30,10 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Laucov\Db\Data\Driver\DriverFactory;
-use Laucov\Http\Message\OutgoingRequest;
-use Laucov\Http\Message\RequestInterface;
-use Laucov\WebFramework\Database\ConnectionProvider;
+use Laucov\Http\Message\IncomingRequest;
 use Laucov\WebFramework\Http\AbstractController;
-use Laucov\WebFramework\Modeling\AbstractModel;
-use Laucov\WebFramework\Modeling\AbstractEntity;
+use Laucov\WebFramework\Providers\ConfigProvider;
+use Laucov\WebFramework\Providers\ServiceProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,21 +43,32 @@ class AbstractControllerTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Database\ConnectionProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      */
     public function testCanExtend(): void
     {
-        $this->expectNotToPerformAssertions();
-
-        // Create request.
-        $request = new OutgoingRequest();
-
-        // Create connection provider.
-        $provider = new ConnectionProvider(new DriverFactory());
-
-        // Extend.
-        new class ($request, $provider) extends AbstractController
+        // Create providers.
+        $req = new IncomingRequest([], [], null, 'GET', 'https://foo.com', []);
+        $cpv = new ConfigProvider([]);
+        $spv = new ServiceProvider($cpv);
+        
+        // Create example class.
+        $controller = new class ($req, $cpv, $spv) extends AbstractController
         {
         };
+        $reflection = new \ReflectionObject($controller);
+        $this->assertSame(
+            $req,
+            $reflection->getProperty('request')->getValue($controller),
+        );
+        $this->assertSame(
+            $cpv,
+            $reflection->getProperty('config')->getValue($controller),
+        );
+        $this->assertSame(
+            $spv,
+            $reflection->getProperty('services')->getValue($controller),
+        );
     }
 }
