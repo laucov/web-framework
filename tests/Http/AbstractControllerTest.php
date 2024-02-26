@@ -31,6 +31,7 @@ declare(strict_types=1);
 namespace Tests\Http;
 
 use Laucov\Http\Message\IncomingRequest;
+use Laucov\Http\Message\OutgoingResponse;
 use Laucov\WebFramework\Http\AbstractController;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
@@ -69,6 +70,10 @@ class AbstractControllerTest extends TestCase
         $this->assertSame(
             $spv,
             $reflection->getProperty('services')->getValue($controller),
+        );
+        $this->assertInstanceOf(
+            OutgoingResponse::class,
+            $reflection->getProperty('response')->getValue($controller),
         );
     }
 }

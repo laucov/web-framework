@@ -29,7 +29,9 @@
 namespace Laucov\WebFramework\Http;
 
 use Laucov\Arrays\ArrayReader;
+use Laucov\Http\Message\OutgoingResponse;
 use Laucov\Http\Message\RequestInterface;
+use Laucov\Http\Message\ResponseInterface;
 use Laucov\WebFramework\Database\ConnectionProvider;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
@@ -40,11 +42,16 @@ use Laucov\WebFramework\Providers\ServiceProvider;
 abstract class AbstractController
 {
     /**
+     * Response.
+     */
+    protected OutgoingResponse $response;
+
+    /**
      * Create the controller instance.
      */
     public function __construct(
         /**
-         * Configuration provider.
+         * Request.
          */
         protected RequestInterface $request,
 
@@ -58,5 +65,6 @@ abstract class AbstractController
          */
         protected ServiceProvider $services,
     ) {
+        $this->response = new OutgoingResponse();
     }
 }
