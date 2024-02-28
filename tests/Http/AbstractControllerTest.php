@@ -50,19 +50,14 @@ class AbstractControllerTest extends TestCase
     public function testCanExtend(): void
     {
         // Create providers.
-        $req = new IncomingRequest([], [], null, 'GET', 'https://foo.com', []);
         $cpv = new ConfigProvider([]);
         $spv = new ServiceProvider($cpv);
         
         // Create example class.
-        $controller = new class ($req, $cpv, $spv) extends AbstractController
+        $controller = new class ($cpv, $spv) extends AbstractController
         {
         };
         $reflection = new \ReflectionObject($controller);
-        $this->assertSame(
-            $req,
-            $reflection->getProperty('request')->getValue($controller),
-        );
         $this->assertSame(
             $cpv,
             $reflection->getProperty('config')->getValue($controller),

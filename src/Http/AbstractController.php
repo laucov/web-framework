@@ -51,11 +51,6 @@ abstract class AbstractController
      */
     public function __construct(
         /**
-         * Request.
-         */
-        protected RequestInterface $request,
-
-        /**
          * Configuration provider.
          */
         protected ConfigProvider $config,
