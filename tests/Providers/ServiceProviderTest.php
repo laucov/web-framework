@@ -53,6 +53,7 @@ class ServiceProviderTest extends TestCase
     protected ServiceProvider $services;
 
     /**
+     * @covers ::__construct
      * @covers ::db
      * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
@@ -60,7 +61,6 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::applyEnvironmentValues
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getOrCacheInstance
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
      */
     public function testCanGetServices(): void
