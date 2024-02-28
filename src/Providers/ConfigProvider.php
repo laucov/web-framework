@@ -38,7 +38,7 @@ class ConfigProvider
     /**
      * Registered classes.
      * 
-     * @var array<class-string<T>>
+     * @var array<string, class-string<T>>
      */
     protected array $classes = [];
 
@@ -74,14 +74,17 @@ class ConfigProvider
             throw new \InvalidArgumentException(sprintf($msg, $intf_name));
         }
 
+        // Create name.
+        $name = $this->getConfigName($class_name);
+
         // Check if is already registered.
-        if (in_array($class_name, $this->classes, true)) {
-            $msg = 'Configuration %s is already registered.';
-            throw new \RuntimeException(sprintf($msg, $class_name));
+        if (array_key_exists($name, $this->classes)) {
+            $msg = 'Configuration "%s" is already registered. Cannot add %s.';
+            throw new \RuntimeException(sprintf($msg, $name, $class_name));
         }
 
         // Register.
-        $this->classes[] = $class_name;
+        $this->classes[$name] = $class_name;
 
         return $this;
     }
@@ -94,24 +97,27 @@ class ConfigProvider
      */
     public function getConfig(string $class_name): mixed
     {
+        // Get name.
+        $name = $this->getConfigName($class_name);
+
         // Check if the class name is registered.
-        if (!in_array($class_name, $this->classes, true)) {
+        if (!array_key_exists($name, $this->classes)) {
             $msg = 'There is no configuration registered for %s.';
             throw new \InvalidArgumentException(sprintf($msg, $class_name));
         }
 
-        return $this->getOrCacheInstance($class_name);
+        return $this->getOrCacheInstance($name);
     }
 
     /**
      * Try to get a cached instance.
      * 
-     * @param class-string<T>
-     * 
      * @var T
      */
-    public function getOrCacheInstance(string $class_name)
+    public function getOrCacheInstance(string $name)
     {
+        $class_name = $this->classes[$name];
+
         if (!array_key_exists($class_name, $this->instances)) {
             $instance = new $class_name();
             $this->applyEnvironmentValues($instance);
@@ -144,5 +150,22 @@ class ConfigProvider
                 $object->{$env_match->propertyName} = $value;
             }
         }
+    }
+
+    /**
+     * Get the config name.
+     * 
+     * Removes the namespace from the class name.
+     * 
+     * Ex.: `'Foo\Bar\Baz'` => `'Baz'`
+     */
+    public function getConfigName(string $class_name): string
+    {
+        // Get namespace separator position.
+        $position = strrpos($class_name, '\\');
+
+        return $position !== false
+            ? substr($class_name, $position + 1)
+            : $class_name;
     }
 }

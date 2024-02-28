@@ -47,6 +47,7 @@ class ConfigProviderTest extends TestCase
      * @covers ::addConfig
      * @covers ::applyEnvironmentValues
      * @covers ::getConfig
+     * @covers ::getConfigName
      * @covers ::getOrCacheInstance
      * @uses Laucov\WebFramework\Providers\EnvMatch::__construct
      */
@@ -71,22 +72,32 @@ class ConfigProviderTest extends TestCase
         $this->assertSame('Example title', $config_c->title);
         $this->assertSame('Johnson, Carl', $config_c->author);
         $this->assertSame(1997, $config_c->year);
+
+        // Test if can extend default configuration objects.
+        $provider = new ConfigProvider([]);
+        $provider->addConfig(\Tests\Providers\Another\Book::class);
+        $config_d = $provider->getConfig(\Tests\Providers\Another\Book::class);
+        $this->assertInstanceOf(\Tests\Providers\Another\Book::class, $config_d);
+        $config_e = $provider->getConfig(Book::class);
+        $this->assertSame($config_d, $config_e);
     }
 
     /**
      * @covers ::addConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
      */
     public function testCannotAddConfigTwice(): void
     {
         $this->provider->addConfig(Book::class);
         $this->expectException(\RuntimeException::class);
-        $this->provider->addConfig(Book::class);
+        $this->provider->addConfig(\Tests\Providers\Another\Book::class);
     }
 
     /**
      * @covers ::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
      */
     public function testMustSetBeforeGetting(): void
     {
@@ -117,4 +128,10 @@ class Book implements ConfigInterface
     public string $title = 'Example title';
     public string $author = 'Doe, John';
     public int $year = 2024;
+}
+
+namespace Tests\Providers\Another;
+
+class Book extends \Tests\Providers\Book
+{
 }

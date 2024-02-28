@@ -60,6 +60,7 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::applyEnvironmentValues
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getOrCacheInstance
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
      */
