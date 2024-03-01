@@ -92,6 +92,7 @@ class ConfigProvider
     /**
      * Get a configuration instance.
      * 
+     * @todo Check if `$class_name` extends `$this->classes[$name]`.
      * @param class-string<T>
      * @return T
      */
