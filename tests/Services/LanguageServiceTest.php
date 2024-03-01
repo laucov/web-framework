@@ -31,6 +31,7 @@ declare(strict_types=1);
 namespace Tests\Services;
 
 use Laucov\WebFramework\Config\Language;
+use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\LanguageService;
 use PHPUnit\Framework\TestCase;
 
@@ -59,6 +60,8 @@ class LanguageServiceTest extends TestCase
      */
     public function testCanSetAcceptedLanguagesAndFormatMessages(): void
     {
+        $this->assertInstanceOf(AbstractService::class, $this->service);
+
         // Test with no accepted locale.
         $this->assertSame('en', $this->service->getLocale());
 
