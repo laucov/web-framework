@@ -43,7 +43,7 @@ use PHPUnit\Framework\TestCase;
 class DatabaseServiceTest extends TestCase
 {
     /**
-     * Service instance.
+     * Configuration instance.
      */
     protected Database $config;
 
