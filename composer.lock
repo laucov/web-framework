@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8a32b54b068ea94824e9f19dbc21d3e",
+    "content-hash": "6fb0d1a7ce857593d9e5ed0afe78a234",
     "packages": [
         {
             "name": "laucov/arrays",
@@ -173,6 +173,50 @@
                 "source": "https://github.com/laucov/http/tree/v1.1.1"
             },
             "time": "2024-02-28T12:03:23+00:00"
+        },
+        {
+            "name": "laucov/lang",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laucov/lang.git",
+                "reference": "3fefbc26ec3a9a0ffdf31affba6599dc403d5a2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laucov/lang/zipball/3fefbc26ec3a9a0ffdf31affba6599dc403d5a2c",
+                "reference": "3fefbc26ec3a9a0ffdf31affba6599dc403d5a2c",
+                "shasum": ""
+            },
+            "require": {
+                "laucov/arrays": "^1.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laucov\\Lang\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Covaleski Pereira",
+                    "email": "rafael.covaleski@laucov.com"
+                }
+            ],
+            "description": "Library for multi-language support.",
+            "support": {
+                "issues": "https://github.com/laucov/lang/issues",
+                "source": "https://github.com/laucov/lang/tree/v1.0.1"
+            },
+            "time": "2024-02-29T16:03:39+00:00"
         }
     ],
     "packages-dev": [
