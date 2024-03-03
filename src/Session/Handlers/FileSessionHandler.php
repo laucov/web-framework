@@ -156,14 +156,15 @@ class FileSessionHandler implements SessionHandlerInterface
 
         // Create file and copy the old session content.
         $resource = fopen($this->directory . $new_id, 'c+');
-        if (
-            !$resource
-            || !flock($resource, $this->exclusiveLock)
-            || !ftruncate($resource, 0)
-            || !fwrite($resource, $data)
-        ) {
-            $msg = 'Could not lock, truncate or write the new session file.';
+        $success = $resource
+            && flock($resource, $this->exclusiveLock)
+            && ftruncate($resource, 0)
+            && fwrite($resource, $data);
+        if (!$success) {
+            // @codeCoverageIgnoreStart
+            $msg = 'Could not create the new session file.';
             throw new \RuntimeException($msg);
+            // @codeCoverageIgnoreEnd
         }
 
         // Register new session.
