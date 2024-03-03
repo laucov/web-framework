@@ -47,9 +47,4 @@ enum SessionOpening
      * The session was found and just opened.
      */
     case OPEN;
-
-    /**
-     * The session source could not be locked.
-     */
-    case UNABLE_TO_LOCK;
 }
