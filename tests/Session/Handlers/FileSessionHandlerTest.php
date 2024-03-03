@@ -134,7 +134,7 @@ class FileSessionHandlerTest extends TestCase
 
         // Write to the session.
         $this->assertSame('', $this->handler->read($id_b));
-        $data = 'nome|s:4:"John";';
+        $data = 'firstname|s:4:"John";';
         $this->handler->write($id_b, $data);
         $this->assertSame($data, $this->handler->read($id_b));
 
@@ -160,6 +160,36 @@ class FileSessionHandlerTest extends TestCase
             SessionOpening::NOT_FOUND,
             $this->handler->open($id_c),
         );
+    }
+
+    /**
+     * @covers ::read
+     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::__construct
+     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::create
+     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::open
+     */
+    public function testCannotReadBeforeOpening(): void
+    {
+        $id = $this->handler->create();
+        $this->handler->open($id);
+        $this->handler->read($id);
+        $this->expectException(\RuntimeException::class);
+        $this->handler->read('invalid_id');
+    }
+
+    /**
+     * @covers ::write
+     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::__construct
+     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::create
+     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::open
+     */
+    public function testCannotWriteBeforeOpening(): void
+    {
+        $id = $this->handler->create();
+        $this->handler->open($id);
+        $this->handler->write($id, 'lastname|s:3:"Doe";');
+        $this->expectException(\RuntimeException::class);
+        $this->handler->write('invalid_id', 'age|i:42;');
     }
     
     protected function setUp(): void

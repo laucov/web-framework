@@ -197,8 +197,32 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function read(string $id): string
     {
+        // Check if the session exists.
+        if (!array_key_exists($id, $this->sessions)) {
+            $msg = 'Cannot read a session that is not open.';
+            throw new \RuntimeException($msg);
+        }
+
+        // Get the session.
         $resource = $this->sessions[$id];
-        return stream_get_contents($resource, null, 0) ?: '';
+
+        // Read contents.
+        try {
+            $result = stream_get_contents($resource, null, 0);
+            // @codeCoverageIgnoreStart
+        } catch (\Throwable $t) {
+            $result = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!is_string($result)) {
+                $msg = 'Could not read the session file: ';
+                $msg .= $error ?? 'stream_get_contents() failure.';
+                throw new \RuntimeException($msg);
+            }
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $result;
     }
 
     /**
@@ -257,9 +281,36 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function write(string $id, string $data): void
     {
+        // Check if the session exists.
+        if (!array_key_exists($id, $this->sessions)) {
+            $msg = 'Cannot read a session that is not open.';
+            throw new \RuntimeException($msg);
+        }
+
+        // Get the session.
         $resource = $this->sessions[$id];
-        ftruncate($resource, 0);
-        rewind($resource);
-        fwrite($resource, $data);
+
+        // Write contents.
+        try {
+            $ftruncate = ftruncate($resource, 0);
+            $rewind = $ftruncate && rewind($resource);
+            $fwrite = $rewind && fwrite($resource, $data);
+            $success = $fwrite;
+            // @codeCoverageIgnoreStart
+        } catch (\Throwable $t) {
+            $success = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!$success) {
+                $msg = 'Could not write to the session file: ';
+                $msg .= $error ?? match (true) {
+                    !$ftruncate => 'ftruncate() failure.',
+                    !$rewind => 'rewind() failure.',
+                    !$fwrite => 'fwrite() failure.',
+                };
+                throw new \RuntimeException($msg);
+            }
+            // @codeCoverageIgnoreEnd
+        }
     }
 }
