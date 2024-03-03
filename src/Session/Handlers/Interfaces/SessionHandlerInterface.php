@@ -28,6 +28,7 @@
 
 namespace Laucov\WebFramework\Session\Handlers\Interfaces;
 use Laucov\WebFramework\Session\SessionClosing;
+use Laucov\WebFramework\Session\SessionDestruction;
 use Laucov\WebFramework\Session\SessionOpening;
 
 /**
@@ -48,7 +49,7 @@ interface SessionHandlerInterface
     /**
      * Destroy the session with the given ID.
      */
-    public function destroy(string $id): void;
+    public function destroy(string $id): SessionDestruction;
 
     /**
      * Open the session with the given ID.

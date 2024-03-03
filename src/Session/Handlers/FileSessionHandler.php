@@ -30,6 +30,7 @@ namespace Laucov\WebFramework\Session\Handlers;
 
 use Laucov\WebFramework\Session\Handlers\Interfaces\SessionHandlerInterface;
 use Laucov\WebFramework\Session\SessionClosing;
+use Laucov\WebFramework\Session\SessionDestruction;
 use Laucov\WebFramework\Session\SessionOpening;
 
 /**
@@ -43,21 +44,11 @@ class FileSessionHandler implements SessionHandlerInterface
     protected string $directory;
 
     /**
-     * Exclusive lock value.
-     */
-    protected int $exclusiveLock = LOCK_EX;
-
-    /**
      * Open sessions.
      * 
      * @var array<string, resource>
      */
     protected array $sessions = [];
-
-    /**
-     * Shared lock value.
-     */
-    protected int $sharedLock = LOCK_SH;
 
     /**
      * Create the session handler instance.
@@ -72,11 +63,28 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function close(string $id): SessionClosing
     {
+        // Check if the session is open.
         if (!array_key_exists($id, $this->sessions)) {
-            return SessionClosing::NOT_FOUND;
+            return SessionClosing::NOT_OPEN;
         }
 
-        fclose($this->sessions[$id]);
+        // Try to close the file.
+        try {
+            $success = fclose($this->sessions[$id]);
+            // @codeCoverageIgnoreStart
+        } catch (\Throwable $t) {
+            $success = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!$success) {
+                $msg = 'Could not close the session file: '
+                    . ($error ?? 'fclose() failure.');
+                throw new \RuntimeException($msg);
+            }
+            // @codeCoverageIgnoreEnd
+        }
+
+        // Unregister ID.
         unset($this->sessions[$id]);
 
         return SessionClosing::CLOSED;
@@ -87,21 +95,58 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function create(): string
     {
+        // Create new ID.
         $id = uniqid();
-        touch($this->directory . $id);
+        
+        // Create the session file without opening it.
+        try {
+            $success = touch($this->directory . $id);
+            // @codeCoverageIgnoreStart
+        } catch (\Throwable $t) {
+            $success = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!$success) {
+                $msg = 'Could not create the new session file: '
+                    . ($error ?? 'touch() failure.');
+                throw new \RuntimeException($msg);
+            }
+            // @codeCoverageIgnoreEnd
+        }
         
         return $id;
     }
 
     /**
-     * Destroy the session with the given ID.
+     * Remove all data and eliminate the session with the given ID.
      */
-    public function destroy(string $id): void
+    public function destroy(string $id): SessionDestruction
     {
-        $this->open($id);
+        // Check if the session is open.
+        if (!array_key_exists($id, $this->sessions)) {
+            return SessionDestruction::NOT_OPEN;
+        }
+
+        // Close the session.
         $this->close($id);
-        unlink($this->directory . $id);
-        return;
+
+        // Remove the session file.
+        try {
+            $success = unlink($this->directory . $id);
+            // @codeCoverageIgnoreStart
+        } catch (\Throwable $t) {
+            $success = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!$success) {
+                $msg = 'Could not delete the session file: '
+                    . ($error ?? 'unlink() failure.');
+                throw new \RuntimeException($msg);
+            }
+            // @codeCoverageIgnoreEnd
+        }
+
+        return SessionDestruction::DESTROYED;
     }
 
     /**
@@ -120,12 +165,25 @@ class FileSessionHandler implements SessionHandlerInterface
         }
 
         // Open session.
-        $resource = fopen($this->directory . $id, 'a+');
-
-        // Lock session file.
-        $lock = $readonly ? $this->sharedLock : $this->exclusiveLock;
-        if (!flock($resource, $lock)) {
-            return SessionOpening::UNABLE_TO_LOCK;
+        try {
+            $resource = fopen($this->directory . $id, 'c+');
+            $lock = $readonly ? LOCK_SH : LOCK_EX;
+            $flock = $resource && flock($resource, $lock);
+            $success = $flock;
+            // @codeCoverageIgnoreStart
+        } catch (\Throwable $t) {
+            $success = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!$success) {
+                $msg = 'Could not open the session file: ';
+                $msg .= $error ?? match (true) {
+                    !$resource => 'fopen() failure.',
+                    !$flock => 'flock() failure.',
+                };
+                throw new \RuntimeException($msg);
+            }
+            // @codeCoverageIgnoreEnd
         }
 
         // Register open session.
@@ -155,15 +213,27 @@ class FileSessionHandler implements SessionHandlerInterface
         $new_id = uniqid();
 
         // Create file and copy the old session content.
-        $resource = fopen($this->directory . $new_id, 'c+');
-        $success = $resource
-            && flock($resource, $this->exclusiveLock)
-            && ftruncate($resource, 0)
-            && fwrite($resource, $data);
-        if (!$success) {
+        try {
+            $resource = fopen($this->directory . $new_id, 'c+');
+            $flock = $resource && flock($resource, LOCK_EX);
+            $ftruncate = $flock && ftruncate($resource, 0);
+            $fwrite = $ftruncate && fwrite($resource, $data);
+            $success = $fwrite;
             // @codeCoverageIgnoreStart
-            $msg = 'Could not create the new session file.';
-            throw new \RuntimeException($msg);
+        } catch (\Throwable $t) {
+            $success = false;
+            $error = $t->getMessage();
+        } finally {
+            if (!$success) {
+                $msg = 'Could not create the session file when regenerating: ';
+                $msg .= $error ?? match (true) {
+                    !$resource => 'fopen() failure.',
+                    !$flock => 'flock() failure.',
+                    !$ftruncate => 'ftruncate() failure.',
+                    !$fwrite => 'fwrite() failure.',
+                };
+                throw new \RuntimeException($msg);
+            }
             // @codeCoverageIgnoreEnd
         }
 

@@ -29,14 +29,14 @@
 namespace Laucov\WebFramework\Session;
 
 /**
- * Session closing status.
+ * Session destruction status.
  */
-enum SessionClosing
+enum SessionDestruction
 {
     /**
-     * The session was open and just closed.
+     * The session was successfully destroyed.
      */
-    case CLOSED;
+    case DESTROYED;
 
     /**
      * There was no open session for the given ID.

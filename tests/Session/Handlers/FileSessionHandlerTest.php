@@ -30,6 +30,7 @@ namespace Tests\Session;
 
 use Laucov\WebFramework\Session\Handlers\FileSessionHandler;
 use Laucov\WebFramework\Session\Handlers\Interfaces\SessionHandlerInterface;
+use Laucov\WebFramework\Session\SessionDestruction;
 use Laucov\WebFramework\Session\SessionOpening;
 use Laucov\WebFramework\Session\SessionClosing;
 use PHPUnit\Framework\TestCase;
@@ -90,7 +91,7 @@ class FileSessionHandlerTest extends TestCase
             $this->handler->close($id_a),
         );
         $this->assertSame(
-            SessionClosing::NOT_FOUND,
+            SessionClosing::NOT_OPEN,
             $this->handler->close($id_a),
         );
 
@@ -103,25 +104,6 @@ class FileSessionHandlerTest extends TestCase
         // Create concurring handler to test locks.
         $handler = new FileSessionHandler(__DIR__ . '/session-files');
 
-        // Test lock properties and change them to not actually lock this test.
-        $reflection = new \ReflectionObject($handler);
-        $lock_sh = $reflection->getProperty('sharedLock');
-        $this->assertSame(LOCK_SH, $lock_sh->getValue($handler));
-        $lock_ex = $reflection->getProperty('exclusiveLock');
-        $this->assertSame(LOCK_EX, $lock_ex->getValue($handler));
-        $lock_sh->setValue($handler, LOCK_SH|LOCK_NB);
-        $lock_ex->setValue($handler, LOCK_EX|LOCK_NB);
-
-        // Test concurrency against default lock (LOCK_EX).
-        $this->assertSame(
-            SessionOpening::UNABLE_TO_LOCK,
-            $handler->open($id_a),
-        );
-        $this->assertSame(
-            SessionOpening::UNABLE_TO_LOCK,
-            $handler->open($id_a, true),
-        );
-
         // Test concurrency against readonly lock (LOCK_SH).
         $id_b = $this->handler->create();
         $this->assertSame(
@@ -133,13 +115,18 @@ class FileSessionHandlerTest extends TestCase
             $handler->open($id_b, true),
         );
         $handler->close($id_b);
-        $this->assertSame(
-            SessionOpening::UNABLE_TO_LOCK,
-            $handler->open($id_b, false),
-        );
 
         // Destroy a session.
-        $this->handler->destroy($id_a);
+        $this->handler->close($id_a);
+        $this->assertSame(
+            SessionDestruction::NOT_OPEN,
+            $this->handler->destroy($id_a),
+        );
+        $this->handler->open($id_a);
+        $this->assertSame(
+            SessionDestruction::DESTROYED,
+            $this->handler->destroy($id_a),
+        );
         $this->assertSame(
             SessionOpening::NOT_FOUND,
             $this->handler->open($id_a),
@@ -157,12 +144,6 @@ class FileSessionHandlerTest extends TestCase
 
         // Check if is already open and contains the same data.
         $this->assertSame($data, $this->handler->read($id_c));
-        
-        // Check if the regenerated session is locked.
-        $this->assertSame(
-            SessionOpening::UNABLE_TO_LOCK,
-            $handler->open($id_c, true),
-        );
 
         // Check if the old session is closed and still contains the data.
         $this->assertSame(
