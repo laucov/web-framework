@@ -137,6 +137,10 @@ class FileSessionHandlerTest extends TestCase
         $data = 'firstname|s:4:"John";';
         $this->handler->write($id_b, $data);
         $this->assertSame($data, $this->handler->read($id_b));
+        // Write an empty string.
+        $this->handler->write($id_b, '');
+        $this->assertSame('', $this->handler->read($id_b));
+        $this->handler->write($id_b, $data);
 
         // Regenerate a session without destroying the old one.
         $id_c = $this->handler->regenerate($id_b, false);

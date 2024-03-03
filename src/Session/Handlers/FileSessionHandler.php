@@ -294,7 +294,7 @@ class FileSessionHandler implements SessionHandlerInterface
         try {
             $ftruncate = ftruncate($resource, 0);
             $rewind = $ftruncate && rewind($resource);
-            $fwrite = $rewind && fwrite($resource, $data);
+            $fwrite = $rewind && is_int(fwrite($resource, $data));
             $success = $fwrite;
             // @codeCoverageIgnoreStart
         } catch (\Throwable $t) {
