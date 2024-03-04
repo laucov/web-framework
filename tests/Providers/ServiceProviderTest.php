@@ -31,10 +31,12 @@ declare(strict_types=1);
 namespace Tests\Providers;
 
 use Laucov\WebFramework\Config\Database;
+use Laucov\WebFramework\Config\Language;
 use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
 use Laucov\WebFramework\Services\DatabaseService;
+use Laucov\WebFramework\Services\LanguageService;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,6 +57,8 @@ class ServiceProviderTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::db
+     * @covers ::getService
+     * @covers ::lang
      * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
@@ -63,16 +67,28 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getOrCacheInstance
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
+     * @uses Laucov\WebFramework\Services\LanguageService::__construct
+     * @uses Laucov\WebFramework\Services\LanguageService::update
      */
     public function testCanGetServices(): void
     {
-        // Try to get the database service.
-        $this->config->addConfig(Database::class);
-        $db_a = $this->services->db();
-        $this->assertInstanceOf(DatabaseService::class, $db_a);
-        // Test caching.
-        $db_b = $this->services->db();
-        $this->assertSame($db_a, $db_b);
+        // Set service list.
+        $services = [
+            ['db', DatabaseService::class, Database::class],
+            ['lang', LanguageService::class, Language::class],
+        ];
+
+        // Test each service.
+        foreach ($services as [$method, $service, $config]) {
+            // Add config.
+            $this->config->addConfig($config);
+            // Get a new instance.
+            $a = $this->services->{$method}();
+            $this->assertInstanceOf($service, $a);
+            // Get cached instance.
+            $b = $this->services->{$method}();
+            $this->assertSame($a, $b);
+        }
     }
 
     protected function setUp(): void

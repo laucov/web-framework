@@ -29,7 +29,9 @@
 namespace Laucov\WebFramework\Providers;
 
 use Laucov\WebFramework\Config\Database;
+use Laucov\WebFramework\Config\Language;
 use Laucov\WebFramework\Services\DatabaseService;
+use Laucov\WebFramework\Services\LanguageService;
 
 /**
  * Caches and provides service object instances.
@@ -57,15 +59,51 @@ class ServiceProvider
     }
 
     /**
-     * Get a database service.
+     * Get the database service.
      */
     public function db(): DatabaseService
     {
-        if (!array_key_exists('db', $this->instances)) {
-            $config = $this->config->getConfig(Database::class);
-            $this->instances['db'] = new DatabaseService($config);
+        return $this->getService(
+            'db',
+            DatabaseService::class,
+            Database::class,
+        );
+    }
+
+    /**
+     * Get the language service.
+     */
+    public function lang(): LanguageService
+    {
+        return $this->getService(
+            'lang',
+            LanguageService::class,
+            Language::class,
+        );
+    }
+
+    /**
+     * Cache a new service instance.
+     * 
+     * @param string $name
+     * @param class-string<T> $service
+     * @param class-string<ConfigInterface> $config
+     * @return T
+     */
+    protected function getService(
+        string $name,
+        string $service,
+        string $config,
+    ): mixed {
+        if (array_key_exists($name, $this->instances)) {
+            return $this->instances[$name];
         }
 
-        return $this->instances['db'];
+        $config = $this->config->getConfig($config);
+        $service = new $service($config);
+
+        $this->instances[$name] = $service;
+
+        return $service;
     }
 }
