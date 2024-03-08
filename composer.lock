@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fb0d1a7ce857593d9e5ed0afe78a234",
+    "content-hash": "98ec889f4621d808df038341b9ee1375",
     "packages": [
         {
             "name": "laucov/arrays",
@@ -217,6 +217,47 @@
                 "source": "https://github.com/laucov/lang/tree/v1.0.1"
             },
             "time": "2024-02-29T16:03:39+00:00"
+        },
+        {
+            "name": "laucov/views",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laucov/views.git",
+                "reference": "dc2bc420bc8e6ef45c6638dbbea3df523a315aee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laucov/views/zipball/dc2bc420bc8e6ef45c6638dbbea3df523a315aee",
+                "reference": "dc2bc420bc8e6ef45c6638dbbea3df523a315aee",
+                "shasum": ""
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laucov\\Views\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Covaleski Pereira",
+                    "email": "rafael.covaleski@laucov.com"
+                }
+            ],
+            "description": "Library for view management and templating.",
+            "support": {
+                "issues": "https://github.com/laucov/views/issues",
+                "source": "https://github.com/laucov/views/tree/v1.0.0"
+            },
+            "time": "2024-03-08T12:50:18+00:00"
         }
     ],
     "packages-dev": [

@@ -22,6 +22,7 @@
     "require": {
         "laucov/db": "^1.0",
         "laucov/http": "^1.0",
-        "laucov/lang": "^1.0"
+        "laucov/lang": "^1.0",
+        "laucov/views": "^1.0"
     }
 }
