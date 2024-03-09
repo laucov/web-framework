@@ -26,25 +26,11 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Providers;
+namespace Laucov\WebFramework\Services\Interfaces;
 
 /**
- * Provides an interface to a cacheable and configurable functionality.
- * 
- * @template T of ConfigInterface
+ * Provides an interface to a configurable functionality.
  */
-abstract class AbstractService
+interface ServiceInterface
 {
-    /**
-     * Create the service instance.
-     */
-    public function __construct(
-        /**
-         * Service configuration.
-         * 
-         * @var T
-         */
-        protected ConfigInterface $config,
-    ) {
-    }
 }

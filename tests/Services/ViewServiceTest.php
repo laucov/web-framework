@@ -31,6 +31,7 @@ declare(strict_types=1);
 namespace Tests\Services;
 
 use Laucov\WebFramework\Config\View;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\ViewService;
 use PHPUnit\Framework\TestCase;
 
@@ -52,10 +53,10 @@ class ViewServiceTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getView
-     * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      */
     public function testCanGetViews(): void
     {
+        $this->assertInstanceOf(ServiceInterface::class, $this->service);
         $view = $this->service->getView('view-a');
         $this->assertInstanceOf(\Laucov\Views\View::class, $view);
         $this->assertSame('<p>Hello, World!</p>', $view->get());

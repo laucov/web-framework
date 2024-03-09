@@ -31,13 +31,14 @@ namespace Laucov\WebFramework\Services;
 use Laucov\Views\ViewFactory;
 use Laucov\WebFramework\Config\View;
 use Laucov\WebFramework\Providers\AbstractService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides front-end related tools.
  * 
  * @extends AbstractService<View>
  */
-class ViewService extends AbstractService
+class ViewService implements ServiceInterface
 {
     /**
      * View factory.
@@ -47,9 +48,12 @@ class ViewService extends AbstractService
     /**
      * Create the service instance.
      */
-    public function __construct(View $config)
-    {
-        parent::__construct($config);
+    public function __construct(
+        /**
+         * View configuration.
+         */
+        protected View $config,
+    ) {
         $this->factory = new ViewFactory($config->viewsDir, $config->cacheDir);
     }
 

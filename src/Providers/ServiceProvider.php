@@ -28,24 +28,20 @@
 
 namespace Laucov\WebFramework\Providers;
 
-use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Config\Language;
-use Laucov\WebFramework\Config\View;
 use Laucov\WebFramework\Services\DatabaseService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\LanguageService;
 use Laucov\WebFramework\Services\ViewService;
 
 /**
  * Caches and provides service object instances.
- * 
- * @template T of AbstractService
  */
 class ServiceProvider
 {
     /**
      * Cached instances.
      * 
-     * @var array<string, T>
+     * @var array<string, AbstractService>
      */
     protected array $instances = [];
 
@@ -65,11 +61,7 @@ class ServiceProvider
      */
     public function db(): DatabaseService
     {
-        return $this->getService(
-            'db',
-            DatabaseService::class,
-            Database::class,
-        );
+        return $this->getService(DatabaseService::class);
     }
 
     /**
@@ -77,11 +69,7 @@ class ServiceProvider
      */
     public function lang(): LanguageService
     {
-        return $this->getService(
-            'lang',
-            LanguageService::class,
-            Language::class,
-        );
+        return $this->getService(LanguageService::class);
     }
 
     /**
@@ -89,34 +77,60 @@ class ServiceProvider
      */
     public function view(): ViewService
     {
-        return $this->getService(
-            'view',
-            ViewService::class,
-            View::class,
-        );
+        return $this->getService(ViewService::class);
     }
 
     /**
      * Cache a new service instance.
      * 
-     * @param string $name
+     * @template T of AbstractService
      * @param class-string<T> $service
-     * @param class-string<ConfigInterface> $config
      * @return T
      */
-    protected function getService(
-        string $name,
-        string $service,
-        string $config,
-    ): mixed {
-        if (array_key_exists($name, $this->instances)) {
-            return $this->instances[$name];
+    protected function getService(string $class_name): mixed
+    {
+        // Check for a cached instance.
+        if (array_key_exists($class_name, $this->instances)) {
+            return $this->instances[$class_name];
         }
 
-        $config = $this->config->getConfig($config);
-        $service = new $service($config);
+        // Get constructor parameters.
+        $reflection = new \ReflectionClass($class_name);
+        $constructor = $reflection->getMethod('__construct');
+        $parameters = $constructor->getParameters();
 
-        $this->instances[$name] = $service;
+        // Create arguments.
+        $arguments = [];
+        foreach ($parameters as $parameter) {
+            // Get and check type.
+            $type = $parameter->getType();
+            if ($type === null) {
+                $msg = 'Untyped argument found in provided service ' .
+                    "{$class_name} constructor.";
+                throw new \RuntimeException($msg);
+            }
+            if (!($type instanceof \ReflectionNamedType)) {
+                $msg = 'Intersection or union type argument found in '
+                    . "provided service {$class_name} constructor.";
+                throw new \RuntimeException($msg);
+            }
+            // Get name.
+            $name = $type->getName();
+            // Inject dependency.
+            if (is_a($name, ServiceInterface::class, true)) {
+                $arguments[] = $this->getService($name);
+            } elseif (is_a($name, ConfigInterface::class, true)) {
+                $arguments[] = $this->config->getConfig($name);
+            } elseif ($type->allowsNull()) {
+                $msg = 'Invalid argument type "%s" found in provided ' .
+                    "service {$class_name} constructor.";
+                throw new \RuntimeException($msg);
+            }
+        }
+
+        // Create and cache the instance.
+        $service = new $class_name(...$arguments);
+        $this->instances[$class_name] = $service;
 
         return $service;
     }

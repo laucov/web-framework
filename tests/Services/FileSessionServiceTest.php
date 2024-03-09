@@ -33,6 +33,7 @@ namespace Tests\Services;
 use Laucov\WebFramework\Config\Session as SessionConfig;
 use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\FileSessionService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
 use Laucov\WebFramework\Session\Session;
 use PHPUnit\Framework\TestCase;
@@ -72,7 +73,6 @@ class FileSessionServiceTest extends TestCase
     public function testCanGetSession(): void
     {
         // Create service.
-        $this->assertInstanceOf(AbstractService::class, $this->service);
         $this->assertInstanceOf(SessionServiceInterface::class, $this->service);
 
         // Get session.

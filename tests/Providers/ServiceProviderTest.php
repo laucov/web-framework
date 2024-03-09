@@ -62,7 +62,6 @@ class ServiceProviderTest extends TestCase
      * @covers ::getService
      * @covers ::lang
      * @covers ::view
-     * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance

@@ -34,7 +34,7 @@ use Laucov\WebFramework\Config\Session as SessionConfig;
 /**
  * Provides read/write access to sessions.
  */
-interface SessionServiceInterface
+interface SessionServiceInterface extends ServiceInterface
 {
     /**
      * Create the service instance.

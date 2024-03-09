@@ -34,13 +34,14 @@ use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
 use Laucov\WebFramework\Config\Database;
 use Laucov\WebFramework\Providers\AbstractService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides an interface to configurable database connections and libraries.
  * 
  * @extends AbstractService<Database>
  */
-class DatabaseService extends AbstractService
+class DatabaseService implements ServiceInterface
 {
     /**
      * Cached connections.
@@ -57,9 +58,12 @@ class DatabaseService extends AbstractService
     /**
      * Create the database service instance.
      */
-    public function __construct(Database $config)
-    {
-        parent::__construct($config);
+    public function __construct(
+        /**
+         * Database configuration.
+         */
+        protected Database $config,
+    ) {
         $factory_name = $config->driverFactoryName;
         $this->driverFactory = new $factory_name();
     }

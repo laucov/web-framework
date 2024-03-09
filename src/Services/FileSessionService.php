@@ -37,8 +37,7 @@ use Laucov\WebFramework\Providers\AbstractService;
 /**
  * Provides read/write access to sessions stored in files.
  */
-class FileSessionService extends AbstractService implements
-    SessionServiceInterface
+class FileSessionService implements SessionServiceInterface
 {
     /**
      * Session handler.
@@ -48,8 +47,12 @@ class FileSessionService extends AbstractService implements
     /**
      * Create the service instance.
      */
-    public function __construct(SessionConfig $config)
-    {
+    public function __construct(
+        /**
+         * Session configuration.
+         */
+        protected SessionConfig $config,
+    ) {
         $this->handler = new FileSessionHandler($config->path);
     }
 

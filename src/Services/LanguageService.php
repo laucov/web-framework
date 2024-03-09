@@ -31,13 +31,14 @@ namespace Laucov\WebFramework\Services;
 use Laucov\Lang\MessageRepository;
 use Laucov\WebFramework\Config\Language;
 use Laucov\WebFramework\Providers\AbstractService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides an interface to multi-language support.
  * 
  * @extends AbstractService<Language>
  */
-class LanguageService extends AbstractService
+class LanguageService implements ServiceInterface
 {
     /**
      * Currently selected locales.
@@ -54,11 +55,12 @@ class LanguageService extends AbstractService
     /**
      * Create the language service instance.
      */
-    public function __construct(Language $config)
-    {
-        // Run parent constructor.
-        parent::__construct($config);
-
+    public function __construct(
+        /**
+         * Language configuration.
+         */
+        protected Language $config,
+    ) {
         // Create and configure the repository.
         $this->repository = new MessageRepository();
         $this->update();

@@ -36,6 +36,7 @@ use Laucov\Db\Query\Table;
 use Laucov\WebFramework\Config\Database;
 use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\DatabaseService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -59,12 +60,11 @@ class DatabaseServiceTest extends TestCase
      * @covers ::getConnection
      * @covers ::getSchema
      * @covers ::getTable
-     * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      */
     public function testCanSetAndGetConnections(): void
     {
-        $this->assertInstanceOf(AbstractService::class, $this->service);
+        $this->assertInstanceOf(ServiceInterface::class, $this->service);
 
         // Get connection.
         $conn_a = $this->service->getConnection('sqlite-a');
