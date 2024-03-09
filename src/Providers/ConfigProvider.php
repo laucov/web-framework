@@ -28,6 +28,8 @@
 
 namespace Laucov\WebFramework\Providers;
 
+use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
+
 /**
  * Caches and provides configuration object instances.
  * 

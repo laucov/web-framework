@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
-use Laucov\WebFramework\Providers\ConfigInterface;
+use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\EnvMatch;
 use PHPUnit\Framework\TestCase;

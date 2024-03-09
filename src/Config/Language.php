@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Config;
 
-use Laucov\WebFramework\Providers\ConfigInterface;
+use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 
 /**
  * Stores internationalization configuration.

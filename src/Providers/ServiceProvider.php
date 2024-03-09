@@ -28,6 +28,7 @@
 
 namespace Laucov\WebFramework\Providers;
 
+use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 use Laucov\WebFramework\Services\DatabaseService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\LanguageService;

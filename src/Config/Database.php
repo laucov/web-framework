@@ -29,7 +29,7 @@
 namespace Laucov\WebFramework\Config;
 
 use Laucov\Db\Data\Driver\DriverFactory;
-use Laucov\WebFramework\Providers\ConfigInterface;
+use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 
 /**
  * Stores database-related configuration.
