@@ -34,9 +34,11 @@ use Laucov\WebFramework\Config\Database;
 use Laucov\WebFramework\Config\Language;
 use Laucov\WebFramework\Config\View;
 use Laucov\WebFramework\Providers\AbstractService;
+use Laucov\WebFramework\Providers\ConfigInterface;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
 use Laucov\WebFramework\Services\DatabaseService;
+use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\LanguageService;
 use Laucov\WebFramework\Services\ViewService;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +58,47 @@ class ServiceProviderTest extends TestCase
      */
     protected ServiceProvider $services;
 
+    public function callProvider(): array
+    {
+        return [
+            ['db', DatabaseService::class, [Database::class]],
+            ['lang', LanguageService::class, [Language::class]],
+            ['view', ViewService::class, [View::class]],
+        ];
+    }
+
+    public function invalidChildrenProvider(): array
+    {
+        $config = new ConfigProvider([]);
+
+        return [
+            // Use a service with untyped constructor argument.
+            [new class ($config) extends AbstractFooProvider
+            {
+                public function foobar()
+                {
+                    $this->getService(InvalidServiceA::class);
+                }
+            }],
+            // Use a service with union/intersection constructor argument.
+            [new class ($config) extends AbstractFooProvider
+            {
+                public function foobar()
+                {
+                    $this->getService(InvalidServiceB::class);
+                }
+            }],
+            // Use a service with invalid type argument.
+            [new class ($config) extends AbstractFooProvider
+            {
+                public function foobar()
+                {
+                    $this->getService(InvalidServiceC::class);
+                }
+            }],
+        ];
+    }
+
     /**
      * @covers ::__construct
      * @covers ::db
@@ -72,27 +115,38 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Services\LanguageService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::update
      * @uses Laucov\WebFramework\Services\ViewService::__construct
+     * @dataProvider callProvider
      */
-    public function testCanGetServices(): void
-    {
-        // Set service list.
-        $services = [
-            ['db', DatabaseService::class, Database::class],
-            ['lang', LanguageService::class, Language::class],
-            ['view', ViewService::class, View::class],
-        ];
-
-        // Test each service.
-        foreach ($services as [$method, $service, $config]) {
-            // Add config.
-            $this->config->addConfig($config);
-            // Get a new instance.
-            $a = $this->services->{$method}();
-            $this->assertInstanceOf($service, $a);
-            // Get cached instance.
-            $b = $this->services->{$method}();
-            $this->assertSame($a, $b);
+    public function testCanGetServices(
+        string $method_name,
+        string $service_class_name,
+        array $config_classes,
+    ): void {
+        // Add configuration classes.
+        foreach ($config_classes as $class_name) {
+            $this->config->addConfig($class_name);
         }
+
+        // Get a new instance.
+        $a = $this->services->{$method_name}();
+        $this->assertInstanceOf($service_class_name, $a);
+
+        // Get cached instance.
+        $b = $this->services->{$method_name}();
+        $this->assertSame($a, $b);
+    }
+
+    /**
+     * @covers ::getService
+     * @dataProvider invalidChildrenProvider
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
+     */
+    public function testValidatesServiceConstructors(object $provider): void
+    {
+        $this->assertInstanceOf(AbstractFooProvider::class, $provider);
+        $this->expectException(\RuntimeException::class);
+        $provider->foobar();
     }
 
     protected function setUp(): void
@@ -100,4 +154,27 @@ class ServiceProviderTest extends TestCase
         $this->config = new ConfigProvider([]);
         $this->services = new ServiceProvider($this->config);
     }
+}
+
+abstract class AbstractFooProvider extends ServiceProvider
+{
+    abstract public function foobar();
+}
+
+class InvalidServiceA implements ServiceInterface
+{
+    public function __construct($a)
+    {}
+}
+
+class InvalidServiceB implements ServiceInterface
+{
+    public function __construct(ConfigInterface|ServiceInterface $a)
+    {}
+}
+
+class InvalidServiceC implements ServiceInterface
+{
+    public function __construct(array $b)
+    {}
 }

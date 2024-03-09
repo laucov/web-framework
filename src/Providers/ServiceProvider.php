@@ -41,7 +41,7 @@ class ServiceProvider
     /**
      * Cached instances.
      * 
-     * @var array<string, AbstractService>
+     * @var array<string, ServiceInterface>
      */
     protected array $instances = [];
 
@@ -83,7 +83,7 @@ class ServiceProvider
     /**
      * Cache a new service instance.
      * 
-     * @template T of AbstractService
+     * @template T of ServiceInterface
      * @param class-string<T> $service
      * @return T
      */
@@ -121,7 +121,7 @@ class ServiceProvider
                 $arguments[] = $this->getService($name);
             } elseif (is_a($name, ConfigInterface::class, true)) {
                 $arguments[] = $this->config->getConfig($name);
-            } elseif ($type->allowsNull()) {
+            } else {
                 $msg = 'Invalid argument type "%s" found in provided ' .
                     "service {$class_name} constructor.";
                 throw new \RuntimeException($msg);
