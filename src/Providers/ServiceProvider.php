@@ -30,8 +30,10 @@ namespace Laucov\WebFramework\Providers;
 
 use Laucov\WebFramework\Config\Database;
 use Laucov\WebFramework\Config\Language;
+use Laucov\WebFramework\Config\View;
 use Laucov\WebFramework\Services\DatabaseService;
 use Laucov\WebFramework\Services\LanguageService;
+use Laucov\WebFramework\Services\ViewService;
 
 /**
  * Caches and provides service object instances.
@@ -79,6 +81,18 @@ class ServiceProvider
             'lang',
             LanguageService::class,
             Language::class,
+        );
+    }
+
+    /**
+     * Get the view service.
+     */
+    public function view(): ViewService
+    {
+        return $this->getService(
+            'view',
+            ViewService::class,
+            View::class,
         );
     }
 

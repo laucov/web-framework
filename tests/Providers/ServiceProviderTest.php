@@ -32,11 +32,13 @@ namespace Tests\Providers;
 
 use Laucov\WebFramework\Config\Database;
 use Laucov\WebFramework\Config\Language;
+use Laucov\WebFramework\Config\View;
 use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
 use Laucov\WebFramework\Services\DatabaseService;
 use Laucov\WebFramework\Services\LanguageService;
+use Laucov\WebFramework\Services\ViewService;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -59,6 +61,7 @@ class ServiceProviderTest extends TestCase
      * @covers ::db
      * @covers ::getService
      * @covers ::lang
+     * @covers ::view
      * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
@@ -69,6 +72,7 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::update
+     * @uses Laucov\WebFramework\Services\ViewService::__construct
      */
     public function testCanGetServices(): void
     {
@@ -76,6 +80,7 @@ class ServiceProviderTest extends TestCase
         $services = [
             ['db', DatabaseService::class, Database::class],
             ['lang', LanguageService::class, Language::class],
+            ['view', ViewService::class, View::class],
         ];
 
         // Test each service.
