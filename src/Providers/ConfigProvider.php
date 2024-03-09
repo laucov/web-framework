@@ -92,7 +92,6 @@ class ConfigProvider
     /**
      * Get a configuration instance.
      * 
-     * @todo Check if `$class_name` extends `$this->classes[$name]`.
      * @param class-string<T>
      * @return T
      */
@@ -107,7 +106,19 @@ class ConfigProvider
             throw new \InvalidArgumentException(sprintf($msg, $class_name));
         }
 
-        return $this->getInstance($name);
+        // Get instance.
+        $config = $this->getInstance($name);
+
+        // Check class compatibility.
+        if (!is_a($config, $class_name)) {
+            $msg = 'The registered configuration class %s does not inherit or'
+                . 'implement the requested class/interface %s.';
+            throw new \RuntimeException(
+                sprintf($msg, $config::class, $class_name),
+            );
+        }
+
+        return $config;
     }
 
     /**

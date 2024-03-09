@@ -115,6 +115,22 @@ class ConfigProviderTest extends TestCase
         $this->provider->addConfig(\stdClass::class);
     }
 
+    /**
+     * @covers ::getConfig
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFramework\Providers\EnvMatch::__construct
+     */
+    public function testRegisteredConfigMustExtendTheRequestedOne(): void
+    {
+        $this->provider->addConfig(Book::class);
+        $this->expectException(\RuntimeException::class);
+        $this->provider->getConfig(\Tests\Providers\Another\Book::class);
+    }
+
     protected function setUp(): void
     {
         $this->provider = new ConfigProvider([]);
