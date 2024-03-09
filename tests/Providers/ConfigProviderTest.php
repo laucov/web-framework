@@ -45,10 +45,10 @@ class ConfigProviderTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::addConfig
-     * @covers ::applyEnvironmentValues
+     * @covers ::createInstance
+     * @covers ::getInstance
      * @covers ::getConfig
-     * @covers ::getConfigName
-     * @covers ::getOrCacheInstance
+     * @covers ::getName
      * @uses Laucov\WebFramework\Providers\EnvMatch::__construct
      */
     public function testCanAddAndGetConfigs(): void
@@ -85,9 +85,9 @@ class ConfigProviderTest extends TestCase
     /**
      * @covers ::addConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
      */
-    public function testCannotAddConfigTwice(): void
+    public function testCannotAddTheSameConfigTwice(): void
     {
         $this->provider->addConfig(Book::class);
         $this->expectException(\RuntimeException::class);
@@ -97,7 +97,7 @@ class ConfigProviderTest extends TestCase
     /**
      * @covers ::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
      */
     public function testMustSetBeforeGetting(): void
     {

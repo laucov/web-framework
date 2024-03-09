@@ -65,10 +65,10 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Providers\AbstractService::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::applyEnvironmentValues
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfigName
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getOrCacheInstance
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::update

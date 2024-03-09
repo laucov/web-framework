@@ -75,7 +75,7 @@ class ConfigProvider
         }
 
         // Create name.
-        $name = $this->getConfigName($class_name);
+        $name = $this->getName($class_name);
 
         // Check if is already registered.
         if (array_key_exists($name, $this->classes)) {
@@ -99,7 +99,7 @@ class ConfigProvider
     public function getConfig(string $class_name): mixed
     {
         // Get name.
-        $name = $this->getConfigName($class_name);
+        $name = $this->getName($class_name);
 
         // Check if the class name is registered.
         if (!array_key_exists($name, $this->classes)) {
@@ -107,50 +107,56 @@ class ConfigProvider
             throw new \InvalidArgumentException(sprintf($msg, $class_name));
         }
 
-        return $this->getOrCacheInstance($name);
-    }
-
-    /**
-     * Try to get a cached instance.
-     * 
-     * @var T
-     */
-    public function getOrCacheInstance(string $name)
-    {
-        $class_name = $this->classes[$name];
-
-        if (!array_key_exists($class_name, $this->instances)) {
-            $instance = new $class_name();
-            $this->applyEnvironmentValues($instance);
-            $this->instances[$class_name] = $instance;
-        }
-
-        return $this->instances[$class_name];
+        return $this->getInstance($name);
     }
 
     /**
      * Apply environment variables to a configuration object.
+     * 
+     * @template T of ConfigInterface
+     * @param class-string<T> $class_name
+     * @return T
      */
-    public function applyEnvironmentValues(object $object): void
+    public function createInstance(string $class_name)
     {
-        // Get attributes.
-        $reflection = new \ReflectionObject($object);
+        // Create instance.
+        $instance = new $class_name();
+
+        // Get environment name matches.
+        $reflection = new \ReflectionObject($instance);
         /** @var array<\ReflectionAttribute> */
         $attributes = $reflection->getAttributes(EnvMatch::class);
 
-        // Apply variables.
+        // Apply environment variables.
         foreach ($attributes as $attribute) {
-            // Get match.
+            // Get variable name.
             /** @var EnvMatch */
             $env_match = $attribute->newInstance();
             $key = $env_match->variableName;
-            // Check if environment value exists and use it.
+            // Check if value exists and use it.
             if (array_key_exists($key, $this->environment)) {
-                // Replace default value.
-                $value = $this->environment[$key];
-                $object->{$env_match->propertyName} = $value;
+                $name = $env_match->propertyName;
+                $instance->$name = $this->environment[$key];
             }
         }
+
+        return $instance;
+    }
+
+    /**
+     * Try to get a cached instance.
+     */
+    protected function getInstance(string $name): ConfigInterface
+    {
+        // Get class name.
+        $class_name = $this->classes[$name];
+
+        // Create if not cached.
+        if (!array_key_exists($class_name, $this->instances)) {
+            $this->instances[$class_name] = $this->createInstance($class_name);
+        }
+
+        return $this->instances[$class_name];
     }
 
     /**
@@ -160,7 +166,7 @@ class ConfigProvider
      * 
      * Ex.: `'Foo\Bar\Baz'` => `'Baz'`
      */
-    public function getConfigName(string $class_name): string
+    public function getName(string $class_name): string
     {
         // Get namespace separator position.
         $position = strrpos($class_name, '\\');
