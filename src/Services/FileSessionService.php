@@ -28,11 +28,10 @@
 
 namespace Laucov\WebFramework\Services;
 
+use Laucov\Sessions\Handlers\FileSessionHandler;
+use Laucov\Sessions\Session;
 use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
-use Laucov\WebFramework\Session\Handlers\FileSessionHandler;
-use Laucov\WebFramework\Session\Session;
 use Laucov\WebFramework\Config\Session as SessionConfig;
-use Laucov\WebFramework\Providers\AbstractService;
 
 /**
  * Provides read/write access to sessions stored in files.

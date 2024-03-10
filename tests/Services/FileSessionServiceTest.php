@@ -35,7 +35,7 @@ use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\FileSessionService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
-use Laucov\WebFramework\Session\Session;
+use Laucov\Sessions\Session;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -57,18 +57,18 @@ class FileSessionServiceTest extends TestCase
      * @covers ::__construct
      * @covers ::createSession
      * @covers ::getSession
-     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::__construct
-     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::close
-     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::create
-     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::open
-     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::read
-     * @uses Laucov\WebFramework\Session\Handlers\FileSessionHandler::write
-     * @uses Laucov\WebFramework\Session\Session::__construct
-     * @uses Laucov\WebFramework\Session\Session::close
-     * @uses Laucov\WebFramework\Session\Session::commit
-     * @uses Laucov\WebFramework\Session\Session::get
-     * @uses Laucov\WebFramework\Session\Session::open
-     * @uses Laucov\WebFramework\Session\Session::set
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::__construct
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::close
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::create
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::open
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::read
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::write
+     * @uses Laucov\Sessions\Session::__construct
+     * @uses Laucov\Sessions\Session::close
+     * @uses Laucov\Sessions\Session::commit
+     * @uses Laucov\Sessions\Session::get
+     * @uses Laucov\Sessions\Session::open
+     * @uses Laucov\Sessions\Session::set
      */
     public function testCanGetSession(): void
     {

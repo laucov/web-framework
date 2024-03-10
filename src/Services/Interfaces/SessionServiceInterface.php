@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFramework\Services\Interfaces;
 
-use Laucov\WebFramework\Session\Session;
+use Laucov\Sessions\Session;
 use Laucov\WebFramework\Config\Session as SessionConfig;
 
 /**
