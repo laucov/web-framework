@@ -131,16 +131,16 @@
         },
         {
             "name": "laucov/http",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/http.git",
-                "reference": "b04aafdd46b88c4d08eed42e7e48f53d9eff1a02"
+                "reference": "b3a1743c91ceddc511821ff4a5e36b546250e79a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/http/zipball/b04aafdd46b88c4d08eed42e7e48f53d9eff1a02",
-                "reference": "b04aafdd46b88c4d08eed42e7e48f53d9eff1a02",
+                "url": "https://api.github.com/repos/laucov/http/zipball/b3a1743c91ceddc511821ff4a5e36b546250e79a",
+                "reference": "b3a1743c91ceddc511821ff4a5e36b546250e79a",
                 "shasum": ""
             },
             "require": {
@@ -170,9 +170,9 @@
             "description": "Library for HTTP communication lifecycle control.",
             "support": {
                 "issues": "https://github.com/laucov/http/issues",
-                "source": "https://github.com/laucov/http/tree/v1.2.0"
+                "source": "https://github.com/laucov/http/tree/v1.3.0"
             },
-            "time": "2024-03-04T18:09:22+00:00"
+            "time": "2024-03-10T11:16:00+00:00"
         },
         {
             "name": "laucov/lang",
@@ -458,16 +458,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69"
+                "reference": "139676794dc1e9231bf7bcd123cfc0c99182cb13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/2218c2252c874a4624ab2f613d86ac32d227bc69",
-                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/139676794dc1e9231bf7bcd123cfc0c99182cb13",
+                "reference": "139676794dc1e9231bf7bcd123cfc0c99182cb13",
                 "shasum": ""
             },
             "require": {
@@ -510,9 +510,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.2"
             },
-            "time": "2024-02-21T19:24:10+00:00"
+            "time": "2024-03-05T20:51:40+00:00"
         },
         {
             "name": "phar-io/manifest",
