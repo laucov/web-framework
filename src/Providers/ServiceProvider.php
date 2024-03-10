@@ -30,7 +30,9 @@ namespace Laucov\WebFramework\Providers;
 
 use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 use Laucov\WebFramework\Services\DatabaseService;
+use Laucov\WebFramework\Services\FileSessionService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
+use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
 use Laucov\WebFramework\Services\LanguageService;
 use Laucov\WebFramework\Services\ViewService;
 
@@ -71,6 +73,14 @@ class ServiceProvider
     public function lang(): LanguageService
     {
         return $this->getService(LanguageService::class);
+    }
+
+    /**
+     * Get the session service.
+     */
+    public function session(): SessionServiceInterface
+    {
+        return $this->getService(FileSessionService::class);
     }
 
     /**

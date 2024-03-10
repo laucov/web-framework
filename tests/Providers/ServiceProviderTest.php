@@ -32,12 +32,14 @@ namespace Tests\Providers;
 
 use Laucov\WebFramework\Config\Database;
 use Laucov\WebFramework\Config\Language;
+use Laucov\WebFramework\Config\Session;
 use Laucov\WebFramework\Config\View;
 use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
 use Laucov\WebFramework\Services\DatabaseService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
+use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
 use Laucov\WebFramework\Services\LanguageService;
 use Laucov\WebFramework\Services\ViewService;
 use PHPUnit\Framework\TestCase;
@@ -62,6 +64,7 @@ class ServiceProviderTest extends TestCase
         return [
             ['db', DatabaseService::class, [Database::class]],
             ['lang', LanguageService::class, [Language::class]],
+            ['session', SessionServiceInterface::class, [Session::class]],
             ['view', ViewService::class, [View::class]],
         ];
     }
@@ -103,6 +106,7 @@ class ServiceProviderTest extends TestCase
      * @covers ::db
      * @covers ::getService
      * @covers ::lang
+     * @covers ::session
      * @covers ::view
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
@@ -111,6 +115,7 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
+     * @uses Laucov\WebFramework\Services\FileSessionService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::update
      * @uses Laucov\WebFramework\Services\ViewService::__construct
