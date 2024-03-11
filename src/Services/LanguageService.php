@@ -30,13 +30,10 @@ namespace Laucov\WebFramework\Services;
 
 use Laucov\Lang\MessageRepository;
 use Laucov\WebFramework\Config\Language;
-use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides an interface to multi-language support.
- * 
- * @extends AbstractService<Language>
  */
 class LanguageService implements ServiceInterface
 {

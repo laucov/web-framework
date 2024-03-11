@@ -33,13 +33,10 @@ use Laucov\Db\Data\Driver\DriverFactory;
 use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
 use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides an interface to configurable database connections and libraries.
- * 
- * @extends AbstractService<Database>
  */
 class DatabaseService implements ServiceInterface
 {

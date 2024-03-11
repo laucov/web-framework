@@ -30,13 +30,10 @@ namespace Laucov\WebFramework\Services;
 
 use Laucov\Views\ViewFactory;
 use Laucov\WebFramework\Config\View;
-use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides front-end related tools.
- * 
- * @extends AbstractService<View>
  */
 class ViewService implements ServiceInterface
 {
