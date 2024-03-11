@@ -220,15 +220,12 @@ abstract class AbstractModel
     /**
      * Find a single record by its primary key value.
      * 
-     * @return T
+     * @return null|T
      */
     public function retrieve(string $id): mixed
     {
-        $this->applyDeletionFilter();
-
-        return $this->table
-            ->filter($this->primaryKey, '=', $id)
-            ->selectRecords($this->entityName)[0];
+        $this->table->filter($this->primaryKey, '=', $id);
+        return $this->getEntity();
     }
 
     /**
@@ -238,11 +235,18 @@ abstract class AbstractModel
      */
     public function retrieveBatch(string ...$ids): array
     {
-        $this->applyDeletionFilter();
+        // Get records.
+        $this->table->filter($this->primaryKey, '=', $ids);
+        $records = $this->getEntities();
 
-        return $this->table
-            ->filter($this->primaryKey, '=', $ids)
-            ->selectRecords($this->entityName);
+        // Check IDs.
+        $ids = array_map(fn ($r) => $r->{$this->primaryKey}, $records);
+        if (count($ids) !== count(array_unique($ids))) {
+            $msg = 'Found duplicated entries when querying for multiple IDs.';
+            throw new \RuntimeException($msg);
+        }
+
+        return $records;
     }
 
     /**
@@ -372,6 +376,38 @@ abstract class AbstractModel
     }
 
     /**
+     * Get records from the current filters and return them as entities.
+     * 
+     * @return array<T>
+     */
+    protected function getEntities(): array
+    {
+        $this->applyDeletionFilter();
+        $records = $this->table->selectRecords($this->entityName);
+
+        return $records;
+    }
+
+    /**
+     * Get a single record from the current filters and return it as an entity.
+     * 
+     * @return null|T
+     */
+    protected function getEntity(): mixed
+    {
+        // Get entities.
+        $entities = $this->getEntities();
+
+        // Check if got duplicated entries.
+        if (count($entities) > 1) {
+            $msg = 'Found multiple entries when querying for a single record.';
+            throw new \RuntimeException($msg);
+        }
+
+        return count($entities) === 1 ? $entities[0] : null;
+    }
+
+    /**
      * Get all filtered records as a `Collection`.
      * 
      * @return Collection<T>
@@ -397,10 +433,8 @@ abstract class AbstractModel
         }
         
         // Get records.
-        $this->applyDeletionFilter();
-        $array = $this->table->selectRecords($this->entityName);
-        $this->table->reset();
         $this->table->autoReset = true;
+        $array = $this->getEntities();
 
         // Count total table records.
         $stored = $this->table->countRecords($this->primaryKey);

@@ -115,6 +115,8 @@ class AbstractModelTest extends TestCase
      * @uses Laucov\WebFramework\Modeling\AbstractEntity::validate
      * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
      * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
      * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
      * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieveBatch
      * @uses Laucov\WebFramework\Modeling\ObjectReader::count
@@ -208,6 +210,7 @@ class AbstractModelTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getEntities
      * @covers ::list
      * @covers ::listAll
      * @covers ::paginate
@@ -300,6 +303,7 @@ class AbstractModelTest extends TestCase
     }
 
     /**
+     * @covers ::getEntity
      * @covers ::sort
      * @covers ::retrieve
      * @covers ::retrieveBatch
@@ -307,6 +311,7 @@ class AbstractModelTest extends TestCase
      * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
      * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
      * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
      */
     public function testCanRetrieve(): void
     {
@@ -342,6 +347,14 @@ class AbstractModelTest extends TestCase
         $this->assertSame(10, $records[0]->id);
         $this->assertSame(5, $records[1]->id);
         $this->assertSame(1, $records[2]->id);
+
+        // Retrieve inexistent record.
+        $this->assertNull($this->model->retrieve('95'));
+
+        // Retrieve partially existing batch.
+        $records = $this->model->retrieveBatch('95', '7');
+        $this->assertCount(1, $records);
+        $this->assertSame(7, $records[0]->id);
     }
 
     /**
@@ -366,6 +379,49 @@ class AbstractModelTest extends TestCase
         $model_mock->listAll();
         $model_mock->retrieve('2');
         $model_mock->retrieveBatch('1', '2');
+    }
+
+    /**
+     * @covers ::getEntity
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
+     */
+    public function testFailsIfRetrievesDuplicatedEntries(): void
+    {
+        // Create model.
+        $model = new FaultyModel($this->conn);
+
+        // Get with unique model.
+        $model->retrieve('EMB-820C Caraja');
+
+        // Get with repeated model.
+        $this->expectException(\RuntimeException::class);
+        $model->retrieve('737 MAX 8');
+    }
+
+    /**
+     * @covers ::retrieveBatch
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
+     */
+    public function testFailsIfRetrievesBatchesWithDuplicatedEntries(): void
+    {
+        // Create model.
+        $model = new FaultyModel($this->conn);
+
+        // Get with unique models.
+        $model->retrieveBatch('SR22', 'EMB-820C Caraja');
+
+        // Get with unique and repeated models.
+        $this->expectException(\RuntimeException::class);
+        $model->retrieveBatch('EMB-820C Caraja', '737 MAX 8');
     }
 
     protected function setUp(): void
@@ -422,4 +478,18 @@ class Airplane extends AbstractEntity
     public string $registration;
     public string $manufacturer;
     public string $model;
+}
+
+/**
+ * Bad model.
+ * 
+ * Will fail when retrieval methods are called for planes with the same model.
+ * 
+ * @extends AbstractModel<Airplane>
+ */
+class FaultyModel extends AbstractModel
+{
+    protected string $entityName = Airplane::class;
+    protected string $primaryKey = 'model';
+    protected string $tableName = 'airplanes';
 }
