@@ -48,7 +48,7 @@ class Database implements ConfigInterface
      * 
      * Key-value pairs with connection names and its instance arguments.
      * 
-     * Ex.: `'mysql' => ['host=localhost;dbname=example', 'john', '1234']`
+     * Ex.: `'mysql' => ['mysql:host=localhost;dbname=foo', 'john', '1234']`
      */
     public array $defaultConnections = [];
 
