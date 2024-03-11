@@ -26,35 +26,39 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Modeling;
+namespace Laucov\WebFramework\Models;
+
+use Laucov\WebFramework\Entities\User;
+use Laucov\WebFramework\Modeling\AbstractModel;
 
 /**
- * Represents a result from an update operation.
+ * Provides and saves `User` entities.
+ * 
+ * @extends AbstractModel<User>
  */
-enum BatchUpdateResult
+class UserModel extends AbstractModel
 {
     /**
-     * Updated successfuly.
+     * Entity class name.
      */
-    case SUCCESS;
+    protected string $entityName = User::class;
 
     /**
-     * Could not update because one or more values did not pass validation.
+     * Primary key column.
      */
-    case INVALID_VALUES;
+    protected string $primaryKey = 'id';
 
     /**
-     * Could not update because no values were given. 
+     * Table name.
      */
-    case NO_VALUES;
+    protected string $tableName = 'users';
 
     /**
-     * Did not update because no changes would be made to the record.
+     * Retrieve a user by its ID.
      */
-    case NO_ENTRIES;
-
-    /**
-     * Could not update because one or more IDs didn't exist.
-     */
-    case NOT_FOUND;
+    public function retrieveWithLogin(string $login): null|User
+    {
+        $this->table->filter('login', '=', $login);
+        return $this->getEntity();
+    }
 }

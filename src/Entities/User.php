@@ -26,35 +26,48 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Modeling;
+namespace Laucov\WebFramework\Entities;
+
+use Laucov\WebFramework\Modeling\AbstractEntity;
 
 /**
- * Represents a result from an update operation.
+ * Represents a user record.
  */
-enum BatchUpdateResult
+class User extends AbstractEntity
 {
     /**
-     * Updated successfuly.
+     * User ID.
      */
-    case SUCCESS;
+    public int $id;
 
     /**
-     * Could not update because one or more values did not pass validation.
+     * Login.
      */
-    case INVALID_VALUES;
+    public string $login;
 
     /**
-     * Could not update because no values were given. 
+     * Password hash.
      */
-    case NO_VALUES;
+    public string $password_hash;
 
     /**
-     * Did not update because no changes would be made to the record.
+     * Number of required successful MFA procedures to log in.
      */
-    case NO_ENTRIES;
+    public int $required_mfa;
 
     /**
-     * Could not update because one or more IDs didn't exist.
+     * Set a new password hash from the given password.
      */
-    case NOT_FOUND;
+    public function setPassword(string $password): void
+    {
+        $this->password_hash = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * Check if a password matches the registered hash.
+     */
+    public function testPassword(string $password): bool
+    {
+        return password_verify($password, $this->password_hash);
+    }
 }
