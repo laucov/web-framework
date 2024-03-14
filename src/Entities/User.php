@@ -31,32 +31,36 @@ namespace Laucov\WebFramework\Entities;
 use Laucov\WebFramework\Modeling\AbstractEntity;
 
 /**
- * Represents a user record.
+ * Represents an user record.
  */
 class User extends AbstractEntity
 {
     /**
-     * User ID.
+     * Record ID.
      */
     public int $id;
 
     /**
      * Login.
+     * 
+     * Unique key used to accredit this user.
      */
     public string $login;
 
     /**
      * Password hash.
+     * 
+     * Received passwords must match this hash to accredit this user.
      */
     public string $password_hash;
 
     /**
-     * Number of required successful MFA procedures to log in.
+     * Number of required MFA procedures to authenticate this user.
      */
-    public int $required_mfa;
+    public int $authentication_steps;
 
     /**
-     * Set a new password hash from the given password.
+     * Set a new password hash from a password.
      */
     public function setPassword(string $password): void
     {
@@ -64,7 +68,7 @@ class User extends AbstractEntity
     }
 
     /**
-     * Check if a password matches the registered hash.
+     * Check if a password matches the stored password hash.
      */
     public function testPassword(string $password): bool
     {
