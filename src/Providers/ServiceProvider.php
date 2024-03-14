@@ -37,7 +37,9 @@ use Laucov\WebFramework\Services\LanguageService;
 use Laucov\WebFramework\Services\ViewService;
 
 /**
- * Caches and provides service object instances.
+ * Caches and provides services (`ServiceInterface` objects).
+ * 
+ * Also provides cached configuration objects to those services.
  */
 class ServiceProvider
 {
@@ -49,6 +51,15 @@ class ServiceProvider
     protected array $instances = [];
 
     /**
+     * Registered services.
+     * 
+     * These services can be used to resolve function dependencies.
+     * 
+     * @var array<class-string<ServiceInterface>, string>
+     */
+    protected array $services = [];
+
+    /**
      * Create the provider instance.
      */
     public function __construct(
@@ -57,6 +68,24 @@ class ServiceProvider
          */
         protected ConfigProvider $config,
     ) {
+        // Get methods.
+        $reflection = new \ReflectionClass(static::class);
+        $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+        // Register services.
+        foreach ($methods as $method) {
+            /** @var \ReflectionMethod $method */
+            // Check if is a named return type.
+            $type = $method->getReturnType();
+            if ($type instanceof \ReflectionNamedType) {
+                // Check if returns a ServiceInterface object.
+                $name = $type->getName();
+                if (is_a($name, ServiceInterface::class, true)) {
+                    // Register.
+                    $this->services[$type->getName()] = $name;
+                }
+            }
+        }
     }
 
     /**
@@ -128,8 +157,9 @@ class ServiceProvider
             // Get name.
             $name = $type->getName();
             // Inject dependency.
-            if (is_a($name, ServiceInterface::class, true)) {
-                $arguments[] = $this->getService($name);
+            if (array_key_exists($name, $this->services)) {
+                $method_name = $this->services[$name];
+                $arguments[] = $this->{$method_name}();
             } elseif (is_a($name, ConfigInterface::class, true)) {
                 $arguments[] = $this->config->getConfig($name);
             } else {
