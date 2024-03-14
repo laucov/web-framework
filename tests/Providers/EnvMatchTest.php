@@ -52,8 +52,7 @@ class EnvMatchTest extends TestCase
         $object = new
         #[EnvMatch('MY_CLASS_NAME', 'name')]
         #[EnvMatch('MY_CLASS_COUNT', 'count')]
-        class
-        {
+        class {
             public string $name = 'Foobar';
             public int $count = 18;
         };

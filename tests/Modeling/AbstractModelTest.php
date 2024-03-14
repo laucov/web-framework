@@ -262,8 +262,7 @@ class AbstractModelTest extends TestCase
         }
 
         // Paginate - test with filter.
-        $model = new class ($this->conn) extends AirplaneModel
-        {
+        $model = new class ($this->conn) extends AirplaneModel {
             /**
              * List all planes for a specific manufacturer.
              * 
@@ -343,7 +342,7 @@ class AbstractModelTest extends TestCase
         $this->assertSame(7, $records[2]->id);
         $records = $this->model
             ->sort('id', true)
-            ->retrieveBatch('1', '10' , '5');
+            ->retrieveBatch('1', '10', '5');
         $this->assertSame(10, $records[0]->id);
         $this->assertSame(5, $records[1]->id);
         $this->assertSame(1, $records[2]->id);
@@ -371,7 +370,7 @@ class AbstractModelTest extends TestCase
         $model_mock
             ->expects($this->exactly(7))
             ->method('applyDeletionFilter');
-        
+
         // Test `AirplaneModel::applyDeletionFilter()`.
         $model_mock->delete('3');
         $model_mock->erase('9');
@@ -456,7 +455,7 @@ class AbstractModelTest extends TestCase
                     ('CC-DBE', 'Airbus', 'A320-251N'),
                     ('PR-YSH', 'Airbus', 'A320-251N')
             SQL);
-        
+
         $this->model = new AirplaneModel($this->conn);
     }
 }

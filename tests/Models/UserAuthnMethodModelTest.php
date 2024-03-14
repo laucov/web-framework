@@ -96,7 +96,7 @@ class UserMfaMethodModelTest extends TestCase
     ): void {
         // Try to get the record.
         $record = $this->model->retrieveForUser($user_id, $id);
-        
+
         // Check result.
         if ($should_exist) {
             $this->assertInstanceOf(UserAuthnMethod::class, $record);

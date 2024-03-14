@@ -33,7 +33,7 @@ use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
 /**
  * Requires a value to match a RegEx pattern.
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY|\Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::IS_REPEATABLE)]
 class Regex implements RuleInterface
 {
     /**

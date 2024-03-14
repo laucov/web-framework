@@ -44,7 +44,7 @@ enum AuthnRequestResult
      * The authentication method does not exist for the factory in use.
      */
     case INVALID_METHOD;
-    
+
     /**
      * A session is active but there is no accredited user.
      */

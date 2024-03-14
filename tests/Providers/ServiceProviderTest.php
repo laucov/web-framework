@@ -75,24 +75,21 @@ class ServiceProviderTest extends TestCase
 
         return [
             // Use a service with untyped constructor argument.
-            [new class ($config) extends AbstractFooProvider
-            {
+            [new class ($config) extends AbstractFooProvider {
                 public function foobar()
                 {
                     $this->getService(InvalidServiceA::class);
                 }
             }],
             // Use a service with union/intersection constructor argument.
-            [new class ($config) extends AbstractFooProvider
-            {
+            [new class ($config) extends AbstractFooProvider {
                 public function foobar()
                 {
                     $this->getService(InvalidServiceB::class);
                 }
             }],
             // Use a service with invalid type argument.
-            [new class ($config) extends AbstractFooProvider
-            {
+            [new class ($config) extends AbstractFooProvider {
                 public function foobar()
                 {
                     $this->getService(InvalidServiceC::class);
@@ -168,17 +165,20 @@ abstract class AbstractFooProvider extends ServiceProvider
 class InvalidServiceA implements ServiceInterface
 {
     public function __construct($a)
-    {}
+    {
+    }
 }
 
 class InvalidServiceB implements ServiceInterface
 {
     public function __construct(ConfigInterface|ServiceInterface $a)
-    {}
+    {
+    }
 }
 
 class InvalidServiceC implements ServiceInterface
 {
     public function __construct(array $b)
-    {}
+    {
+    }
 }

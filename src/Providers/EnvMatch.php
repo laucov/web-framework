@@ -33,7 +33,7 @@ namespace Laucov\WebFramework\Providers;
  * 
  * Used in `ConfigurationInterface` objects as attributes.
  */
-#[\Attribute(\Attribute::IS_REPEATABLE|\Attribute::TARGET_CLASS)]
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS)]
 class EnvMatch
 {
     /**

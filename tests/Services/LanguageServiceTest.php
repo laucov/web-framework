@@ -31,7 +31,6 @@ declare(strict_types=1);
 namespace Tests\Services;
 
 use Laucov\WebFramework\Config\Language;
-use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\LanguageService;
 use PHPUnit\Framework\TestCase;
@@ -91,7 +90,7 @@ class LanguageServiceTest extends TestCase
     protected function setUp(): void
     {
         // Create configuration.
-        $this->config = new class extends Language {};
+        $this->config = new class () extends Language {};
         $this->config->defaultLocale = 'en';
         $this->config->redirects['pt'] = 'pt-BR';
         $this->config->supportedLocales[] = 'pt-BR';

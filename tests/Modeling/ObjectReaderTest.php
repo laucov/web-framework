@@ -47,8 +47,7 @@ class ObjectReaderTest extends TestCase
     public function testCanExtractPublicPropertiesFromObjects(): void
     {
         // Create class to test scopes.
-        $car = new class
-        {
+        $car = new class () {
             public string $manufacturer = 'Chevrolet';
             public string $model = 'Corsa';
             public int $year = 1998;
@@ -83,12 +82,10 @@ class ObjectReaderTest extends TestCase
         $this->assertSame(3, ObjectReader::count($car));
 
         // Get difference.
-        $other_car = new class
-        {
+        $other_car = new class () {
             public string $manufacturer = 'Chevrolet';
         };
-        $some_car = new class
-        {
+        $some_car = new class () {
             public string $model = 'Corsa';
             public int $passengers = 2;
         };

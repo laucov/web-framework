@@ -36,7 +36,6 @@ use Laucov\WebFramework\Config\Session;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
 use Laucov\WebFramework\Security\AccreditationResult;
-use Laucov\WebFramework\Security\Authentication\AuthnFactory;
 use Laucov\WebFramework\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFramework\Security\Authentication\AuthnResult;
 use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnFactoryInterface;
@@ -349,7 +348,7 @@ class AuthorizerTest extends TestCase
         $this->authorizer->setSession($session_id);
         $this->authorizer->accredit('michael', 'abcd');
         $this->authorizer->requestAuthn('2');
-        
+
         // Remove user authentication from database before completing it.
         // Could happen between requests.
         $this->services
@@ -357,7 +356,7 @@ class AuthorizerTest extends TestCase
             ->getTable('users_authn_methods')
             ->filter('id', '=', '2')
             ->deleteRecords();
-        
+
         // Try to complete - should fail.
         $this->assertSame(
             AuthnResult::NOT_FOUND,
@@ -437,7 +436,7 @@ class AuthorizerTest extends TestCase
             $this->authorizer->getStatus(),
             'Assert that status is UserStatus::NO_ACTIVE_SESSION',
         );
-        
+
         // Change session.
         $this->authorizer->setSession($id_b);
         $this->assertSame(

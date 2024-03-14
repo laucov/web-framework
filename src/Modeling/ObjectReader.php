@@ -84,7 +84,7 @@ class ObjectReader
         foreach ($subject as $name => $value) {
             $result->$name = $value;
         }
-        
+
         return $result;
     }
 }

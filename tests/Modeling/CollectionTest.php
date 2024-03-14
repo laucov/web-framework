@@ -54,7 +54,10 @@ class CollectionTest extends TestCase
     {
         // Create collection.
         $collection = new Collection(
-            2, 4, 7, 16,
+            2,
+            4,
+            7,
+            16,
             $this->createProduct('ProdA', 23.99),
             $this->createProduct('ProdB', 6.41),
             $this->createProduct('ProdC', 1.99),

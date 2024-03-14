@@ -72,7 +72,6 @@ class Collection implements \Countable, \Iterator
          * Total number of records in the database table.
          */
         public readonly int $storedCount,
-
         AbstractEntity ...$entities,
     ) {
         $this->entities = $entities;
@@ -123,7 +122,7 @@ class Collection implements \Countable, \Iterator
     {
         $this->key++;
     }
-    
+
     /**
      * Rewind the collection to the first entity.
      */

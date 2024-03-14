@@ -34,7 +34,6 @@ use Laucov\Db\Data\Connection;
 use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
 use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\DatabaseService;
 use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use PHPUnit\Framework\TestCase;
@@ -130,7 +129,7 @@ class DatabaseServiceTest extends TestCase
     protected function setUp(): void
     {
         // Create configuration.
-        $this->config = new class extends Database {};
+        $this->config = new class () extends Database {};
         $this->config->defaultConnections['sqlite-a'] = ['sqlite::memory:'];
         $this->config->defaultConnections['sqlite-b'] = ['sqlite::memory:'];
         $this->config->defaultConnection = 'sqlite-a';

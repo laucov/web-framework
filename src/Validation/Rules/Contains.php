@@ -30,11 +30,10 @@ namespace Laucov\WebFramework\Validation\Rules;
 
 use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
 
-
 /**
  * Requires a value to contain a specific text.
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY|\Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::IS_REPEATABLE)]
 class Contains implements RuleInterface
 {
     /**
@@ -43,7 +42,7 @@ class Contains implements RuleInterface
      * @var array<string>
      */
     public array $needles;
-    
+
     /**
      * Create the rule instance.
      */

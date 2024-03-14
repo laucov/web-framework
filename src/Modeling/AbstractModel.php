@@ -333,7 +333,7 @@ abstract class AbstractModel
         $this->table
             ->filter($this->primaryKey, '=', $ids)
             ->updateRecords($this->updateValues);
-        
+
         // Reset values.
         $this->updateValues = [];
 
@@ -431,7 +431,7 @@ abstract class AbstractModel
                 ->offset($offset)
                 ->limit($this->pageLength);
         }
-        
+
         // Get records.
         $this->table->autoReset = true;
         $array = $this->getEntities();

@@ -30,7 +30,6 @@ namespace Laucov\WebFramework\Validation\Rules;
 
 use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
 
-
 /**
  * Requires a value to have a minimum and/or a maximum length.
  */

@@ -49,8 +49,7 @@ class AbstractEntityTest extends TestCase
     public function testCanCacheAndGetEntries(): void
     {
         // Create entity instance.
-        $entity = new class extends AbstractEntity
-        {
+        $entity = new class () extends AbstractEntity {
             public string $firstName = 'John';
             public string $lastName = 'Doe';
             public int $age = 40;
@@ -85,8 +84,7 @@ class AbstractEntityTest extends TestCase
     public function testCanGetAsArray(): void
     {
         // Create entity instance.
-        $entity = new class extends AbstractEntity
-        {
+        $entity = new class () extends AbstractEntity {
             public int $user_id = 21;
             public string $number = '5555555555554444';
             public string $cvc = '123';
@@ -124,8 +122,7 @@ class AbstractEntityTest extends TestCase
     public function testCanValidate(): void
     {
         // Create entity instance.
-        $entity = new class extends AbstractEntity
-        {
+        $entity = new class () extends AbstractEntity {
             #[Length(8, 16)]
             public string $login;
             #[Length(16, 24)]
@@ -180,8 +177,7 @@ class AbstractEntityTest extends TestCase
     public function testIgnoresInexistentProperties(): void
     {
         // Create entity instance.
-        $entity = new class extends AbstractEntity
-        {
+        $entity = new class () extends AbstractEntity {
             public string $title = 'Foobar: a study of Baz';
             public string $author = 'Doe, John';
         };

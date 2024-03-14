@@ -43,7 +43,7 @@ abstract class AbstractRuleTest extends TestCase
      * 
      * This function must return key-value pairs for filtering.
      */
-    protected abstract function getValues(): array;
+    abstract protected function getValues(): array;
 
     /**
      * Assert that a class can be used as a property attribute.
@@ -58,9 +58,9 @@ abstract class AbstractRuleTest extends TestCase
 
         // Set expected bitmask.
         $bitmask = $is_repeatable
-            ? \Attribute::TARGET_PROPERTY|\Attribute::IS_REPEATABLE
+            ? \Attribute::TARGET_PROPERTY | \Attribute::IS_REPEATABLE
             : \Attribute::TARGET_PROPERTY;
-        
+
         // Check if the class is a property attribute.
         foreach ($attributes as $attribute) {
             // Check if is an attribute.

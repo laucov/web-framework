@@ -151,7 +151,7 @@ class ControllerRouter extends Router
             $this->configProvider,
             $this->serviceProvider,
         );
-        
+
         return $this;
     }
 

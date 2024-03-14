@@ -30,7 +30,6 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
-use Laucov\Http\Message\IncomingRequest;
 use Laucov\Http\Message\OutgoingResponse;
 use Laucov\WebFramework\Http\AbstractController;
 use Laucov\WebFramework\Providers\ConfigProvider;
@@ -52,10 +51,9 @@ class AbstractControllerTest extends TestCase
         // Create providers.
         $cpv = new ConfigProvider([]);
         $spv = new ServiceProvider($cpv);
-        
+
         // Create example class.
-        $controller = new class ($cpv, $spv) extends AbstractController
-        {
+        $controller = new class ($cpv, $spv) extends AbstractController {
         };
         $reflection = new \ReflectionObject($controller);
         $this->assertSame(

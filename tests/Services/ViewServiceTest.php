@@ -65,7 +65,7 @@ class ViewServiceTest extends TestCase
     protected function setUp(): void
     {
         // Create configuration.
-        $this->config = new class extends View {};
+        $this->config = new class () extends View {};
         $this->config->viewsDir = __DIR__ . '/view-files';
         $this->config->cacheDir = __DIR__ . '/view-cache';
 
