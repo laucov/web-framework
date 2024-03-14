@@ -28,16 +28,12 @@
 
 namespace Laucov\WebFramework\Http;
 
-use Laucov\Arrays\ArrayReader;
 use Laucov\Http\Message\OutgoingResponse;
-use Laucov\Http\Message\RequestInterface;
-use Laucov\Http\Message\ResponseInterface;
-use Laucov\WebFramework\Database\ConnectionProvider;
 use Laucov\WebFramework\Providers\ConfigProvider;
 use Laucov\WebFramework\Providers\ServiceProvider;
 
 /**
- * Represents a list of database records.
+ * Controls the life cycle of a specific category of system actions.
  */
 abstract class AbstractController
 {
