@@ -54,7 +54,7 @@ class UserModel extends AbstractModel
     protected string $tableName = 'users';
 
     /**
-     * Retrieve a user by its ID.
+     * Retrieve an user by its login name.
      */
     public function retrieveWithLogin(string $login): null|User
     {
