@@ -31,9 +31,7 @@ declare(strict_types=1);
 namespace Tests\Services;
 
 use Laucov\WebFramework\Config\Session as SessionConfig;
-use Laucov\WebFramework\Providers\AbstractService;
 use Laucov\WebFramework\Services\FileSessionService;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
 use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
 use Laucov\Sessions\Session;
 use PHPUnit\Framework\TestCase;
