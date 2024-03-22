@@ -94,7 +94,7 @@ class ConfigProvider
     /**
      * Get a configuration instance.
      * 
-     * @param class-string<T>
+     * @param class-string<T> $class_name
      * @return T
      */
     public function getConfig(string $class_name): mixed
@@ -121,6 +121,17 @@ class ConfigProvider
         }
 
         return $config;
+    }
+
+    /**
+     * Check if a configuration is registered.
+     * 
+     * @param class-string<T> $class_name
+     */
+    public function hasConfig(string $class_name): bool
+    {
+        $name = $this->getName($class_name);
+        return array_key_exists($name, $this->classes);
     }
 
     /**

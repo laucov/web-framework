@@ -49,6 +49,7 @@ class ConfigProviderTest extends TestCase
      * @covers ::getInstance
      * @covers ::getConfig
      * @covers ::getName
+     * @covers ::hasConfig
      * @uses Laucov\WebFramework\Providers\EnvMatch::__construct
      */
     public function testCanAddAndGetConfigs(): void
@@ -80,6 +81,12 @@ class ConfigProviderTest extends TestCase
         $this->assertInstanceOf(\Tests\Providers\Another\Book::class, $config_d);
         $config_e = $provider->getConfig(Book::class);
         $this->assertSame($config_d, $config_e);
+
+        // Check if has config.
+        $this->assertTrue($this->provider->hasConfig(Book::class));
+        $this->assertTrue(
+            $this->provider->hasConfig(\Tests\Providers\Another\Book::class),
+        );
     }
 
     /**
