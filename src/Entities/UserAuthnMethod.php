@@ -32,8 +32,6 @@ use Laucov\WebFramework\Modeling\AbstractEntity;
 
 /**
  * Represents a registered authentication method of a specific user.
- * 
- * @todo public function setSettings(array $string): void
  */
 class UserAuthnMethod extends AbstractEntity
 {

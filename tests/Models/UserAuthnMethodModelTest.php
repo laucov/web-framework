@@ -38,6 +38,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Laucov\WebFramework\Models\UserAuthnMethodModel
+ * @todo Create `UserAuthnMethodTest` and `UserAuthnMethod::setSettings`
  */
 class UserMfaMethodModelTest extends TestCase
 {

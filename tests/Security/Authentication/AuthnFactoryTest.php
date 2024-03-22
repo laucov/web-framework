@@ -26,8 +26,6 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-// @todo Create authentication classes to use.
-
 declare(strict_types=1);
 
 namespace Tests\Security;
@@ -40,6 +38,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Laucov\WebFramework\Security\Authentication\AuthnFactory
+ * @todo Create `AuthnInterface` classes to test.
  */
 class AuthnFactoryTest extends TestCase
 {
