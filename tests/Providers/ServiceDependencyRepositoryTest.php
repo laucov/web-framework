@@ -42,6 +42,7 @@ class ServiceDependencyRepositoryTest extends TestCase
 {
     /**
      * @covers ::getValue
+     * @covers ::hasDependency
      * @covers ::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
@@ -53,21 +54,47 @@ class ServiceDependencyRepositoryTest extends TestCase
      */
     public function testCanResolveConfigurationDependencies(): void
     {
-        // Set configuration.
-        $config = new ConfigProvider([]);
-        $config->addConfig(ConfigA::class);
-
         // Create repository.
         $repo = new ServiceDependencyRepository();
-        $repo->setConfigProvider($config);
 
-        // Assert that can get from provider.
+        // Assert that can use without configuration.
+        $repo->setValue(ConfigA::class, new ConfigA());
+        $this->assertTrue($repo->hasDependency(ConfigA::class));
+        $this->assertFalse($repo->hasDependency(ConfigB::class));
+        $this->assertFalse($repo->hasDependency(ConfigC::class));
         $this->assertInstanceOf(
             ConfigA::class,
             $repo->getValue(ConfigA::class),
         );
 
-        // @todo Test fallback.
+        // Set configuration.
+        $config = new ConfigProvider([]);
+        $config->addConfig(ConfigB::class);
+        $repo->setConfigProvider($config);
+
+        // Assert that can get from provider.
+        $this->assertTrue($repo->hasDependency(ConfigB::class));
+        $this->assertFalse($repo->hasDependency(ConfigC::class));
+        $this->assertInstanceOf(
+            ConfigB::class,
+            $repo->getValue(ConfigB::class),
+        );
+
+        // Test fallback.
+        $config_c = new ConfigC();
+        $repo->setValue(ConfigC::class, $config_c);
+        $this->assertTrue($repo->hasDependency(ConfigC::class));
+        $this->assertInstanceOf(
+            ConfigC::class,
+            $repo->getValue(ConfigC::class),
+        );
+
+        // Assert that prefers manual dependencies.
+        $config->addConfig(ConfigC::class);
+        $result = $repo->getValue(ConfigC::class);
+        $this->assertTrue($repo->hasDependency(ConfigC::class));
+        $this->assertInstanceOf(ConfigC::class, $result);
+        $this->assertNotSame($config_c, $result);
     }
 }
 

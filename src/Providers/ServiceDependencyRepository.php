@@ -49,13 +49,32 @@ class ServiceDependencyRepository extends Repository
     public function getValue(string $name): mixed
     {
         if (
-            is_a($name, ConfigInterface::class, true)
+            isset($this->configProvider)
+            && is_a($name, ConfigInterface::class, true)
             && $this->configProvider->hasConfig($name)
         ) {
             return $this->configProvider->getConfig($name);
         }
 
         return parent::getValue($name);
+    }
+
+    /**
+     * Check whether a dependency type is registered.
+     * 
+     * Check the provider first for `ConfigInterface` dependencies.
+     */
+    public function hasDependency(string $name): bool
+    {
+        if (
+            isset($this->configProvider)
+            && is_a($name, ConfigInterface::class, true)
+            && $this->configProvider->hasConfig($name)
+        ) {
+            return true;
+        }
+
+        return parent::hasDependency($name);
     }
 
     /**
