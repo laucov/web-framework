@@ -28,6 +28,7 @@
 
 namespace Laucov\WebFramework\Providers;
 
+use Laucov\Injection\Resolver;
 use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
 use Laucov\WebFramework\Services\DatabaseService;
 use Laucov\WebFramework\Services\FileSessionService;
@@ -44,11 +45,21 @@ use Laucov\WebFramework\Services\ViewService;
 class ServiceProvider
 {
     /**
+     * Service dependencies.
+     */
+    protected ServiceDependencyRepository $dependencies;
+
+    /**
      * Cached instances.
      * 
      * @var array<string, ServiceInterface>
      */
     protected array $instances = [];
+
+    /**
+     * Dependency resolver.
+     */
+    protected Resolver $resolver;
 
     /**
      * Registered services.
@@ -68,21 +79,26 @@ class ServiceProvider
          */
         protected ConfigProvider $config,
     ) {
-        // Get methods.
+        // Set dependencies.
+        $this->dependencies = new ServiceDependencyRepository();
+        $this->dependencies->setConfigProvider($this->config);
+        $this->resolver = new Resolver($this->dependencies);
+
+        // Get public methods.
         $reflection = new \ReflectionClass(static::class);
+        /** @var array<\ReflectionMethod> */
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        // Register services.
+        // Register each service factory method as a dependency.
         foreach ($methods as $method) {
-            /** @var \ReflectionMethod $method */
-            // Check if is a named return type.
+            // Get method return type.
             $type = $method->getReturnType();
             if ($type instanceof \ReflectionNamedType) {
-                // Check if returns a ServiceInterface object.
-                $name = $type->getName();
-                if (is_a($name, ServiceInterface::class, true)) {
-                    // Register.
-                    $this->services[$type->getName()] = $name;
+                // Add factory dependency if returns a ServiceInterface object.
+                $type_name = $type->getName();
+                if (is_a($type_name, ServiceInterface::class, true)) {
+                    $callable = [$this, $method->getName()];
+                    $this->dependencies->setFactory($type_name, $callable);
                 }
             }
         }
@@ -134,43 +150,44 @@ class ServiceProvider
             return $this->instances[$class_name];
         }
 
-        // Get constructor parameters.
-        $reflection = new \ReflectionClass($class_name);
-        $constructor = $reflection->getMethod('__construct');
-        $parameters = $constructor->getParameters();
+        // // Get constructor parameters.
+        // $reflection = new \ReflectionClass($class_name);
+        // $constructor = $reflection->getMethod('__construct');
+        // $parameters = $constructor->getParameters();
 
-        // Create arguments.
-        $arguments = [];
-        foreach ($parameters as $parameter) {
-            // Get and check type.
-            $type = $parameter->getType();
-            if ($type === null) {
-                $msg = 'Untyped argument found in provided service ' .
-                    "{$class_name} constructor.";
-                throw new \RuntimeException($msg);
-            }
-            if (!($type instanceof \ReflectionNamedType)) {
-                $msg = 'Intersection or union type argument found in '
-                    . "provided service {$class_name} constructor.";
-                throw new \RuntimeException($msg);
-            }
-            // Get name.
-            $name = $type->getName();
-            // Inject dependency.
-            if (array_key_exists($name, $this->services)) {
-                $method_name = $this->services[$name];
-                $arguments[] = $this->{$method_name}();
-            } elseif (is_a($name, ConfigInterface::class, true)) {
-                $arguments[] = $this->config->getConfig($name);
-            } else {
-                $msg = 'Invalid argument type "%s" found in provided ' .
-                    "service {$class_name} constructor.";
-                throw new \RuntimeException($msg);
-            }
-        }
+        // // Create arguments.
+        // $arguments = [];
+        // foreach ($parameters as $parameter) {
+        //     // Get and check type.
+        //     $type = $parameter->getType();
+        //     if ($type === null) {
+        //         $msg = 'Untyped argument found in provided service ' .
+        //             "{$class_name} constructor.";
+        //         throw new \RuntimeException($msg);
+        //     }
+        //     if (!($type instanceof \ReflectionNamedType)) {
+        //         $msg = 'Intersection or union type argument found in '
+        //             . "provided service {$class_name} constructor.";
+        //         throw new \RuntimeException($msg);
+        //     }
+        //     // Get name.
+        //     $name = $type->getName();
+        //     // Inject dependency.
+        //     if (array_key_exists($name, $this->services)) {
+        //         $method_name = $this->services[$name];
+        //         $arguments[] = $this->{$method_name}();
+        //     } elseif (is_a($name, ConfigInterface::class, true)) {
+        //         $arguments[] = $this->config->getConfig($name);
+        //     } else {
+        //         $msg = 'Invalid argument type "%s" found in provided ' .
+        //             "service {$class_name} constructor.";
+        //         throw new \RuntimeException($msg);
+        //     }
+        // }
 
-        // Create and cache the instance.
-        $service = new $class_name(...$arguments);
+        // // Create and cache the instance.
+        // $service = new $class_name(...$arguments);
+        $service = $this->resolver->instantiate($class_name);
         $this->instances[$class_name] = $service;
 
         return $service;

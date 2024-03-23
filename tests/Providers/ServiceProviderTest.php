@@ -74,25 +74,18 @@ class ServiceProviderTest extends TestCase
         $config = new ConfigProvider([]);
 
         return [
-            // Use a service with untyped constructor argument.
+            // Use a service with union/intersection constructor argument.
             [new class ($config) extends AbstractFooProvider {
                 public function foobar()
                 {
                     $this->getService(InvalidServiceA::class);
                 }
             }],
-            // Use a service with union/intersection constructor argument.
-            [new class ($config) extends AbstractFooProvider {
-                public function foobar()
-                {
-                    $this->getService(InvalidServiceB::class);
-                }
-            }],
             // Use a service with invalid type argument.
             [new class ($config) extends AbstractFooProvider {
                 public function foobar()
                 {
-                    $this->getService(InvalidServiceC::class);
+                    $this->getService(InvalidServiceB::class);
                 }
             }],
         ];
@@ -111,6 +104,10 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Services\DatabaseService::__construct
      * @uses Laucov\WebFramework\Services\FileSessionService::__construct
      * @uses Laucov\WebFramework\Services\LanguageService::__construct
@@ -141,6 +138,8 @@ class ServiceProviderTest extends TestCase
      * @covers ::getService
      * @dataProvider invalidChildrenProvider
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      */
     public function testValidatesServiceConstructors(object $provider): void
@@ -164,19 +163,12 @@ abstract class AbstractFooProvider extends ServiceProvider
 
 class InvalidServiceA implements ServiceInterface
 {
-    public function __construct($a)
-    {
-    }
-}
-
-class InvalidServiceB implements ServiceInterface
-{
     public function __construct(ConfigInterface|ServiceInterface $a)
     {
     }
 }
 
-class InvalidServiceC implements ServiceInterface
+class InvalidServiceB implements ServiceInterface
 {
     public function __construct(array $b)
     {

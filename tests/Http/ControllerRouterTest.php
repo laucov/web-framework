@@ -53,6 +53,7 @@ class ControllerRouterTest extends TestCase
      * @covers ::setProviders
      * @covers ::withCrudOps
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      */
     public function testCanRouteControllers(): void
@@ -115,6 +116,7 @@ class ControllerRouterTest extends TestCase
      * @covers ::setController
      * @uses Laucov\WebFramework\Http\ControllerRouter::setProviders
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      */
     public function testControllerMustExtendAbstractController(): void

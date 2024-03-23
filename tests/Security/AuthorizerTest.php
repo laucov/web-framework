@@ -80,6 +80,10 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      * @uses Laucov\WebFramework\Providers\ServiceProvider::db
      * @uses Laucov\WebFramework\Providers\ServiceProvider::getService
@@ -324,6 +328,10 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      * @uses Laucov\WebFramework\Providers\ServiceProvider::db
      * @uses Laucov\WebFramework\Providers\ServiceProvider::getService
@@ -400,6 +408,10 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
      * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      * @uses Laucov\WebFramework\Providers\ServiceProvider::db
      * @uses Laucov\WebFramework\Providers\ServiceProvider::getService

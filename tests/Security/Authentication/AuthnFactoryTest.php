@@ -53,6 +53,7 @@ class AuthnFactoryTest extends TestCase
     /**
      * @covers ::__construct
      * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
      */
     public function testCanInstantiate(): void
