@@ -26,10 +26,10 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Services\Interfaces;
+namespace Laucov\WebFwk\Services\Interfaces;
 
 use Laucov\Sessions\Session;
-use Laucov\WebFramework\Config\Session as SessionConfig;
+use Laucov\WebFwk\Config\Session as SessionConfig;
 
 /**
  * Provides read/write access to sessions.

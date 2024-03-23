@@ -26,9 +26,9 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Providers;
+namespace Laucov\WebFwk\Providers;
 
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 
 /**
  * Caches and provides configuration object instances.

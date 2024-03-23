@@ -30,13 +30,13 @@ declare(strict_types=1);
 
 namespace Tests\Services;
 
-use Laucov\WebFramework\Config\Language;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
-use Laucov\WebFramework\Services\LanguageService;
+use Laucov\WebFwk\Config\Language;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Services\LanguageService;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Services\LanguageService
+ * @coversDefaultClass \Laucov\WebFwk\Services\LanguageService
  */
 class LanguageServiceTest extends TestCase
 {

@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Config\Interfaces;
+namespace Laucov\WebFwk\Config\Interfaces;
 
 /**
  * Stores settings for a specific application matter.

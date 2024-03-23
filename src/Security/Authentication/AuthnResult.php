@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Security\Authentication;
+namespace Laucov\WebFwk\Security\Authentication;
 
 /**
  * Represents an user authentication attempt result.

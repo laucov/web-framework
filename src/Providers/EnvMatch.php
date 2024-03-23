@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Providers;
+namespace Laucov\WebFwk\Providers;
 
 /**
  * Represents an environment variable name translation.

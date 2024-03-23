@@ -32,16 +32,16 @@ namespace Tests\Modeling;
 
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Data\Driver\DriverFactory;
-use Laucov\WebFramework\Modeling\BatchUpdateResult;
-use Laucov\WebFramework\Modeling\Collection;
-use Laucov\WebFramework\Modeling\DeletionFilter;
-use Laucov\WebFramework\Modeling\AbstractEntity;
-use Laucov\WebFramework\Modeling\AbstractModel;
-use Laucov\WebFramework\Validation\Rules\Regex;
+use Laucov\WebFwk\Modeling\BatchUpdateResult;
+use Laucov\WebFwk\Modeling\Collection;
+use Laucov\WebFwk\Modeling\DeletionFilter;
+use Laucov\WebFwk\Modeling\AbstractEntity;
+use Laucov\WebFwk\Modeling\AbstractModel;
+use Laucov\WebFwk\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Modeling\AbstractModel
+ * @coversDefaultClass \Laucov\WebFwk\Modeling\AbstractModel
  */
 class AbstractModelTest extends TestCase
 {
@@ -54,7 +54,7 @@ class AbstractModelTest extends TestCase
      * @covers ::erase
      * @covers ::exists
      * @covers ::filterDeleted
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
      */
     public function testCanDeleteAndErase(): void
     {
@@ -106,27 +106,27 @@ class AbstractModelTest extends TestCase
      * @covers ::update
      * @covers ::updateBatch
      * @covers ::withValue
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::cacheRules
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::getEntries
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::getRuleset
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::toArray
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::validate
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieveBatch
-     * @uses Laucov\WebFramework\Modeling\ObjectReader::count
-     * @uses Laucov\WebFramework\Modeling\ObjectReader::diff
-     * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::__construct
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::validate
-     * @uses Laucov\WebFramework\Validation\Ruleset::addRule
-     * @uses Laucov\WebFramework\Validation\Ruleset::getErrors
-     * @uses Laucov\WebFramework\Validation\Ruleset::validate
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::cacheRules
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::getEntries
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::getRuleset
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::toArray
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::validate
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieveBatch
+     * @uses Laucov\WebFwk\Modeling\ObjectReader::count
+     * @uses Laucov\WebFwk\Modeling\ObjectReader::diff
+     * @uses Laucov\WebFwk\Modeling\ObjectReader::toArray
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::validate
+     * @uses Laucov\WebFwk\Validation\Ruleset::addRule
+     * @uses Laucov\WebFwk\Validation\Ruleset::getErrors
+     * @uses Laucov\WebFwk\Validation\Ruleset::validate
      */
     public function testCanInsertAndUpdate(): void
     {
@@ -216,16 +216,16 @@ class AbstractModelTest extends TestCase
      * @covers ::paginate
      * @covers ::resetPagination
      * @covers ::sort
-     * @uses Laucov\WebFramework\Modeling\Collection::__construct
-     * @uses Laucov\WebFramework\Modeling\Collection::count
-     * @uses Laucov\WebFramework\Modeling\Collection::current
-     * @uses Laucov\WebFramework\Modeling\Collection::get
-     * @uses Laucov\WebFramework\Modeling\Collection::next
-     * @uses Laucov\WebFramework\Modeling\Collection::rewind
-     * @uses Laucov\WebFramework\Modeling\Collection::valid
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\Collection::__construct
+     * @uses Laucov\WebFwk\Modeling\Collection::count
+     * @uses Laucov\WebFwk\Modeling\Collection::current
+     * @uses Laucov\WebFwk\Modeling\Collection::get
+     * @uses Laucov\WebFwk\Modeling\Collection::next
+     * @uses Laucov\WebFwk\Modeling\Collection::rewind
+     * @uses Laucov\WebFwk\Modeling\Collection::valid
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
      */
     public function testCanList(): void
     {
@@ -306,11 +306,11 @@ class AbstractModelTest extends TestCase
      * @covers ::sort
      * @covers ::retrieve
      * @covers ::retrieveBatch
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
      */
     public function testCanRetrieve(): void
     {
@@ -382,12 +382,12 @@ class AbstractModelTest extends TestCase
 
     /**
      * @covers ::getEntity
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
      */
     public function testFailsIfRetrievesDuplicatedEntries(): void
     {
@@ -404,11 +404,11 @@ class AbstractModelTest extends TestCase
 
     /**
      * @covers ::retrieveBatch
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
      */
     public function testFailsIfRetrievesBatchesWithDuplicatedEntries(): void
     {

@@ -26,9 +26,9 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Validation\Rules;
+namespace Laucov\WebFwk\Validation\Rules;
 
-use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
+use Laucov\WebFwk\Validation\Rules\Interfaces\RuleInterface;
 
 /**
  * Requires a value to have a minimum and/or a maximum length.

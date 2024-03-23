@@ -26,11 +26,11 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Services;
+namespace Laucov\WebFwk\Services;
 
 use Laucov\Views\ViewFactory;
-use Laucov\WebFramework\Config\View;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Config\View;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides front-end related tools.

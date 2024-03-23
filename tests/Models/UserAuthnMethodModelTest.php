@@ -32,12 +32,12 @@ namespace Tests\Models;
 
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Data\Driver\DriverFactory;
-use Laucov\WebFramework\Entities\UserAuthnMethod;
-use Laucov\WebFramework\Models\UserAuthnMethodModel;
+use Laucov\WebFwk\Entities\UserAuthnMethod;
+use Laucov\WebFwk\Models\UserAuthnMethodModel;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Models\UserAuthnMethodModel
+ * @coversDefaultClass \Laucov\WebFwk\Models\UserAuthnMethodModel
  * @todo Create `UserAuthnMethodTest` and `UserAuthnMethod::setSettings`
  */
 class UserMfaMethodModelTest extends TestCase
@@ -57,16 +57,16 @@ class UserMfaMethodModelTest extends TestCase
 
     /**
      * @covers ::listForUser
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::list
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::resetPagination
-     * @uses Laucov\WebFramework\Modeling\Collection::__construct
-     * @uses Laucov\WebFramework\Modeling\Collection::count
-     * @uses Laucov\WebFramework\Modeling\Collection::get
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::list
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::resetPagination
+     * @uses Laucov\WebFwk\Modeling\Collection::__construct
+     * @uses Laucov\WebFwk\Modeling\Collection::count
+     * @uses Laucov\WebFwk\Modeling\Collection::get
      */
     public function testCanListForUsers(): void
     {
@@ -81,13 +81,13 @@ class UserMfaMethodModelTest extends TestCase
 
     /**
      * @covers ::retrieveForUser
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
      * @dataProvider authnMethodIdProvider
      */
     public function testCanRetrieveForUsers(

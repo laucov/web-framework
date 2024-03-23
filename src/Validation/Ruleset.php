@@ -26,9 +26,9 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Validation;
+namespace Laucov\WebFwk\Validation;
 
-use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
+use Laucov\WebFwk\Validation\Rules\Interfaces\RuleInterface;
 
 /**
  * Stores rules and validate values with them.

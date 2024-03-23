@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Validation\Rules\Interfaces;
+namespace Laucov\WebFwk\Validation\Rules\Interfaces;
 
 /**
  * Validates values.

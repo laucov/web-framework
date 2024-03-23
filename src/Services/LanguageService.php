@@ -26,11 +26,11 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Services;
+namespace Laucov\WebFwk\Services;
 
 use Laucov\Lang\MessageRepository;
-use Laucov\WebFramework\Config\Language;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Config\Language;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides an interface to multi-language support.

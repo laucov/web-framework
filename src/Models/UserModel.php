@@ -26,10 +26,10 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Models;
+namespace Laucov\WebFwk\Models;
 
-use Laucov\WebFramework\Entities\User;
-use Laucov\WebFramework\Modeling\AbstractModel;
+use Laucov\WebFwk\Entities\User;
+use Laucov\WebFwk\Modeling\AbstractModel;
 
 /**
  * Provides and saves `User` entities.

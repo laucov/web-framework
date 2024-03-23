@@ -26,9 +26,9 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Config;
+namespace Laucov\WebFwk\Config;
 
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 
 /**
  * Stores internationalization configuration.

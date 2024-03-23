@@ -30,21 +30,21 @@ declare(strict_types=1);
 
 namespace Tests\Modeling;
 
-use Laucov\WebFramework\Modeling\AbstractEntity;
-use Laucov\WebFramework\Validation\Rules\Length;
-use Laucov\WebFramework\Validation\Rules\Regex;
+use Laucov\WebFwk\Modeling\AbstractEntity;
+use Laucov\WebFwk\Validation\Rules\Length;
+use Laucov\WebFwk\Validation\Rules\Regex;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Modeling\AbstractEntity
+ * @coversDefaultClass \Laucov\WebFwk\Modeling\AbstractEntity
  */
 class AbstractEntityTest extends TestCase
 {
     /**
      * @covers ::cache
      * @covers ::getEntries
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\ObjectReader::diff
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\ObjectReader::diff
      */
     public function testCanCacheAndGetEntries(): void
     {
@@ -78,8 +78,8 @@ class AbstractEntityTest extends TestCase
 
     /**
      * @covers ::toArray
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\ObjectReader::toArray
      */
     public function testCanGetAsArray(): void
     {
@@ -108,16 +108,16 @@ class AbstractEntityTest extends TestCase
      * @covers ::getErrors
      * @covers ::getRuleset
      * @covers ::validate
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::cache
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::toArray
-     * @uses Laucov\WebFramework\Modeling\ObjectReader::toArray
-     * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
-     * @uses Laucov\WebFramework\Validation\Rules\Length::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::__construct
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::validate
-     * @uses Laucov\WebFramework\Validation\Ruleset::addRule
-     * @uses Laucov\WebFramework\Validation\Ruleset::getErrors
-     * @uses Laucov\WebFramework\Validation\Ruleset::validate
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::cache
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::toArray
+     * @uses Laucov\WebFwk\Modeling\ObjectReader::toArray
+     * @uses Laucov\WebFwk\Validation\Rules\Length::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Length::validate
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::validate
+     * @uses Laucov\WebFwk\Validation\Ruleset::addRule
+     * @uses Laucov\WebFwk\Validation\Ruleset::getErrors
+     * @uses Laucov\WebFwk\Validation\Ruleset::validate
      */
     public function testCanValidate(): void
     {
@@ -172,7 +172,7 @@ class AbstractEntityTest extends TestCase
 
     /**
      * @covers ::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
      */
     public function testIgnoresInexistentProperties(): void
     {

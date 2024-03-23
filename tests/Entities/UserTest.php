@@ -30,18 +30,18 @@ declare(strict_types=1);
 
 namespace Tests\Entities;
 
-use Laucov\WebFramework\Entities\User;
+use Laucov\WebFwk\Entities\User;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Entities\User
+ * @coversDefaultClass \Laucov\WebFwk\Entities\User
  */
 class UserTest extends TestCase
 {
     /**
      * @covers ::setPassword
      * @covers ::testPassword
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
      */
     public function testSetsAndTestsPasswords(): void
     {

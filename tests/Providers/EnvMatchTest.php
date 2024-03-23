@@ -30,11 +30,11 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
-use Laucov\WebFramework\Providers\EnvMatch;
+use Laucov\WebFwk\Providers\EnvMatch;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Providers\EnvMatch
+ * @coversDefaultClass \Laucov\WebFwk\Providers\EnvMatch
  */
 class EnvMatchTest extends TestCase
 {

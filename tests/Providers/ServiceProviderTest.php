@@ -30,22 +30,22 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
-use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Config\Language;
-use Laucov\WebFramework\Config\Session;
-use Laucov\WebFramework\Config\View;
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceProvider;
-use Laucov\WebFramework\Services\DatabaseService;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
-use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
-use Laucov\WebFramework\Services\LanguageService;
-use Laucov\WebFramework\Services\ViewService;
+use Laucov\WebFwk\Config\Database;
+use Laucov\WebFwk\Config\Language;
+use Laucov\WebFwk\Config\Session;
+use Laucov\WebFwk\Config\View;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Services\DatabaseService;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
+use Laucov\WebFwk\Services\LanguageService;
+use Laucov\WebFwk\Services\ViewService;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Providers\ServiceProvider
+ * @coversDefaultClass \Laucov\WebFwk\Providers\ServiceProvider
  */
 class ServiceProviderTest extends TestCase
 {
@@ -98,21 +98,21 @@ class ServiceProviderTest extends TestCase
      * @covers ::lang
      * @covers ::session
      * @covers ::view
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Services\DatabaseService::__construct
-     * @uses Laucov\WebFramework\Services\FileSessionService::__construct
-     * @uses Laucov\WebFramework\Services\LanguageService::__construct
-     * @uses Laucov\WebFramework\Services\LanguageService::update
-     * @uses Laucov\WebFramework\Services\ViewService::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\LanguageService::__construct
+     * @uses Laucov\WebFwk\Services\LanguageService::update
+     * @uses Laucov\WebFwk\Services\ViewService::__construct
      * @dataProvider callProvider
      */
     public function testCanGetServices(
@@ -137,10 +137,10 @@ class ServiceProviderTest extends TestCase
     /**
      * @covers ::getService
      * @dataProvider invalidChildrenProvider
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
     public function testValidatesServiceConstructors(object $provider): void
     {

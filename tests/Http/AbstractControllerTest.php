@@ -31,21 +31,21 @@ declare(strict_types=1);
 namespace Tests\Http;
 
 use Laucov\Http\Message\OutgoingResponse;
-use Laucov\WebFramework\Http\AbstractController;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceProvider;
+use Laucov\WebFwk\Http\AbstractController;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Http\AbstractController
+ * @coversDefaultClass \Laucov\WebFwk\Http\AbstractController
  */
 class AbstractControllerTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
     public function testCanExtend(): void
     {

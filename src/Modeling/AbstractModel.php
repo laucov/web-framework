@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Modeling;
+namespace Laucov\WebFwk\Modeling;
 
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Query\Table;

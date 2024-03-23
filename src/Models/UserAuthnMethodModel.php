@@ -26,11 +26,11 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Models;
+namespace Laucov\WebFwk\Models;
 
-use Laucov\WebFramework\Entities\UserAuthnMethod;
-use Laucov\WebFramework\Modeling\AbstractModel;
-use Laucov\WebFramework\Modeling\Collection;
+use Laucov\WebFwk\Entities\UserAuthnMethod;
+use Laucov\WebFwk\Modeling\AbstractModel;
+use Laucov\WebFwk\Modeling\Collection;
 
 /**
  * Provides and saves `UserAuthnMethod` entities.

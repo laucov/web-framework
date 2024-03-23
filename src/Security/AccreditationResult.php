@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Security;
+namespace Laucov\WebFwk\Security;
 
 /**
  * Represents an user accreditation attempt result.

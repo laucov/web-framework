@@ -30,11 +30,11 @@ declare(strict_types=1);
 
 namespace Tests\Validation\Rules;
 
-use Laucov\WebFramework\Validation\Rules\Contains;
+use Laucov\WebFwk\Validation\Rules\Contains;
 use Tests\AbstractRuleTest;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Validation\Rules\Contains
+ * @coversDefaultClass \Laucov\WebFwk\Validation\Rules\Contains
  */
 class ContainsTest extends AbstractRuleTest
 {
@@ -60,7 +60,7 @@ class ContainsTest extends AbstractRuleTest
 
     /**
      * @covers ::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Contains::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Contains::__construct
      */
     public function testDoesNotAcceptNonScalarValues(): void
     {

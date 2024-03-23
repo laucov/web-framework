@@ -26,10 +26,10 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Modeling;
+namespace Laucov\WebFwk\Modeling;
 
-use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
-use Laucov\WebFramework\Validation\Ruleset;
+use Laucov\WebFwk\Validation\Rules\Interfaces\RuleInterface;
+use Laucov\WebFwk\Validation\Ruleset;
 
 /**
  * Represents a database record.

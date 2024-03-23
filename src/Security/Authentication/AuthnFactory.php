@@ -26,10 +26,10 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Security\Authentication;
+namespace Laucov\WebFwk\Security\Authentication;
 
-use Laucov\WebFramework\Providers\ServiceProvider;
-use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnFactoryInterface;
+use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
 
 /**
  * Creates `AuthnInterface` objects.

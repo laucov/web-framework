@@ -30,11 +30,11 @@ declare(strict_types=1);
 
 namespace Tests\Validation\Rules;
 
-use Laucov\WebFramework\Validation\Rules\Length;
+use Laucov\WebFwk\Validation\Rules\Length;
 use Tests\AbstractRuleTest;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Validation\Rules\Length
+ * @coversDefaultClass \Laucov\WebFwk\Validation\Rules\Length
  */
 class LengthTest extends AbstractRuleTest
 {
@@ -61,7 +61,7 @@ class LengthTest extends AbstractRuleTest
 
     /**
      * @covers ::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Length::__construct
      */
     public function testDoesNotAcceptNonScalarValues(): void
     {

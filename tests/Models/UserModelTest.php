@@ -32,12 +32,12 @@ namespace Tests\Models;
 
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Data\Driver\DriverFactory;
-use Laucov\WebFramework\Entities\User;
-use Laucov\WebFramework\Models\UserModel;
+use Laucov\WebFwk\Entities\User;
+use Laucov\WebFwk\Models\UserModel;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Models\UserModel
+ * @coversDefaultClass \Laucov\WebFwk\Models\UserModel
  */
 class UserModelTest extends TestCase
 {
@@ -45,12 +45,12 @@ class UserModelTest extends TestCase
 
     /**
      * @covers ::retrieveWithLogin
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
      */
     public function testCanRetrieveWithLoginName(): void
     {

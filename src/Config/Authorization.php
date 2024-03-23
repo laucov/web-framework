@@ -26,11 +26,11 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Config;
+namespace Laucov\WebFwk\Config;
 
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
-use Laucov\WebFramework\Security\Authentication\AuthnFactory;
-use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnFactoryInterface;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Security\Authentication\AuthnFactory;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
 
 /**
  * Stores login and authentication parameters.

@@ -26,11 +26,11 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Http;
+namespace Laucov\WebFwk\Http;
 
 use Laucov\Http\Message\OutgoingResponse;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceProvider;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceProvider;
 
 /**
  * Controls the life cycle of a specific category of system actions.

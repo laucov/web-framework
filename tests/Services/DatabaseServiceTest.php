@@ -33,13 +33,13 @@ namespace Tests\Services;
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
-use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Services\DatabaseService;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Config\Database;
+use Laucov\WebFwk\Services\DatabaseService;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Services\DatabaseService
+ * @coversDefaultClass \Laucov\WebFwk\Services\DatabaseService
  */
 class DatabaseServiceTest extends TestCase
 {
@@ -59,7 +59,7 @@ class DatabaseServiceTest extends TestCase
      * @covers ::getConnection
      * @covers ::getSchema
      * @covers ::getTable
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      */
     public function testCanSetAndGetConnections(): void
     {

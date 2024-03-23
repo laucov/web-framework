@@ -26,16 +26,16 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Providers;
+namespace Laucov\WebFwk\Providers;
 
 use Laucov\Injection\Resolver;
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
-use Laucov\WebFramework\Services\DatabaseService;
-use Laucov\WebFramework\Services\FileSessionService;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
-use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
-use Laucov\WebFramework\Services\LanguageService;
-use Laucov\WebFramework\Services\ViewService;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Services\DatabaseService;
+use Laucov\WebFwk\Services\FileSessionService;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
+use Laucov\WebFwk\Services\LanguageService;
+use Laucov\WebFwk\Services\ViewService;
 
 /**
  * Caches and provides services (`ServiceInterface` objects).

@@ -26,12 +26,12 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Services;
+namespace Laucov\WebFwk\Services;
 
 use Laucov\Sessions\Handlers\FileSessionHandler;
 use Laucov\Sessions\Session;
-use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
-use Laucov\WebFramework\Config\Session as SessionConfig;
+use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
+use Laucov\WebFwk\Config\Session as SessionConfig;
 
 /**
  * Provides read/write access to sessions stored in files.

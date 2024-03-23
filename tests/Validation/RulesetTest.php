@@ -30,13 +30,13 @@ declare(strict_types=1);
 
 namespace Tests\Validation;
 
-use Laucov\WebFramework\Validation\Rules\Length;
-use Laucov\WebFramework\Validation\Rules\Regex;
-use Laucov\WebFramework\Validation\Ruleset;
+use Laucov\WebFwk\Validation\Rules\Length;
+use Laucov\WebFwk\Validation\Rules\Regex;
+use Laucov\WebFwk\Validation\Ruleset;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Validation\Ruleset
+ * @coversDefaultClass \Laucov\WebFwk\Validation\Ruleset
  */
 class RulesetTest extends TestCase
 {
@@ -44,10 +44,10 @@ class RulesetTest extends TestCase
      * @covers ::addRule
      * @covers ::getErrors
      * @covers ::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Length::__construct
-     * @uses Laucov\WebFramework\Validation\Rules\Length::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::__construct
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::validate
+     * @uses Laucov\WebFwk\Validation\Rules\Length::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Length::validate
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::validate
      */
     public function testCanAddRulesAndValidate(): void
     {

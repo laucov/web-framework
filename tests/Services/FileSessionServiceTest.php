@@ -30,14 +30,14 @@ declare(strict_types=1);
 
 namespace Tests\Services;
 
-use Laucov\WebFramework\Config\Session as SessionConfig;
-use Laucov\WebFramework\Services\FileSessionService;
-use Laucov\WebFramework\Services\Interfaces\SessionServiceInterface;
+use Laucov\WebFwk\Config\Session as SessionConfig;
+use Laucov\WebFwk\Services\FileSessionService;
+use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
 use Laucov\Sessions\Session;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Services\FileSessionService
+ * @coversDefaultClass \Laucov\WebFwk\Services\FileSessionService
  */
 class FileSessionServiceTest extends TestCase
 {

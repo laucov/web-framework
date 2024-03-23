@@ -30,13 +30,13 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceDependencyRepository;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceDependencyRepository;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Providers\ServiceDependencyRepository
+ * @coversDefaultClass \Laucov\WebFwk\Providers\ServiceDependencyRepository
  */
 class ServiceDependencyRepositoryTest extends TestCase
 {
@@ -44,13 +44,13 @@ class ServiceDependencyRepositoryTest extends TestCase
      * @covers ::getValue
      * @covers ::hasDependency
      * @covers ::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
      */
     public function testCanResolveConfigurationDependencies(): void
     {

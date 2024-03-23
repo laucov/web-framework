@@ -30,12 +30,12 @@ declare(strict_types=1);
 
 namespace Tests\Modeling;
 
-use Laucov\WebFramework\Modeling\Collection;
-use Laucov\WebFramework\Modeling\AbstractEntity;
+use Laucov\WebFwk\Modeling\Collection;
+use Laucov\WebFwk\Modeling\AbstractEntity;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Modeling\Collection
+ * @coversDefaultClass \Laucov\WebFwk\Modeling\Collection
  */
 class CollectionTest extends TestCase
 {
@@ -48,7 +48,7 @@ class CollectionTest extends TestCase
      * @covers ::next
      * @covers ::rewind
      * @covers ::valid
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
      */
     public function testCanInstantiate(): void
     {

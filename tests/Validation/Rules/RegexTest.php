@@ -30,11 +30,11 @@ declare(strict_types=1);
 
 namespace Tests\Validation\Rules;
 
-use Laucov\WebFramework\Validation\Rules\Regex;
+use Laucov\WebFwk\Validation\Rules\Regex;
 use Tests\AbstractRuleTest;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Validation\Rules\Regex
+ * @coversDefaultClass \Laucov\WebFwk\Validation\Rules\Regex
  */
 class RegexTest extends AbstractRuleTest
 {
@@ -62,7 +62,7 @@ class RegexTest extends AbstractRuleTest
 
     /**
      * @covers ::validate
-     * @uses Laucov\WebFramework\Validation\Rules\Regex::__construct
+     * @uses Laucov\WebFwk\Validation\Rules\Regex::__construct
      */
     public function testDoesNotAcceptNonScalarValues(): void
     {

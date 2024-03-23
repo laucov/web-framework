@@ -30,13 +30,13 @@ declare(strict_types=1);
 
 namespace Tests\Services;
 
-use Laucov\WebFramework\Config\View;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
-use Laucov\WebFramework\Services\ViewService;
+use Laucov\WebFwk\Config\View;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Services\ViewService;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Services\ViewService
+ * @coversDefaultClass \Laucov\WebFwk\Services\ViewService
  */
 class ViewServiceTest extends TestCase
 {

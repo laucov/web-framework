@@ -26,7 +26,7 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Http;
+namespace Laucov\WebFwk\Http;
 
 /**
  * Represents a CRUD operation.

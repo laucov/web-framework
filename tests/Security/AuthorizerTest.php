@@ -30,22 +30,22 @@ declare(strict_types=1);
 
 namespace Tests\Security;
 
-use Laucov\WebFramework\Config\Authorization;
-use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Config\Session;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceProvider;
-use Laucov\WebFramework\Security\AccreditationResult;
-use Laucov\WebFramework\Security\Authentication\AuthnRequestResult;
-use Laucov\WebFramework\Security\Authentication\AuthnResult;
-use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnFactoryInterface;
-use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnInterface;
-use Laucov\WebFramework\Security\Authorizer;
-use Laucov\WebFramework\Security\UserStatus;
+use Laucov\WebFwk\Config\Authorization;
+use Laucov\WebFwk\Config\Database;
+use Laucov\WebFwk\Config\Session;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\AccreditationResult;
+use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
+use Laucov\WebFwk\Security\Authentication\AuthnResult;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
+use Laucov\WebFwk\Security\Authorizer;
+use Laucov\WebFwk\Security\UserStatus;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Security\Authorizer
+ * @coversDefaultClass \Laucov\WebFwk\Security\Authorizer
  */
 class AuthorizerTest extends TestCase
 {
@@ -64,37 +64,37 @@ class AuthorizerTest extends TestCase
      * @covers ::logout
      * @covers ::requestAuthn
      * @covers ::setSession
-     * @uses Laucov\WebFramework\Entities\User::testPassword
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
-     * @uses Laucov\WebFramework\Models\UserAuthnMethodModel::retrieveForUser
-     * @uses Laucov\WebFramework\Models\UserModel::retrieveWithLogin
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::db
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::getService
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::session
-     * @uses Laucov\WebFramework\Security\Authentication\AuthnFactory::__construct
-     * @uses Laucov\WebFramework\Services\DatabaseService::__construct
-     * @uses Laucov\WebFramework\Services\DatabaseService::createConnection
-     * @uses Laucov\WebFramework\Services\DatabaseService::getConnection
-     * @uses Laucov\WebFramework\Services\FileSessionService::__construct
-     * @uses Laucov\WebFramework\Services\FileSessionService::createSession
-     * @uses Laucov\WebFramework\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Entities\User::testPassword
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
+     * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authentication\AuthnFactory::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::createSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::getSession
      */
     public function testCanAuthorize(): void
     {
@@ -312,42 +312,42 @@ class AuthorizerTest extends TestCase
 
     /**
      * @covers ::authenticate
-     * @uses Laucov\WebFramework\Entities\User::testPassword
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
-     * @uses Laucov\WebFramework\Models\UserAuthnMethodModel::retrieveForUser
-     * @uses Laucov\WebFramework\Models\UserModel::retrieveWithLogin
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::db
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::getService
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::session
-     * @uses Laucov\WebFramework\Security\Authorizer::__construct
-     * @uses Laucov\WebFramework\Security\Authorizer::accredit
-     * @uses Laucov\WebFramework\Security\Authorizer::getAuthentication
-     * @uses Laucov\WebFramework\Security\Authorizer::requestAuthn
-     * @uses Laucov\WebFramework\Security\Authorizer::setSession
-     * @uses Laucov\WebFramework\Services\DatabaseService::__construct
-     * @uses Laucov\WebFramework\Services\DatabaseService::createConnection
-     * @uses Laucov\WebFramework\Services\DatabaseService::getConnection
-     * @uses Laucov\WebFramework\Services\DatabaseService::getTable
-     * @uses Laucov\WebFramework\Services\FileSessionService::__construct
-     * @uses Laucov\WebFramework\Services\FileSessionService::createSession
-     * @uses Laucov\WebFramework\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Entities\User::testPassword
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
+     * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Security\Authorizer::accredit
+     * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
+     * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
+     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getTable
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::createSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::getSession
      */
     public function testInformsUnusualFailures(): void
     {
@@ -393,38 +393,38 @@ class AuthorizerTest extends TestCase
 
     /**
      * @covers ::setSession
-     * @uses Laucov\WebFramework\Entities\User::testPassword
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFramework\Modeling\AbstractModel::retrieve
-     * @uses Laucov\WebFramework\Models\UserModel::retrieveWithLogin
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::hasConfig
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::getValue
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::hasDependency
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::db
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::getService
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::session
-     * @uses Laucov\WebFramework\Security\Authorizer::__construct
-     * @uses Laucov\WebFramework\Security\Authorizer::accredit
-     * @uses Laucov\WebFramework\Security\Authorizer::getStatus
-     * @uses Laucov\WebFramework\Services\DatabaseService::__construct
-     * @uses Laucov\WebFramework\Services\DatabaseService::createConnection
-     * @uses Laucov\WebFramework\Services\DatabaseService::getConnection
-     * @uses Laucov\WebFramework\Services\FileSessionService::__construct
-     * @uses Laucov\WebFramework\Services\FileSessionService::createSession
-     * @uses Laucov\WebFramework\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Entities\User::testPassword
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
+     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Security\Authorizer::accredit
+     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::createSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::getSession
      */
     public function testSavesUserData(): void
     {

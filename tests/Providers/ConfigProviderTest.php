@@ -30,13 +30,13 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
-use Laucov\WebFramework\Config\Interfaces\ConfigInterface;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\EnvMatch;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\EnvMatch;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Providers\ConfigProvider
+ * @coversDefaultClass \Laucov\WebFwk\Providers\ConfigProvider
  */
 class ConfigProviderTest extends TestCase
 {
@@ -50,7 +50,7 @@ class ConfigProviderTest extends TestCase
      * @covers ::getConfig
      * @covers ::getName
      * @covers ::hasConfig
-     * @uses Laucov\WebFramework\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
      */
     public function testCanAddAndGetConfigs(): void
     {
@@ -91,8 +91,8 @@ class ConfigProviderTest extends TestCase
 
     /**
      * @covers ::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
      */
     public function testCannotAddTheSameConfigTwice(): void
     {
@@ -103,8 +103,8 @@ class ConfigProviderTest extends TestCase
 
     /**
      * @covers ::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
      */
     public function testMustSetBeforeGetting(): void
     {
@@ -114,7 +114,7 @@ class ConfigProviderTest extends TestCase
 
     /**
      * @covers ::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      */
     public function testMustUseConfigurationClassesToSetConfigs(): void
     {
@@ -124,12 +124,12 @@ class ConfigProviderTest extends TestCase
 
     /**
      * @covers ::getConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::addConfig
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::createInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getInstance
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::getName
-     * @uses Laucov\WebFramework\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
      */
     public function testRegisteredConfigMustExtendTheRequestedOne(): void
     {

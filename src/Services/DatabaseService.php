@@ -26,14 +26,14 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Services;
+namespace Laucov\WebFwk\Services;
 
 use Laucov\Db\Data\Connection;
 use Laucov\Db\Data\Driver\DriverFactory;
 use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
-use Laucov\WebFramework\Config\Database;
-use Laucov\WebFramework\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Config\Database;
+use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 
 /**
  * Provides an interface to configurable database connections and libraries.

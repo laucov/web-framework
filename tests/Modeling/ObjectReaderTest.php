@@ -30,11 +30,11 @@ declare(strict_types=1);
 
 namespace Tests\Modeling;
 
-use Laucov\WebFramework\Modeling\ObjectReader;
+use Laucov\WebFwk\Modeling\ObjectReader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Modeling\ObjectReader
+ * @coversDefaultClass \Laucov\WebFwk\Modeling\ObjectReader
  */
 class ObjectReaderTest extends TestCase
 {

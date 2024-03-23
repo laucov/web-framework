@@ -31,15 +31,15 @@ declare(strict_types=1);
 namespace Tests\Http;
 
 use Laucov\Http\Routing\Router;
-use Laucov\WebFramework\Http\AbstractController;
-use Laucov\WebFramework\Http\ControllerRouter;
-use Laucov\WebFramework\Http\Crud;
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceProvider;
+use Laucov\WebFwk\Http\AbstractController;
+use Laucov\WebFwk\Http\ControllerRouter;
+use Laucov\WebFwk\Http\Crud;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Http\ControllerRouter
+ * @coversDefaultClass \Laucov\WebFwk\Http\ControllerRouter
  */
 class ControllerRouterTest extends TestCase
 {
@@ -52,9 +52,9 @@ class ControllerRouterTest extends TestCase
      * @covers ::setMethodRoute
      * @covers ::setProviders
      * @covers ::withCrudOps
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
     public function testCanRouteControllers(): void
     {
@@ -114,10 +114,10 @@ class ControllerRouterTest extends TestCase
 
     /**
      * @covers ::setController
-     * @uses Laucov\WebFramework\Http\ControllerRouter::setProviders
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Http\ControllerRouter::setProviders
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
     public function testControllerMustExtendAbstractController(): void
     {

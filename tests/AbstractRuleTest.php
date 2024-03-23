@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Laucov\WebFramework\Validation\Rules\Interfaces\RuleInterface;
+use Laucov\WebFwk\Validation\Rules\Interfaces\RuleInterface;
 use PHPUnit\Framework\TestCase;
 
 /**

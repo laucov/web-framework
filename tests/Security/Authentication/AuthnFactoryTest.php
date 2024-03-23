@@ -30,14 +30,14 @@ declare(strict_types=1);
 
 namespace Tests\Security;
 
-use Laucov\WebFramework\Providers\ConfigProvider;
-use Laucov\WebFramework\Providers\ServiceProvider;
-use Laucov\WebFramework\Security\Authentication\AuthnFactory;
-// use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnInterface;
+use Laucov\WebFwk\Providers\ConfigProvider;
+use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\AuthnFactory;
+// use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFramework\Security\Authentication\AuthnFactory
+ * @coversDefaultClass \Laucov\WebFwk\Security\Authentication\AuthnFactory
  * @todo Create `AuthnInterface` classes to test.
  */
 class AuthnFactoryTest extends TestCase
@@ -52,9 +52,9 @@ class AuthnFactoryTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @uses Laucov\WebFramework\Providers\ConfigProvider::__construct
-     * @uses Laucov\WebFramework\Providers\ServiceDependencyRepository::setConfigProvider
-     * @uses Laucov\WebFramework\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
     public function testCanInstantiate(): void
     {

@@ -26,9 +26,9 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Entities;
+namespace Laucov\WebFwk\Entities;
 
-use Laucov\WebFramework\Modeling\AbstractEntity;
+use Laucov\WebFwk\Modeling\AbstractEntity;
 
 /**
  * Represents a registered authentication method of a specific user.

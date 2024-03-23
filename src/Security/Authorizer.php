@@ -26,19 +26,19 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFramework\Security;
+namespace Laucov\WebFwk\Security;
 
 use Laucov\Sessions\Session;
-use Laucov\WebFramework\Config\Authorization;
-use Laucov\WebFramework\Entities\User;
-use Laucov\WebFramework\Entities\UserAuthnMethod;
-use Laucov\WebFramework\Models\UserAuthnMethodModel;
-use Laucov\WebFramework\Models\UserModel;
-use Laucov\WebFramework\Providers\ServiceProvider;
-use Laucov\WebFramework\Security\Authentication\AuthnRequestResult;
-use Laucov\WebFramework\Security\Authentication\AuthnResult;
-use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnFactoryInterface;
-use Laucov\WebFramework\Security\Authentication\Interfaces\AuthnInterface;
+use Laucov\WebFwk\Config\Authorization;
+use Laucov\WebFwk\Entities\User;
+use Laucov\WebFwk\Entities\UserAuthnMethod;
+use Laucov\WebFwk\Models\UserAuthnMethodModel;
+use Laucov\WebFwk\Models\UserModel;
+use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
+use Laucov\WebFwk\Security\Authentication\AuthnResult;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
 
 /**
  * Accredits, authenticates and stores users in sessions.
