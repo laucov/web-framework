@@ -131,16 +131,16 @@
         },
         {
             "name": "laucov/http",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/http.git",
-                "reference": "d1befc43c7b7deb40ac40b0d7603faa1b4933243"
+                "reference": "1566c2fe9d0617185725313ebc4bb32782ddf14b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/http/zipball/d1befc43c7b7deb40ac40b0d7603faa1b4933243",
-                "reference": "d1befc43c7b7deb40ac40b0d7603faa1b4933243",
+                "url": "https://api.github.com/repos/laucov/http/zipball/1566c2fe9d0617185725313ebc4bb32782ddf14b",
+                "reference": "1566c2fe9d0617185725313ebc4bb32782ddf14b",
                 "shasum": ""
             },
             "require": {
@@ -171,9 +171,9 @@
             "description": "Library for HTTP communication lifecycle control.",
             "support": {
                 "issues": "https://github.com/laucov/http/issues",
-                "source": "https://github.com/laucov/http/tree/v1.4.0"
+                "source": "https://github.com/laucov/http/tree/v1.5.0"
             },
-            "time": "2024-03-22T00:33:29+00:00"
+            "time": "2024-03-24T16:50:31+00:00"
         },
         {
             "name": "laucov/injection",
