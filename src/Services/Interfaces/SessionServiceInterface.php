@@ -50,4 +50,9 @@ interface SessionServiceInterface extends ServiceInterface
      * Get a saved session.
      */
     public function getSession(string $id): Session;
+
+    /**
+     * Check if a session ID is valid.
+     */
+    public function validateId(string $id): bool;
 }

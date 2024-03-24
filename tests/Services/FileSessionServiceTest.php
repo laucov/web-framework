@@ -55,11 +55,13 @@ class FileSessionServiceTest extends TestCase
      * @covers ::__construct
      * @covers ::createSession
      * @covers ::getSession
+     * @covers ::validateId
      * @uses Laucov\Sessions\Handlers\FileSessionHandler::__construct
      * @uses Laucov\Sessions\Handlers\FileSessionHandler::close
      * @uses Laucov\Sessions\Handlers\FileSessionHandler::create
      * @uses Laucov\Sessions\Handlers\FileSessionHandler::open
      * @uses Laucov\Sessions\Handlers\FileSessionHandler::read
+     * @uses Laucov\Sessions\Handlers\FileSessionHandler::validate
      * @uses Laucov\Sessions\Handlers\FileSessionHandler::write
      * @uses Laucov\Sessions\Session::__construct
      * @uses Laucov\Sessions\Session::close
@@ -88,6 +90,11 @@ class FileSessionServiceTest extends TestCase
             ->set('foo', 'bar')
             ->commit();
         $this->assertSame('bar', $session_b->open()->get('foo'));
+
+        // Check if sessions are detected.
+        $this->assertTrue($this->service->validateId($session_a->id));
+        $this->assertTrue($this->service->validateId($session_b->id));
+        $this->assertFalse($this->service->validateId('foobar'));
     }
 
     protected function setUp(): void

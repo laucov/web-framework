@@ -70,4 +70,12 @@ class FileSessionService implements SessionServiceInterface
     {
         return new Session($this->handler, $id);
     }
+
+    /**
+     * Check if a session ID is valid.
+     */
+    public function validateId(string $id): bool
+    {
+        return $this->handler->validate($id);
+    }
 }

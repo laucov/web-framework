@@ -262,16 +262,16 @@
         },
         {
             "name": "laucov/sessions",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/sessions.git",
-                "reference": "7e947d5fe2f2606358770febef303f586961c353"
+                "reference": "ce9b508d36a73295403d323483111c348aed5b4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/sessions/zipball/7e947d5fe2f2606358770febef303f586961c353",
-                "reference": "7e947d5fe2f2606358770febef303f586961c353",
+                "url": "https://api.github.com/repos/laucov/sessions/zipball/ce9b508d36a73295403d323483111c348aed5b4e",
+                "reference": "ce9b508d36a73295403d323483111c348aed5b4e",
                 "shasum": ""
             },
             "require": {
@@ -301,9 +301,9 @@
             "description": "Library for session management.",
             "support": {
                 "issues": "https://github.com/laucov/sessions/issues",
-                "source": "https://github.com/laucov/sessions/tree/v1.0.0"
+                "source": "https://github.com/laucov/sessions/tree/v1.1.0"
             },
-            "time": "2024-03-10T11:51:13+00:00"
+            "time": "2024-03-24T17:32:48+00:00"
         },
         {
             "name": "laucov/views",
