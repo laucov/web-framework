@@ -28,6 +28,7 @@
 
 namespace Laucov\WebFwk\Http;
 use Laucov\Http\Message\IncomingRequest;
+use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Message\ResponseInterface;
 use Laucov\Http\Server\ServerInfo;
 use Laucov\WebFwk\Providers\ConfigProvider;
@@ -58,6 +59,11 @@ class Application
      * @var array<string, callable>
      */
     protected array $outputCallables = [];
+
+    /**
+     * Request cookies (key-value pairs).
+     */
+    protected array $requestCookies = [];
     
     /**
      * Router.
@@ -93,7 +99,9 @@ class Application
         // Create request.
         $request = new IncomingRequest(
             '',
+            protocol_version: $this->server->getProtocolVersion(),
             uri: $this->server->getRequestUri(),
+            cookies: $this->requestCookies,
         );
 
         // Find route.
@@ -106,12 +114,14 @@ class Application
         $response = $route->run();
 
         // Get data.
-        $status = $this->getStatusLine($response);
+        $status = $this->getStatusLine($request, $response);
         $header_names = $response->getHeaderNames();
         $body = $response->getBody();
 
-        // Output headers.
+        // Output status line.
         $this->outputCallables['status_line']($status);
+
+        // Output headers.
         foreach ($header_names as $name) {
             $header_lines = $response->getHeaderLines($name);
             foreach ($header_lines as $line) {
@@ -145,6 +155,7 @@ class Application
      */
     public function setCookies(array $values): static
     {
+        $this->requestCookies = $values;
         return $this;
     }
 
@@ -235,9 +246,12 @@ class Application
     /**
      * Build the status line from a response object.
      */
-    protected function getStatusLine(ResponseInterface $response): string
-    {
-        $protocol_version = $response->getProtocolVersion() ?? '1.0';
+    protected function getStatusLine(
+        RequestInterface $request,
+        ResponseInterface $response,
+    ): string {
+        $protocol_version = $response->getProtocolVersion()
+            ?? $request->getProtocolVersion();
         $code = $response->getStatusCode();
         $text = $response->getStatusText();
 

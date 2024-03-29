@@ -30,9 +30,12 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Message\ResponseInterface;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 use Laucov\WebFwk\Http\AbstractController;
 use Laucov\WebFwk\Http\Application;
+use Laucov\WebFwk\Providers\EnvMatch;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,7 +46,7 @@ class ApplicationTest extends TestCase
     public function superGlobalsProvider(): array
     {
         return [
-            0 => [
+            'build request with server data' => [
                 // $_COOKIE
                 [],
                 // $_ENV
@@ -71,7 +74,7 @@ class ApplicationTest extends TestCase
                 '{"id":3,"call_sign":"TAM3279","aircraft":"Airbus A319-132"}' .
                 ']}',
             ],
-            1 => [
+            'change protocol version and test cookies' => [
                 // $_COOKIE
                 [
                     'theme' => 'dark',
@@ -83,9 +86,7 @@ class ApplicationTest extends TestCase
                 // $_GET
                 [],
                 // getallheaders()
-                [
-                    'Authorization: john:1234',
-                ],
+                [],
                 // $_POST
                 [],
                 // $_SERVER
@@ -94,13 +95,48 @@ class ApplicationTest extends TestCase
                     'SERVER_PROTOCOL' => 'HTTP/1.1',
                 ],
                 // Expected output.
-                'HTTP/1.1 200 OK' .
-                'Content-Type: text/html' .
-                'Content-Length: text/html' .
+                "HTTP/1.1 200 OK\n" .
+                "Content-Type: text/html\n" .
+                "Content-Length: 104\n" .
                 <<<HTML
                     <!DOCTYPE html>
                     <html>
                     <body class="body--dark">
+                    <h1>My App</h1>
+                    <p>Howdy, Stranger!</p>
+                    </body>
+                    </html>
+                    HTML,
+            ],
+            'test headers and environment' => [
+                // $_COOKIE
+                [],
+                // $_ENV
+                [
+                    'APP_NAME' => 'The App',
+                ],
+                // php://input
+                '',
+                // $_GET
+                [],
+                // getallheaders()
+                [],
+                // $_POST
+                [],
+                // $_SERVER
+                [
+                    'REQUEST_URI' => '/home',
+                    'SERVER_PROTOCOL' => 'HTTP/1.0',
+                ],
+                // Expected output.
+                "HTTP/1.0 200 OK\n" .
+                "Content-Type: text/html\n" .
+                "Content-Length: 106\n" .
+                <<<HTML
+                    <!DOCTYPE html>
+                    <html>
+                    <body class="body--light">
+                    <h1>The App</h1>
                     <p>Hello, John!</p>
                     </body>
                     </html>
@@ -111,6 +147,7 @@ class ApplicationTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::createRouter
      * @covers ::getRouter
      * @covers ::getStatusLine
      * @covers ::run
@@ -128,18 +165,31 @@ class ApplicationTest extends TestCase
      * @uses Laucov\WebFwk\Http\ControllerRouter::setMethodRoute
      * @uses Laucov\WebFwk\Http\ControllerRouter::setProviders
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::view
+     * @uses Laucov\WebFwk\Services\ViewService::__construct
+     * @uses Laucov\WebFwk\Services\ViewService::getView
      * @dataProvider superGlobalsProvider
      */
     public function testCanRunApplication(
-        array $cookies,
-        array $environment,
-        string $input_filename,
-        array $get,
-        array $headers,
-        array $post,
-        array $server,
+        array $cookies = [],
+        array $environment = [],
+        string $input_filename = '',
+        array $get = [],
+        array $headers = [],
+        array $post = [],
+        array $server = [],
         string $expected,
     ): void {
         // Create application instance.
@@ -156,6 +206,7 @@ class ApplicationTest extends TestCase
         // Set variables.
         $application
             ->setConfigClasses(
+                App::class,
                 View::class,
             )
             ->setCookies($cookies)
@@ -187,14 +238,20 @@ class ApplicationTest extends TestCase
 
 // Configuration classes.
 
+#[EnvMatch('APP_NAME', 'title')]
+class App implements ConfigInterface
+{
+    public string $title = 'My App';
+}
+
+class Language extends \Laucov\WebFwk\Config\Language
+{}
+
 class View extends \Laucov\WebFwk\Config\View
 {
     public string $cacheDir = __DIR__ . '/view-cache';
     public string $viewsDir = __DIR__ . '/view-files';
 }
-
-class Language extends \Laucov\WebFwk\Config\Language
-{}
 
 // Controller classes.
 
@@ -206,14 +263,26 @@ class FlightController extends AbstractController
         ['id' => 3, 'call_sign' => 'TAM3279', 'aircraft' => 'Airbus A319-132'],
     ];
 
-    public function home(): ResponseInterface
+    public function home(RequestInterface $req): ResponseInterface
     {
+        // Get theme.
+        $theme_cookie = $req->getCookie('theme');
+        $theme = $theme_cookie === null ? null : $theme_cookie->value;
+
+        // Get view content.
         $view = $this->services
             ->view()
             ->getView('view-a')
-            ->get([]);
+            ->get([
+                'lang' => $this->services->lang(),
+                'theme' => $theme,
+                'title' => $this->config->getConfig(App::class)->title,
+            ]);
+        
+        // Set response.
         $this->response->setHeaderLine('Content-Type', 'text/html');
         $this->response->setBody($view);
+
         return $this->response;
     }
 
