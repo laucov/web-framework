@@ -40,6 +40,14 @@ use Laucov\WebFwk\Providers\ServiceProvider;
 class Application
 {
     /**
+     * Content types which cause PHP to fill `$_POST`.
+     */
+    public const POST_CONTENT_TYPES = [
+        'application/x-www-form-urlencoded',
+        'multipart/form-data',
+    ];
+
+    /**
      * Configuration classes.
      * 
      * @var array<string>
@@ -52,6 +60,11 @@ class Application
     protected array $environment = [];
 
     /**
+     * Request input filename.
+     */
+    protected string $inputFilename = 'data://text/plain,';
+
+    /**
      * Callables used to output different parts of the response.
      * 
      * Must contain three keys: `status_line`, `header` and `body`.
@@ -61,9 +74,19 @@ class Application
     protected array $outputCallables = [];
 
     /**
+     * Parsed POST variables.
+     */
+    protected array $postVariables = [];
+
+    /**
      * Request cookies (key-value pairs).
      */
     protected array $requestCookies = [];
+
+    /**
+     * Request headers (key-value pairs).
+     */
+    protected array $requestHeaders = [];
     
     /**
      * Router.
@@ -74,6 +97,11 @@ class Application
      * Server information object.
      */
     protected ServerInfo $server;
+
+    /**
+     * Parsed URI parameters (e.g. `$_GET`).
+     */
+    public array $uriParameters = [];
 
     /**
      * Create the application instance.
@@ -98,9 +126,12 @@ class Application
     {
         // Create request.
         $request = new IncomingRequest(
-            '',
+            content_or_post: $this->getContentOrPost(),
+            headers: $this->requestHeaders,
             protocol_version: $this->server->getProtocolVersion(),
+            method: $this->server->get('REQUEST_METHOD') ?? 'GET',
             uri: $this->server->getRequestUri(),
+            parameters: $this->uriParameters,
             cookies: $this->requestCookies,
         );
 
@@ -169,18 +200,11 @@ class Application
     }
 
     /**
-     * Set request headers.
-     */
-    public function setHeaders(array $headers): static
-    {
-        return $this;
-    }
-
-    /**
      * Set the request body content filename.
      */
     public function setInputFilename(string $filename): static
     {
+        $this->inputFilename = $filename;
         return $this;
     }
 
@@ -203,8 +227,9 @@ class Application
     /**
      * Set parsed URI parameters.
      */
-    public function setParameters(array $values): static
+    public function setUriParameters(array $values): static
     {
+        $this->uriParameters = $values;
         return $this;
     }
 
@@ -213,6 +238,7 @@ class Application
      */
     public function setPostVariables(array $values): static
     {
+        $this->postVariables = $values;
         return $this;
     }
 
@@ -221,7 +247,48 @@ class Application
      */
     public function setServerInfo(array $values): static
     {
+        // Set headers.
+        foreach ($values as $key => $value) {
+            if (str_starts_with($key, 'HTTP_')) {
+                $name = strtolower(str_replace('_', '-', substr($key, 5)));
+                $this->requestHeaders[$name] = $value;
+            }
+        }
+
+        // Get missing Content-Type header.
+        if (
+            !array_key_exists('content-type', $this->requestHeaders)
+            && array_key_exists('CONTENT_TYPE', $values)
+        ) {
+            $this->requestHeaders['content-type'] = $values['CONTENT_TYPE'];
+        }
+
+        // Get missing Content-Length header.
+        if (
+            !array_key_exists('content-length', $this->requestHeaders)
+            && array_key_exists('CONTENT_LENGTH', $values)
+        ) {
+            $this->requestHeaders['content-length'] = $values['CONTENT_LENGTH'];
+        }
+
+        // Get missing Authorization header.
+        if (!array_key_exists('authorization', $this->requestHeaders)) {
+            if (array_key_exists('PHP_AUTH_USER', $values)) {
+                // Get Basic authorization.
+                $user = $values['PHP_AUTH_USER'];
+                $password = $values['PHP_AUTH_PW'] ?? '';
+                $authz = base64_encode("{$user}:{$password}");
+                $this->requestHeaders['authorization'] = "Basic {$authz}";
+            } elseif (array_key_exists('PHP_AUTH_DIGEST', $values)) {
+                // Get Digest authorization.
+                $digest = $values['PHP_AUTH_DIGEST'];
+                $this->requestHeaders['authorization'] = "Digest {$digest}";
+            }
+        }
+
+        // Set server info.
         $this->server = new ServerInfo($values);
+
         return $this;
     }
 
@@ -241,6 +308,28 @@ class Application
         $router->setProviders($config, $services);
 
         return $router;
+    }
+
+    /**
+     * Get the incoming request content (POST variables or input file pointer).
+     * 
+     * @return array|resource
+     */
+    protected function getContentOrPost(): mixed
+    {
+        // Check if is a POST request.
+        $method = strtoupper($this->server->get('REQUEST_METHOD'));
+        if ($method !== 'POST') {
+            return fopen($this->inputFilename, 'r');
+        }
+
+        // Check if is a form POST.
+        $type = $this->requestHeaders['content-type'] ?? '';
+        if (!in_array($type, static::POST_CONTENT_TYPES, true)) {
+            return fopen($this->inputFilename, 'r');
+        }
+        
+        return $this->postVariables;
     }
 
     /**
