@@ -29,8 +29,8 @@
 namespace Laucov\WebFwk\Models;
 
 use Laucov\WebFwk\Entities\UserAuthnMethod;
-use Laucov\WebFwk\Modeling\AbstractModel;
-use Laucov\WebFwk\Modeling\Collection;
+use Laucov\Modeling\Model\AbstractModel;
+use Laucov\Modeling\Model\Collection;
 
 /**
  * Provides and saves `UserAuthnMethod` entities.

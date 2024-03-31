@@ -41,7 +41,7 @@ class UserTest extends TestCase
     /**
      * @covers ::setPassword
      * @covers ::testPassword
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
      */
     public function testSetsAndTestsPasswords(): void
     {
