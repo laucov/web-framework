@@ -57,16 +57,16 @@ class UserMfaMethodModelTest extends TestCase
 
     /**
      * @covers ::listForUser
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::list
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::resetPagination
-     * @uses Laucov\WebFwk\Modeling\Collection::__construct
-     * @uses Laucov\WebFwk\Modeling\Collection::count
-     * @uses Laucov\WebFwk\Modeling\Collection::get
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__set
+     * @uses Laucov\Modeling\Model\AbstractModel::__construct
+     * @uses Laucov\Modeling\Model\AbstractModel::applyDeletionFilter
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntities
+     * @uses Laucov\Modeling\Model\AbstractModel::list
+     * @uses Laucov\Modeling\Model\AbstractModel::resetPagination
+     * @uses Laucov\Modeling\Model\Collection::__construct
+     * @uses Laucov\Modeling\Model\Collection::count
+     * @uses Laucov\Modeling\Model\Collection::get
      */
     public function testCanListForUsers(): void
     {
@@ -81,13 +81,13 @@ class UserMfaMethodModelTest extends TestCase
 
     /**
      * @covers ::retrieveForUser
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__set
+     * @uses Laucov\Modeling\Model\AbstractModel::__construct
+     * @uses Laucov\Modeling\Model\AbstractModel::applyDeletionFilter
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntities
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntity
+     * @uses Laucov\Modeling\Model\AbstractModel::retrieve
      * @dataProvider authnMethodIdProvider
      */
     public function testCanRetrieveForUsers(

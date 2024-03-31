@@ -45,12 +45,12 @@ class UserModelTest extends TestCase
 
     /**
      * @covers ::retrieveWithLogin
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__set
+     * @uses Laucov\Modeling\Model\AbstractModel::__construct
+     * @uses Laucov\Modeling\Model\AbstractModel::applyDeletionFilter
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntities
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntity
      */
     public function testCanRetrieveWithLoginName(): void
     {

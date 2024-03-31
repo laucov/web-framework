@@ -28,7 +28,7 @@
 
 namespace Laucov\WebFwk\Entities;
 
-use Laucov\WebFwk\Modeling\AbstractEntity;
+use Laucov\Modeling\Entity\AbstractEntity;
 
 /**
  * Represents an user record.

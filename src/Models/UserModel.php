@@ -29,7 +29,7 @@
 namespace Laucov\WebFwk\Models;
 
 use Laucov\WebFwk\Entities\User;
-use Laucov\WebFwk\Modeling\AbstractModel;
+use Laucov\Modeling\Model\AbstractModel;
 
 /**
  * Provides and saves `User` entities.

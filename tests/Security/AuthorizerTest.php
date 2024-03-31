@@ -65,13 +65,13 @@ class AuthorizerTest extends TestCase
      * @covers ::requestAuthn
      * @covers ::setSession
      * @uses Laucov\WebFwk\Entities\User::testPassword
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__set
+     * @uses Laucov\Modeling\Model\AbstractModel::__construct
+     * @uses Laucov\Modeling\Model\AbstractModel::applyDeletionFilter
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntities
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntity
+     * @uses Laucov\Modeling\Model\AbstractModel::retrieve
      * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
      * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
@@ -313,13 +313,13 @@ class AuthorizerTest extends TestCase
     /**
      * @covers ::authenticate
      * @uses Laucov\WebFwk\Entities\User::testPassword
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__set
+     * @uses Laucov\Modeling\Model\AbstractModel::__construct
+     * @uses Laucov\Modeling\Model\AbstractModel::applyDeletionFilter
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntities
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntity
+     * @uses Laucov\Modeling\Model\AbstractModel::retrieve
      * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
      * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
@@ -394,13 +394,13 @@ class AuthorizerTest extends TestCase
     /**
      * @covers ::setSession
      * @uses Laucov\WebFwk\Entities\User::testPassword
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractEntity::__set
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::__construct
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::applyDeletionFilter
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntities
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::getEntity
-     * @uses Laucov\WebFwk\Modeling\AbstractModel::retrieve
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
+     * @uses Laucov\Modeling\Entity\AbstractEntity::__set
+     * @uses Laucov\Modeling\Model\AbstractModel::__construct
+     * @uses Laucov\Modeling\Model\AbstractModel::applyDeletionFilter
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntities
+     * @uses Laucov\Modeling\Model\AbstractModel::getEntity
+     * @uses Laucov\Modeling\Model\AbstractModel::retrieve
      * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
