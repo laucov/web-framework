@@ -99,8 +99,13 @@ class FileSessionServiceTest extends TestCase
 
     protected function setUp(): void
     {
+        $directory = __DIR__ . '/session-files';
+        if (!is_dir($directory)) {
+            mkdir($directory);
+        }
+
         $this->config = new SessionConfig();
-        $this->config->path = __DIR__ . '/session-files';
+        $this->config->path = $directory;
         $this->service = new FileSessionService($this->config);
     }
 
