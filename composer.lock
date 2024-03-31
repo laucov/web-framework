@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "65d0310c90a559ca4949f89605502668",
+    "content-hash": "1f914199721a11f972d96d76fa9ee1f8",
     "packages": [
         {
             "name": "laucov/arrays",
@@ -261,6 +261,51 @@
             "time": "2024-02-29T16:03:39+00:00"
         },
         {
+            "name": "laucov/modeling",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laucov/modeling.git",
+                "reference": "ef5e5ba487202fe44c546574ee5aa77d11709702"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/ef5e5ba487202fe44c546574ee5aa77d11709702",
+                "reference": "ef5e5ba487202fe44c546574ee5aa77d11709702",
+                "shasum": ""
+            },
+            "require": {
+                "laucov/db": "^1.0",
+                "laucov/validation": "^0.1.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laucov\\Modeling\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Covaleski Pereira",
+                    "email": "rafael.covaleski@laucov.com"
+                }
+            ],
+            "description": "Library for data modeling and database management.",
+            "support": {
+                "issues": "https://github.com/laucov/modeling/issues",
+                "source": "https://github.com/laucov/modeling/tree/v0.1.0"
+            },
+            "time": "2024-03-31T03:10:10+00:00"
+        },
+        {
             "name": "laucov/sessions",
             "version": "v1.1.0",
             "source": {
@@ -304,6 +349,47 @@
                 "source": "https://github.com/laucov/sessions/tree/v1.1.0"
             },
             "time": "2024-03-24T17:32:48+00:00"
+        },
+        {
+            "name": "laucov/validation",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laucov/validation.git",
+                "reference": "e3b2a34622285bc0129dac4acaefae41e66ff803"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laucov/validation/zipball/e3b2a34622285bc0129dac4acaefae41e66ff803",
+                "reference": "e3b2a34622285bc0129dac4acaefae41e66ff803",
+                "shasum": ""
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laucov\\Validation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Covaleski Pereira",
+                    "email": "rafael.covaleski@laucov.com"
+                }
+            ],
+            "description": "Library for data validation.",
+            "support": {
+                "issues": "https://github.com/laucov/validation/issues",
+                "source": "https://github.com/laucov/validation/tree/v0.1.0"
+            },
+            "time": "2024-03-31T02:50:39+00:00"
         },
         {
             "name": "laucov/views",
