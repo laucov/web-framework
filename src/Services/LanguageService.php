@@ -66,6 +66,14 @@ class LanguageService implements ServiceInterface
     /**
      * Find and format a message.
      */
+    public function __invoke(string $path, mixed ...$args): string
+    {
+        return $this->findMessage($path, $args);
+    }
+
+    /**
+     * Find and format a message.
+     */
     public function findMessage(string $path, array $args): string
     {
         return $this->repository->findMessage($path, $args) ?? $path;

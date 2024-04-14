@@ -52,6 +52,7 @@ class LanguageServiceTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::__invoke
      * @covers ::findMessage
      * @covers ::getLocale
      * @covers ::setLocale
@@ -85,6 +86,17 @@ class LanguageServiceTest extends TestCase
         $this->service->setLocale('pt-BR');
         $msg_c = $this->service->findMessage('greetings.hey', ['John']);
         $this->assertSame('Hey, John!', $msg_c);
+        $msg_d = $this->service->findMessage('greetings.ho', ['John']);
+        $this->assertSame('greetings.ho', $msg_d);
+
+        // Test argument omission.
+        $msg_e = $this->service->findMessage('greetings.hey', []);
+        $this->assertSame('Hey, {0}!', $msg_e);
+
+        // Test __invoke.
+        $service = $this->service;
+        $this->assertSame('Olá, Mary!', $service('greetings.hello', 'Mary'));
+        $this->assertSame('Olá, {0}!', $service('greetings.hello'));
     }
 
     protected function setUp(): void
