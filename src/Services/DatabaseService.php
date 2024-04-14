@@ -32,6 +32,7 @@ use Laucov\Db\Data\Connection;
 use Laucov\Db\Data\Driver\DriverFactory;
 use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
+use Laucov\Modeling\Model\AbstractModel;
 use Laucov\WebFwk\Config\Database;
 use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 
@@ -74,6 +75,20 @@ class DatabaseService implements ServiceInterface
         $this->connections[$name] ??= $this->createConnection($name);
 
         return $this->connections[$name];
+    }
+
+    /**
+     * Get a model instance.
+     * 
+     * @template T of AbstractModel
+     * @param class-string<T> $class_name
+     * @return T
+     */
+    public function getModel(
+        string $class_name,
+        null|string $connection = null,
+    ): mixed {
+        return new $class_name($this->getConnection($connection));
     }
 
     /**

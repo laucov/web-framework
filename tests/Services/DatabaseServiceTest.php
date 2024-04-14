@@ -34,6 +34,7 @@ use Laucov\Db\Data\Connection;
 use Laucov\Db\Query\Schema;
 use Laucov\Db\Query\Table;
 use Laucov\WebFwk\Config\Database;
+use Laucov\WebFwk\Models\UserModel;
 use Laucov\WebFwk\Services\DatabaseService;
 use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 use PHPUnit\Framework\TestCase;
@@ -57,6 +58,7 @@ class DatabaseServiceTest extends TestCase
      * @covers ::__construct
      * @covers ::createConnection
      * @covers ::getConnection
+     * @covers ::getModel
      * @covers ::getSchema
      * @covers ::getTable
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
@@ -123,6 +125,25 @@ class DatabaseServiceTest extends TestCase
         $this->assertSame(
             $conn_c,
             $reflection->getProperty('connection')->getValue($schema_c),
+        );
+
+        // Get model instances.
+        $model_a = $this->service->getModel(UserModel::class);
+        $this->assertInstanceOf(UserModel::class, $model_a);
+        $reflection = new \ReflectionObject($model_a);
+        $this->assertSame(
+            $conn_a,
+            $reflection->getProperty('connection')->getValue($model_a),
+        );
+        $model_b = $this->service->getModel(UserModel::class);
+        $this->assertNotSame($model_a, $model_b);
+
+        // Get schema with custom connection.
+        $model_c = $this->service->getModel(UserModel::class, 'sqlite-b');
+        $reflection = new \ReflectionObject($model_c);
+        $this->assertSame(
+            $conn_c,
+            $reflection->getProperty('connection')->getValue($model_c),
         );
     }
 
