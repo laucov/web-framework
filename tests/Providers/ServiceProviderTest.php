@@ -105,6 +105,7 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
      * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
      * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider

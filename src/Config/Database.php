@@ -30,10 +30,12 @@ namespace Laucov\WebFwk\Config;
 
 use Laucov\Db\Data\Driver\DriverFactory;
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\EnvMatch;
 
 /**
  * Stores database-related configuration.
  */
+#[EnvMatch('APP_DATABASE_DEFAULT_CONNECTION', 'defaultConnection')]
 class Database implements ConfigInterface
 {
     /**
