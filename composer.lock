@@ -90,16 +90,16 @@
         },
         {
             "name": "laucov/files",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/files.git",
-                "reference": "a262cb476624ca324acb22a3a1b6a7ba0ad9e36f"
+                "reference": "0982ec56e40cf84ff8ce98c216b6bef23f298e76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/files/zipball/a262cb476624ca324acb22a3a1b6a7ba0ad9e36f",
-                "reference": "a262cb476624ca324acb22a3a1b6a7ba0ad9e36f",
+                "url": "https://api.github.com/repos/laucov/files/zipball/0982ec56e40cf84ff8ce98c216b6bef23f298e76",
+                "reference": "0982ec56e40cf84ff8ce98c216b6bef23f298e76",
                 "shasum": ""
             },
             "require-dev": {
@@ -125,9 +125,9 @@
             "description": "Library for file manipulation.",
             "support": {
                 "issues": "https://github.com/laucov/files/issues",
-                "source": "https://github.com/laucov/files/tree/v1.0.0"
+                "source": "https://github.com/laucov/files/tree/v1.1.0"
             },
-            "time": "2024-01-31T12:48:29+00:00"
+            "time": "2024-04-15T00:06:21+00:00"
         },
         {
             "name": "laucov/http",
