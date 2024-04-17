@@ -168,7 +168,7 @@ class AuthorizerTest extends TestCase
         $this->assertSame(
             UserStatus::ACCREDITED,
             $this->authorizer->getStatus(),
-            'Assert that status is UserStatus::LOGGED_IN',
+            'Assert that status is UserStatus::ACCREDITED',
         );
 
         // Test accreditation with MFA.
@@ -302,13 +302,61 @@ class AuthorizerTest extends TestCase
             'Assert that status is UserStatus::AUTHENTICATED',
         );
 
-        // Logout.
+        // Create a callable to get the authorizer session.
+        $get_session = function (): null|\Laucov\Sessions\Session {
+            $property = new \ReflectionProperty($this->authorizer, 'session');
+            return $property->getValue($this->authorizer);
+        };
+        
+        // Get the current session ID.
+        $prev_session = $get_session();
+        $this->assertNotNull($prev_session);
+        $prev_session_id = $prev_session->id;
+
+        // Logout without destroying the session.
         $this->authorizer->logout();
         $this->assertSame(
             UserStatus::NO_ACCREDITED_USER,
             $this->authorizer->getStatus(),
-            'Assert that status is UserStatus::NOT_LOGGED_IN',
+            'Assert that status is UserStatus::NO_ACCREDITED_USER',
         );
+
+        // Assert that the session wasn't destroyed.
+        $curr_session = $get_session();
+        $this->assertSame($prev_session, $curr_session);
+        // Assert that the session ID wasn't changed.
+        $this->assertSame($prev_session_id, $curr_session->id);
+
+        // Login without changing the session ID.
+        $this->assertSame(
+            AccreditationResult::SUCCESS,
+            $this->authorizer->accredit('john', '1234'),
+            'Assert that result is AccreditationResult::SUCCESS',
+        );
+        $this->assertSame(
+            UserStatus::ACCREDITED,
+            $this->authorizer->getStatus(),
+            'Assert that status is UserStatus::ACCREDITED',
+        );
+
+        // Assert that the session wasn't destroyed.
+        $curr_session = $get_session();
+        $this->assertSame($prev_session, $curr_session);
+        // Assert that the session ID wasn't changed.
+        $this->assertSame($prev_session_id, $curr_session->id);
+
+        // Logout and destroy the session.
+        $this->authorizer->logout(true);
+        $this->assertSame(
+            AccreditationResult::NO_ACTIVE_SESSION,
+            $this->authorizer->accredit('john', '1234'),
+            'Assert that result is AccreditationResult::NO_ACTIVE_SESSION',
+        );
+
+        // Assert that the session was destroyed.
+        $this->assertNull($get_session());
+        // Assert that the session ID was removed.
+        $this->assertSame('', $prev_session->id);
     }
 
     /**

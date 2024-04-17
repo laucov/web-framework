@@ -208,11 +208,19 @@ class Authorizer
     /**
      * Remove all user data from this session.
      */
-    public function logout(): void
+    public function logout(bool $destroy_session = false): void
     {
+        // Remove the user instance.
         $this->user = null;
-        $this->session->set('user', []);
-        $this->session->commit(false);
+
+        // Destroy the session or empty its user data.
+        if ($destroy_session) {
+            $this->session->destroy();
+            $this->session = null;
+        } else {
+            $this->session->set('user', []);
+            $this->session->commit(false);
+        }
     }
 
     /**
