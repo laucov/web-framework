@@ -55,6 +55,8 @@ class AuthorizerTest extends TestCase
 
     protected ServiceProvider $services;
 
+    private string $sessionPath = __DIR__ . '/session-files';
+
     /**
      * @covers ::__construct
      * @covers ::accredit
@@ -344,6 +346,10 @@ class AuthorizerTest extends TestCase
         $this->assertSame($prev_session, $curr_session);
         // Assert that the session ID wasn't changed.
         $this->assertSame($prev_session_id, $curr_session->id);
+        
+        // Assert that the session file exists.
+        $session_filename = "{$this->sessionPath}/{$prev_session_id}";
+        $this->assertFileExists($session_filename);
 
         // Logout and destroy the session.
         $this->authorizer->logout(true);
@@ -357,6 +363,8 @@ class AuthorizerTest extends TestCase
         $this->assertNull($get_session());
         // Assert that the session ID was removed.
         $this->assertSame('', $prev_session->id);
+        // Assert that the session file was also removed.
+        $this->assertFileDoesNotExist($session_filename);
     }
 
     /**
@@ -520,8 +528,8 @@ class AuthorizerTest extends TestCase
     protected function setUp(): void
     {
         // Ensure the session file directory exists.
-        if (!is_dir(__DIR__ . '/session-files')) {
-            mkdir(__DIR__ . '/session-files');
+        if (!is_dir($this->sessionPath)) {
+            mkdir($this->sessionPath);
         }
 
         // Create configuration provider instance.
@@ -541,7 +549,7 @@ class AuthorizerTest extends TestCase
 
         // Adjust session config.
         $session = $this->config->getConfig(Session::class);
-        $session->path = __DIR__ . '/session-files';
+        $session->path = $this->sessionPath;
 
         // Create service provider instance.
         $this->services = new ServiceProvider($this->config);
@@ -597,7 +605,7 @@ class AuthorizerTest extends TestCase
     protected function tearDown(): void
     {
         // Remove session files.
-        $dir = __DIR__ . '/session-files';
+        $dir = $this->sessionPath;
         $items = array_diff(scandir($dir), ['.', '..']);
         foreach ($items as $item) {
             $filename = "{$dir}/{$item}";
