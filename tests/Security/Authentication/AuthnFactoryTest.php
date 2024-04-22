@@ -33,7 +33,8 @@ namespace Tests\Security;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Security\Authentication\AuthnFactory;
-// use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
+use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
+use Laucov\WebFwk\Security\Authentication\TotpAuthn;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,43 +43,34 @@ use PHPUnit\Framework\TestCase;
  */
 class AuthnFactoryTest extends TestCase
 {
-    // protected AuthnFactory $factory;
+    protected AuthnFactory $factory;
 
-    // public function authnNameProvider(): array
-    // {
-    //     return [
-    //     ];
-    // }
+    public function authnOptionProvider(): array
+    {
+        return [
+            ['totp', TotpAuthn::class],
+        ];
+    }
 
     /**
      * @covers ::__construct
+     * @covers ::totp
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @dataProvider authnOptionProvider
      */
-    public function testCanInstantiate(): void
+    public function testCanGetAuthnObjs(string $name, string $expected): void
     {
-        $this->expectNotToPerformAssertions();
-        $config = new ConfigProvider([]);
-        $services = new ServiceProvider($config);
-        new AuthnFactory($services);
+        $instance = $this->factory->{$name}();
+        $this->assertInstanceOf(AuthnInterface::class, $instance);
+        $this->assertInstanceOf($expected, $instance);
     }
 
-    // /**
-    //  * @covers ::__construct
-    //  * @dataProvider authnNameProvider
-    //  */
-    // public function testCanGetAuthnObjs(string $name, string $expected): void
-    // {
-    //     $instance = $this->factory->{$name}();
-    //     $this->assertInstanceOf(AuthnInterface::class, $instance);
-    //     $this->assertInstanceOf($expected, $instance);
-    // }
-
-    // protected function setUp(): void
-    // {
-    //     $config = new ConfigProvider([]);
-    //     $services = new ServiceProvider($config);
-    //     $this->factory = new AuthnFactory($services);
-    // }
+    protected function setUp(): void
+    {
+        $config = new ConfigProvider([]);
+        $services = new ServiceProvider($config);
+        $this->factory = new AuthnFactory($services);
+    }
 }

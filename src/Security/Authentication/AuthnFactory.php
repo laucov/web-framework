@@ -46,4 +46,12 @@ class AuthnFactory implements AuthnFactoryInterface
         protected ServiceProvider $services,
     ) {
     }
+
+    /**
+     * Get the TOTP authentication.
+     */
+    public function totp(): TotpAuthn
+    {
+        return new TotpAuthn();
+    }
 }
