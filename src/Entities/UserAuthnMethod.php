@@ -60,4 +60,35 @@ class UserAuthnMethod extends AbstractEntity
      * Must be stored as a JSON string.
      */
     public string $settings;
+
+    /**
+     * Get the settings as an array.
+     */
+    public function getSettings(): array
+    {
+        // Parse JSON.
+        $data = json_decode($this->settings, true);
+        if (!is_array($data)) {
+            $message = 'Could not parse the settings JSON into an array.';
+            throw new \RuntimeException($message);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Set the settings from an array.
+     */
+    public function setSettings(array $settings): void
+    {
+        // Create JSON.
+        $json = json_encode((object) $settings);
+        if (!is_string($json)) {
+            $message = 'Could not create a JSON string from the given array.';
+            throw new \InvalidArgumentException($message);
+        }
+
+        // Store settings.
+        $this->settings = $json;
+    }
 }
