@@ -4,8 +4,92 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2e32f4d68d693fe197c3fd188046c34",
+    "content-hash": "55dfa509b1ba590d2505934ffce71652",
     "packages": [
+        {
+            "name": "covaleski/data-encoding",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/covaleski/data-encoding.git",
+                "reference": "bdccd31309f858081a4c211cafaf59e159cd38f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/covaleski/data-encoding/zipball/bdccd31309f858081a4c211cafaf59e159cd38f2",
+                "reference": "bdccd31309f858081a4c211cafaf59e159cd38f2",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Covaleski\\DataEncoding\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "covaleski",
+                    "email": "covaleski23@gmail.com"
+                }
+            ],
+            "description": "Data encoding and decoding.",
+            "support": {
+                "issues": "https://github.com/covaleski/data-encoding/issues",
+                "source": "https://github.com/covaleski/data-encoding/tree/v1.0.0"
+            },
+            "time": "2023-10-22T23:04:26+00:00"
+        },
+        {
+            "name": "covaleski/otp",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/covaleski/otp.git",
+                "reference": "5a02d9448b05af0a4ee79c326c13c58a9920aef0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/covaleski/otp/zipball/5a02d9448b05af0a4ee79c326c13c58a9920aef0",
+                "reference": "5a02d9448b05af0a4ee79c326c13c58a9920aef0",
+                "shasum": ""
+            },
+            "require": {
+                "covaleski/data-encoding": "^1.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.15",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Covaleski\\Otp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "covaleski",
+                    "email": "covaleski23@gmail.com"
+                }
+            ],
+            "description": "One-time password generation.",
+            "support": {
+                "issues": "https://github.com/covaleski/otp/issues",
+                "source": "https://github.com/covaleski/otp/tree/v1.1.0"
+            },
+            "time": "2024-04-21T15:27:22+00:00"
+        },
         {
             "name": "laucov/arrays",
             "version": "v1.0.0",
@@ -46,6 +130,47 @@
                 "source": "https://github.com/laucov/arrays/tree/v1.0.0"
             },
             "time": "2024-01-30T11:29:04+00:00"
+        },
+        {
+            "name": "laucov/cli",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laucov/cli.git",
+                "reference": "29bdf71619018ab0f4a829a875362d7177f049db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laucov/cli/zipball/29bdf71619018ab0f4a829a875362d7177f049db",
+                "reference": "29bdf71619018ab0f4a829a875362d7177f049db",
+                "shasum": ""
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laucov\\Cli\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Covaleski",
+                    "email": "covaleski23@gmail.com"
+                }
+            ],
+            "description": "CLI routing and output tools.",
+            "support": {
+                "issues": "https://github.com/laucov/cli/issues",
+                "source": "https://github.com/laucov/cli/tree/v0.1.0"
+            },
+            "time": "2024-04-21T17:42:26+00:00"
         },
         {
             "name": "laucov/db",

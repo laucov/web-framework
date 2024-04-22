@@ -25,6 +25,8 @@
         "laucov/lang": "^1.0",
         "laucov/views": "^1.0",
         "laucov/sessions": "^1.0",
-        "laucov/modeling": "^0.2"
+        "laucov/modeling": "^0.2",
+        "laucov/cli": "^0.1.0",
+        "covaleski/otp": "^1.1"
     }
 }
