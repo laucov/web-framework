@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55dfa509b1ba590d2505934ffce71652",
+    "content-hash": "b77ad6f11d329542f093d0760ba75bc5",
     "packages": [
         {
             "name": "covaleski/data-encoding",
@@ -256,16 +256,16 @@
         },
         {
             "name": "laucov/http",
-            "version": "v1.5.2",
+            "version": "v1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/http.git",
-                "reference": "6b45b65c6cf891c3b366badf7e56575a66d32bbd"
+                "reference": "605543022997cc3f6d919c70054020acdf729e80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/http/zipball/6b45b65c6cf891c3b366badf7e56575a66d32bbd",
-                "reference": "6b45b65c6cf891c3b366badf7e56575a66d32bbd",
+                "url": "https://api.github.com/repos/laucov/http/zipball/605543022997cc3f6d919c70054020acdf729e80",
+                "reference": "605543022997cc3f6d919c70054020acdf729e80",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "Library for HTTP communication lifecycle control.",
             "support": {
                 "issues": "https://github.com/laucov/http/issues",
-                "source": "https://github.com/laucov/http/tree/v1.5.2"
+                "source": "https://github.com/laucov/http/tree/v1.5.4"
             },
-            "time": "2024-03-24T19:08:15+00:00"
+            "time": "2024-04-20T15:09:36+00:00"
         },
         {
             "name": "laucov/injection",
@@ -387,16 +387,16 @@
         },
         {
             "name": "laucov/modeling",
-            "version": "v0.2.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/modeling.git",
-                "reference": "41621f896fabf0bbdd09f65c60f015cefa22fda1"
+                "reference": "f8ac9c0e5a86805ebefaf5b67bf0067ed2fe8b26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/modeling/zipball/41621f896fabf0bbdd09f65c60f015cefa22fda1",
-                "reference": "41621f896fabf0bbdd09f65c60f015cefa22fda1",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/f8ac9c0e5a86805ebefaf5b67bf0067ed2fe8b26",
+                "reference": "f8ac9c0e5a86805ebefaf5b67bf0067ed2fe8b26",
                 "shasum": ""
             },
             "require": {
@@ -426,9 +426,9 @@
             "description": "Library for data modeling and database management.",
             "support": {
                 "issues": "https://github.com/laucov/modeling/issues",
-                "source": "https://github.com/laucov/modeling/tree/v0.2.0"
+                "source": "https://github.com/laucov/modeling/tree/v0.3.0"
             },
-            "time": "2024-04-10T12:10:37+00:00"
+            "time": "2024-04-24T02:39:57+00:00"
         },
         {
             "name": "laucov/sessions",
@@ -631,16 +631,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.15.1",
+            "version": "v1.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "5f288b5e79938cc72f5c298d384e639de87507c6"
+                "reference": "2c9f8004899815f3f0ee3cb28ef7281e2b589134"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/5f288b5e79938cc72f5c298d384e639de87507c6",
-                "reference": "5f288b5e79938cc72f5c298d384e639de87507c6",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/2c9f8004899815f3f0ee3cb28ef7281e2b589134",
+                "reference": "2c9f8004899815f3f0ee3cb28ef7281e2b589134",
                 "shasum": ""
             },
             "require": {
@@ -651,13 +651,13 @@
                 "php": "^8.1.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.52.1",
-                "illuminate/view": "^10.48.4",
-                "larastan/larastan": "^2.9.2",
+                "friendsofphp/php-cs-fixer": "^3.54.0",
+                "illuminate/view": "^10.48.8",
+                "larastan/larastan": "^2.9.5",
                 "laravel-zero/framework": "^10.3.0",
                 "mockery/mockery": "^1.6.11",
                 "nunomaduro/termwind": "^1.15.1",
-                "pestphp/pest": "^2.34.5"
+                "pestphp/pest": "^2.34.7"
             },
             "bin": [
                 "builds/pint"
@@ -693,7 +693,7 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2024-04-02T14:28:47+00:00"
+            "time": "2024-04-23T15:42:34+00:00"
         },
         {
             "name": "myclabs/deep-copy",
