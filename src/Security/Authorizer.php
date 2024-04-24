@@ -35,6 +35,7 @@ use Laucov\WebFwk\Entities\UserAuthnMethod;
 use Laucov\WebFwk\Models\UserAuthnMethodModel;
 use Laucov\WebFwk\Models\UserModel;
 use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\AuthnOption;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
@@ -176,6 +177,36 @@ class Authorizer
     }
 
     /**
+     * Get available authentication options for the current user.
+     * 
+     * @return array<AuthnOption>
+     */
+    public function getAuthnOptions(): array
+    {
+        // Check if we have a user.
+        if ($this->getStatus() !== UserStatus::AWAITING_AUTHENTICATION) {
+            $message = 'Unexpected authentication options request.';
+            throw new \RuntimeException($message);
+        }
+
+        // Get authentication methods.
+        $authn_methods = $this->userAuthnMethodModel
+            ->withColumns('id', 'name')
+            ->listForUser($this->user->id);
+        
+        // Create options.
+        $options = [];
+        foreach ($authn_methods as $authn_method) {
+            $option = new AuthnOption();
+            $option->id = $authn_method->id;
+            $option->name = $authn_method->name;
+            $options[] = $option;
+        }
+
+        return $options;
+    }
+
+    /**
      * Get the current authorization status.
      */
     public function getStatus(): UserStatus
@@ -300,7 +331,7 @@ class Authorizer
     /**
      * Get an `AuthnInterface` object from an authentication method record.
      */
-    public function getAuthentication(UserAuthnMethod $record): AuthnInterface
+    protected function getAuthentication(UserAuthnMethod $record): AuthnInterface
     {
         // Decode settings.
         $settings = json_decode($record->settings, true);

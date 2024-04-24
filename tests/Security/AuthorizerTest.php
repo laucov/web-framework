@@ -58,10 +58,44 @@ class AuthorizerTest extends TestCase
     private string $sessionPath = __DIR__ . '/session-files';
 
     /**
+     * Provides callbacks to execute before getting authentication options.
+     * 
+     * The getter must throw an exception.
+     */
+    public function authnOptionsGetterInitProvider(): array
+    {
+        return [
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                // Don't create a session.
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                // Create session, but don't login.
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                // Create session and login.
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+                $authz->accredit('john', '1234');
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+                $authz->accredit('mary', '4321');
+                $authz->requestAuthn('1');
+                $data = ['value' => 4];
+                $authz->authenticate($data);
+            }],
+        ];
+    }
+
+    /**
      * @covers ::__construct
      * @covers ::accredit
      * @covers ::authenticate
      * @covers ::getAuthentication
+     * @covers ::getAuthnOptions
      * @covers ::getStatus
      * @covers ::logout
      * @covers ::requestAuthn
@@ -74,6 +108,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\Modeling\Model\AbstractModel::getEntities
      * @uses Laucov\Modeling\Model\AbstractModel::getEntity
      * @uses Laucov\Modeling\Model\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::listForUser
      * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
      * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
@@ -185,6 +220,15 @@ class AuthorizerTest extends TestCase
             'Assert that status is UserStatus::AWAITING_AUTHENTICATION',
         );
 
+        // Check available authentication methods.
+        $authn_methods = $this->authorizer->getAuthnOptions();
+        $this->assertIsArray($authn_methods);
+        $this->assertCount(2, $authn_methods);
+        $this->assertSame(1, $authn_methods[0]->id);
+        $this->assertSame('foobar', $authn_methods[0]->name);
+        $this->assertSame(4, $authn_methods[1]->id);
+        $this->assertSame('invalid', $authn_methods[1]->name);
+
         // Try to authenticate without requesting the process.
         $data = ['value' => 0];
         $this->assertSame(
@@ -247,6 +291,15 @@ class AuthorizerTest extends TestCase
             $this->authorizer->getStatus(),
             'Assert that status is UserStatus::AWAITING_AUTHENTICATION',
         );
+
+        // Check available authentication methods.
+        $authn_methods = $this->authorizer->getAuthnOptions();
+        $this->assertIsArray($authn_methods);
+        $this->assertCount(2, $authn_methods);
+        $this->assertSame(2, $authn_methods[0]->id);
+        $this->assertSame('foobar', $authn_methods[0]->name);
+        $this->assertSame(3, $authn_methods[1]->id);
+        $this->assertSame('baz', $authn_methods[1]->name);
 
         // Request 1st authentication.
         $this->assertSame(
@@ -447,6 +500,49 @@ class AuthorizerTest extends TestCase
             $this->authorizer->authenticate(['value' => 12]),
             'Assert that result is AuthnResult::INVALID_METHOD',
         );
+    }
+
+    /**
+     * @covers ::getAuthnOptions
+     * @uses Laucov\WebFwk\Entities\User::testPassword
+     * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
+     * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Security\Authorizer::accredit
+     * @uses Laucov\WebFwk\Security\Authorizer::authenticate
+     * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
+     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
+     * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
+     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::createSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @dataProvider authnOptionsGetterInitProvider
+     */
+    public function testMustBeAwaitingAuthenticationToGetOptions(
+        callable $callable
+    ): void {
+        $callable($this->authorizer, $this->services);
+        $this->expectException(\RuntimeException::class);
+        $this->authorizer->getAuthnOptions();
     }
 
     /**
