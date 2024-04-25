@@ -226,8 +226,10 @@ class AuthorizerTest extends TestCase
         $this->assertCount(2, $authn_methods);
         $this->assertSame(1, $authn_methods[0]->id);
         $this->assertSame('foobar', $authn_methods[0]->name);
+        $this->assertFalse($authn_methods[0]->completed);
         $this->assertSame(4, $authn_methods[1]->id);
         $this->assertSame('invalid', $authn_methods[1]->name);
+        $this->assertFalse($authn_methods[1]->completed);
 
         // Try to authenticate without requesting the process.
         $data = ['value' => 0];
@@ -298,8 +300,10 @@ class AuthorizerTest extends TestCase
         $this->assertCount(2, $authn_methods);
         $this->assertSame(2, $authn_methods[0]->id);
         $this->assertSame('foobar', $authn_methods[0]->name);
+        $this->assertFalse($authn_methods[0]->completed);
         $this->assertSame(3, $authn_methods[1]->id);
         $this->assertSame('baz', $authn_methods[1]->name);
+        $this->assertFalse($authn_methods[1]->completed);
 
         // Request 1st authentication.
         $this->assertSame(
@@ -321,6 +325,15 @@ class AuthorizerTest extends TestCase
             $this->authorizer->getStatus(),
             'Assert that status is UserStatus::AWAITING_AUTHENTICATION',
         );
+
+        // Check available authentication methods.
+        $authn_methods = $this->authorizer->getAuthnOptions();
+        $this->assertIsArray($authn_methods);
+        $this->assertCount(2, $authn_methods);
+        $this->assertSame(2, $authn_methods[0]->id);
+        $this->assertTrue($authn_methods[0]->completed);
+        $this->assertSame(3, $authn_methods[1]->id);
+        $this->assertFalse($authn_methods[1]->completed);
 
         // Check if resets the current authentication method.
         $this->assertSame(

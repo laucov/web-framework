@@ -196,10 +196,13 @@ class Authorizer
         
         // Create options.
         $options = [];
+        $completed = $this->session->get('user.authn.completed', []);
         foreach ($authn_methods as $authn_method) {
             $option = new AuthnOption();
-            $option->id = $authn_method->id;
+            $id = $authn_method->id;
+            $option->id = $id;
             $option->name = $authn_method->name;
+            $option->completed = array_key_exists($id, $completed);
             $options[] = $option;
         }
 

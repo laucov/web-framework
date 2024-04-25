@@ -42,4 +42,9 @@ class AuthnOption
      * Authentication name.
      */
     public string $name;
+
+    /**
+     * Whether the method is completed.
+     */
+    public bool $completed;
 }
