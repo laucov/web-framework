@@ -360,7 +360,7 @@ class ApplicationTest extends TestCase
             ->setPostVariables($data['post'] ?? [])
             ->setServerInfo($data['server'] ?? [])
             ->setUriParameters($data['params'] ?? []);
-        
+
         // Create routes.
         $application
             ->getRouter()
@@ -370,7 +370,7 @@ class ApplicationTest extends TestCase
             ->pushPrefix('flights')
                 ->setMethodRoute('GET', '', 'list')
                 ->setMethodRoute('POST', '', 'create');
-        
+
         // Run the request.
         $this->expectOutputString($expected);
         $application->run();
@@ -479,7 +479,7 @@ class FlightController extends AbstractController
                 'theme' => $theme,
                 'title' => $this->config->getConfig(App::class)->title,
             ]);
-        
+
         // Set response.
         $this->response
             ->setHeaderLine('Content-Type', 'text/html')

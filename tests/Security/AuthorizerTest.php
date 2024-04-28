@@ -46,7 +46,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Laucov\WebFwk\Security\Authorizer
- * @todo Test with inexistent session ID.
  */
 class AuthorizerTest extends TestCase
 {
@@ -377,7 +376,7 @@ class AuthorizerTest extends TestCase
             $property = new \ReflectionProperty($this->authorizer, 'session');
             return $property->getValue($this->authorizer);
         };
-        
+
         // Get the current session ID.
         $prev_session = $get_session();
         $this->assertNotNull($prev_session);
@@ -414,7 +413,7 @@ class AuthorizerTest extends TestCase
         $this->assertSame($prev_session, $curr_session);
         // Assert that the session ID wasn't changed.
         $this->assertSame($prev_session_id, $curr_session->id);
-        
+
         // Assert that the session file exists.
         $session_filename = "{$this->sessionPath}/{$prev_session_id}";
         $this->assertFileExists($session_filename);

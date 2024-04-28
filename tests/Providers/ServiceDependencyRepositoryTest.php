@@ -99,10 +99,13 @@ class ServiceDependencyRepositoryTest extends TestCase
 }
 
 class ConfigA implements ConfigInterface
-{}
+{
+}
 
 class ConfigB implements ConfigInterface
-{}
+{
+}
 
 class ConfigC implements ConfigInterface
-{}
+{
+}

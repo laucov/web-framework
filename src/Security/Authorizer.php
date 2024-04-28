@@ -193,7 +193,7 @@ class Authorizer
         $authn_methods = $this->userAuthnMethodModel
             ->withColumns('id', 'name')
             ->listForUser($this->user->id);
-        
+
         // Create options.
         $options = [];
         $completed = $this->session->get('user.authn.completed', []);

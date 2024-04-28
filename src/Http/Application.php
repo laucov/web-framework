@@ -27,6 +27,7 @@
  */
 
 namespace Laucov\WebFwk\Http;
+
 use Laucov\Http\Message\IncomingRequest;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Message\ResponseInterface;
@@ -87,7 +88,7 @@ class Application
      * Request headers (key-value pairs).
      */
     protected array $requestHeaders = [];
-    
+
     /**
      * Router.
      */
@@ -166,7 +167,7 @@ class Application
             $length = $body->getSize();
             $this->outputCallables['header']("Content-Length: {$length}");
             // Output content.
-            for ($i = 0; $i < ceil($length/4096); $i++) {
+            for ($i = 0; $i < ceil($length / 4096); $i++) {
                 $this->outputCallables['body']($body->read(4096));
             }
         }
@@ -328,7 +329,7 @@ class Application
         if (!in_array($type, static::POST_CONTENT_TYPES, true)) {
             return fopen($this->inputFilename, 'r');
         }
-        
+
         return $this->postVariables;
     }
 
