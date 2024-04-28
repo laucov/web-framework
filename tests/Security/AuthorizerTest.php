@@ -46,6 +46,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Laucov\WebFwk\Security\Authorizer
+ * @todo Test with inexistent session ID.
  */
 class AuthorizerTest extends TestCase
 {
@@ -133,6 +134,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Services\FileSessionService::__construct
      * @uses Laucov\WebFwk\Services\FileSessionService::createSession
      * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
      */
     public function testCanAuthorize(): void
     {
@@ -472,6 +474,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Services\FileSessionService::__construct
      * @uses Laucov\WebFwk\Services\FileSessionService::createSession
      * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
      */
     public function testInformsUnusualFailures(): void
     {
@@ -548,6 +551,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Services\FileSessionService::__construct
      * @uses Laucov\WebFwk\Services\FileSessionService::createSession
      * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
      * @dataProvider authnOptionsGetterInitProvider
      */
     public function testMustBeAwaitingAuthenticationToGetOptions(
@@ -593,6 +597,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Services\FileSessionService::__construct
      * @uses Laucov\WebFwk\Services\FileSessionService::createSession
      * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
      */
     public function testSavesUserData(): void
     {
@@ -632,6 +637,36 @@ class AuthorizerTest extends TestCase
             $this->authorizer->getStatus(),
             'Assert that status is UserStatus::ACCREDITED',
         );
+    }
+
+    /**
+     * @covers ::setSession
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
+     */
+    public function testValidatesSessionIds(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->authorizer->setSession('invalid_session_id');
     }
 
     protected function setUp(): void

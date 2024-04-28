@@ -174,16 +174,16 @@
         },
         {
             "name": "laucov/db",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/db.git",
-                "reference": "2b36257ca00f6ebe8f8172c77cc5f44363a7e708"
+                "reference": "8e13085325bcc50bd3ec6f0d190d242bcf3613dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/db/zipball/2b36257ca00f6ebe8f8172c77cc5f44363a7e708",
-                "reference": "2b36257ca00f6ebe8f8172c77cc5f44363a7e708",
+                "url": "https://api.github.com/repos/laucov/db/zipball/8e13085325bcc50bd3ec6f0d190d242bcf3613dc",
+                "reference": "8e13085325bcc50bd3ec6f0d190d242bcf3613dc",
                 "shasum": ""
             },
             "require-dev": {
@@ -209,9 +209,9 @@
             "description": "Library for database management and operation.",
             "support": {
                 "issues": "https://github.com/laucov/db/issues",
-                "source": "https://github.com/laucov/db/tree/v1.1.1"
+                "source": "https://github.com/laucov/db/tree/v1.1.2"
             },
-            "time": "2024-02-16T21:09:04+00:00"
+            "time": "2024-04-27T11:48:17+00:00"
         },
         {
             "name": "laucov/files",
@@ -387,21 +387,21 @@
         },
         {
             "name": "laucov/modeling",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/modeling.git",
-                "reference": "f8ac9c0e5a86805ebefaf5b67bf0067ed2fe8b26"
+                "reference": "3b9168bb7f53d7ef7d144e3df3b895e30d9f9a79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/modeling/zipball/f8ac9c0e5a86805ebefaf5b67bf0067ed2fe8b26",
-                "reference": "f8ac9c0e5a86805ebefaf5b67bf0067ed2fe8b26",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/3b9168bb7f53d7ef7d144e3df3b895e30d9f9a79",
+                "reference": "3b9168bb7f53d7ef7d144e3df3b895e30d9f9a79",
                 "shasum": ""
             },
             "require": {
                 "laucov/db": "^1.0",
-                "laucov/validation": "^0.1.0"
+                "laucov/validation": "^0"
             },
             "require-dev": {
                 "laravel/pint": "^1.13",
@@ -426,9 +426,9 @@
             "description": "Library for data modeling and database management.",
             "support": {
                 "issues": "https://github.com/laucov/modeling/issues",
-                "source": "https://github.com/laucov/modeling/tree/v0.3.0"
+                "source": "https://github.com/laucov/modeling/tree/v0.4.0"
             },
-            "time": "2024-04-24T02:39:57+00:00"
+            "time": "2024-04-28T02:58:07+00:00"
         },
         {
             "name": "laucov/sessions",
@@ -477,16 +477,16 @@
         },
         {
             "name": "laucov/validation",
-            "version": "v0.1.0",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/validation.git",
-                "reference": "e3b2a34622285bc0129dac4acaefae41e66ff803"
+                "reference": "ad0c21be64530ccd8735ec14fb844e4295b7f98e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/validation/zipball/e3b2a34622285bc0129dac4acaefae41e66ff803",
-                "reference": "e3b2a34622285bc0129dac4acaefae41e66ff803",
+                "url": "https://api.github.com/repos/laucov/validation/zipball/ad0c21be64530ccd8735ec14fb844e4295b7f98e",
+                "reference": "ad0c21be64530ccd8735ec14fb844e4295b7f98e",
                 "shasum": ""
             },
             "require-dev": {
@@ -512,9 +512,9 @@
             "description": "Library for data validation.",
             "support": {
                 "issues": "https://github.com/laucov/validation/issues",
-                "source": "https://github.com/laucov/validation/tree/v0.1.0"
+                "source": "https://github.com/laucov/validation/tree/v0.2.0"
             },
-            "time": "2024-03-31T02:50:39+00:00"
+            "time": "2024-04-27T15:35:35+00:00"
         },
         {
             "name": "laucov/views",

@@ -318,8 +318,15 @@ class Authorizer
             return $this;
         }
 
+        // Check if the session ID is valid.
+        $service = $this->services->session();
+        if (!$service->validateId($session_id)) {
+            $message = 'Tried to set an invalid session ID.';
+            throw new \RuntimeException($message);
+        }
+
         // Open the session with the given ID.
-        $this->session = $this->services->session()->getSession($session_id);
+        $this->session = $service->getSession($session_id);
         $this->session->open();
 
         // Check if the user is active.
