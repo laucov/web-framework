@@ -39,7 +39,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Laucov\WebFwk\Security\Authentication\AuthnFactory
- * @todo Create `AuthnInterface` classes to test.
  */
 class AuthnFactoryTest extends TestCase
 {
