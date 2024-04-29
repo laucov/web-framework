@@ -290,10 +290,11 @@ class ApplicationTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::createRequest
      * @covers ::createRouter
      * @covers ::getContentOrPost
      * @covers ::getRouter
-     * @covers ::getStatusLine
+     * @covers ::output
      * @covers ::run
      * @covers ::setConfigClasses
      * @covers ::setCookies

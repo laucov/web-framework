@@ -126,51 +126,18 @@ class Application
     public function run(): void
     {
         // Create request.
-        $request = new IncomingRequest(
-            content_or_post: $this->getContentOrPost(),
-            headers: $this->requestHeaders,
-            protocol_version: $this->server->getProtocolVersion(),
-            method: $this->server->get('REQUEST_METHOD') ?? 'GET',
-            uri: $this->server->getRequestUri(),
-            parameters: $this->uriParameters,
-            cookies: $this->requestCookies,
-        );
+        $request = $this->createRequest();
 
-        // Find route.
+        // Find the route.
         $route = $this->getRouter()->findRoute($request);
+        // @todo Handle missing routes
         // if ($route === null) {
         //     return;
         // }
 
-        // Get response.
+        // Get and output response.
         $response = $route->run();
-
-        // Get data.
-        $status = $this->getStatusLine($request, $response);
-        $header_names = $response->getHeaderNames();
-        $body = $response->getBody();
-
-        // Output status line.
-        $this->outputCallables['status_line']($status);
-
-        // Output headers.
-        foreach ($header_names as $name) {
-            $header_lines = $response->getHeaderLines($name);
-            foreach ($header_lines as $line) {
-                $this->outputCallables['header']("{$name}: {$line}");
-            }
-        }
-
-        // Output body.
-        if ($body !== null) {
-            // Output content length.
-            $length = $body->getSize();
-            $this->outputCallables['header']("Content-Length: {$length}");
-            // Output content.
-            for ($i = 0; $i < ceil($length / 4096); $i++) {
-                $this->outputCallables['body']($body->read(4096));
-            }
-        }
+        $this->output($request, $response);
     }
 
     /**
@@ -293,6 +260,25 @@ class Application
         return $this;
     }
 
+    /**
+     * Create the request instance.
+     */
+    protected function createRequest(): RequestInterface
+    {
+        return new IncomingRequest(
+            content_or_post: $this->getContentOrPost(),
+            headers: $this->requestHeaders,
+            protocol_version: $this->server->getProtocolVersion(),
+            method: $this->server->get('REQUEST_METHOD') ?? 'GET',
+            uri: $this->server->getRequestUri(),
+            parameters: $this->uriParameters,
+            cookies: $this->requestCookies,
+        );
+    }
+
+    /**
+     * Create the router instance.
+     */
     protected function createRouter(): ControllerRouter
     {
         // Setup configuration provider.
@@ -334,17 +320,38 @@ class Application
     }
 
     /**
-     * Build the status line from a response object.
+     * Output the response based on a request.
      */
-    protected function getStatusLine(
+    protected function output(
         RequestInterface $request,
         ResponseInterface $response,
-    ): string {
+    ): void {
+        // Output status line.
         $protocol_version = $response->getProtocolVersion()
             ?? $request->getProtocolVersion();
-        $code = $response->getStatusCode();
-        $text = $response->getStatusText();
+        $status = 'HTTP/' . $protocol_version . ' '
+            . $response->getStatusCode() . ' '
+            . $response->getStatusText();
+        $this->outputCallables['status_line']($status);
 
-        return "HTTP/{$protocol_version} {$code} {$text}";
+        // Output headers.
+        foreach ($response->getHeaderNames() as $name) {
+            $header_lines = $response->getHeaderLines($name);
+            foreach ($header_lines as $line) {
+                $this->outputCallables['header']("{$name}: {$line}");
+            }
+        }
+
+        // Output body.
+        $body = $response->getBody();
+        if ($body !== null) {
+            // Output content length.
+            $length = $body->getSize();
+            $this->outputCallables['header']("Content-Length: {$length}");
+            // Output content.
+            for ($i = 0; $i < ceil($length / 4096); $i++) {
+                $this->outputCallables['body']($body->read(4096));
+            }
+        }
     }
 }
