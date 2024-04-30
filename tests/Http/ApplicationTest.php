@@ -376,6 +376,48 @@ class ApplicationTest extends TestCase
         $this->expectOutputString($expected);
         $application->run();
     }
+
+    /**
+     * @coversNothing
+     */
+    public function testResetsHeadersWhenSettingServerInfo(): void
+    {
+        // Create application instance.
+        $application = new Application();
+
+        // Set server info.
+        $application->setServerInfo([
+            'CONTENT_TYPE' => 'text/plain',
+            'HTTP_ACCEPT_LANGUAGE' => 'pt-BR, es;q=0.1',
+            'HTTP_AUTHORIZATION' => 'Basic john:1234',
+            'HTTP_CONTENT_LENGTH' => '128',
+        ]);
+
+        // Check headers.
+        $reflection = new \ReflectionObject($application);
+        $headers = $reflection
+            ->getProperty('requestHeaders')
+            ->getValue($application);
+        $this->assertCount(4, $headers);
+        $this->assertSame('pt-BR, es;q=0.1', $headers['accept-language']);
+        $this->assertSame('Basic john:1234', $headers['authorization']);
+        $this->assertSame('128', $headers['content-length']);
+        $this->assertSame('text/plain', $headers['content-type']);
+
+        // Set server info again.
+        $application->setServerInfo([
+            'CONTENT_LENGTH' => '32',
+            'HTTP_CONTENT_TYPE' => 'text/plain',
+            'HTTP_X_FOOBAR' => 'Foo, Bar, Baz',
+        ]);
+        $headers = $reflection
+            ->getProperty('requestHeaders')
+            ->getValue($application);
+        $this->assertCount(3, $headers);
+        $this->assertSame('32', $headers['content-length']);
+        $this->assertSame('text/plain', $headers['content-type']);
+        $this->assertSame('Foo, Bar, Baz', $headers['x-foobar']);
+    }
 }
 
 // Configuration classes.

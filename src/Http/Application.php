@@ -216,6 +216,7 @@ class Application
     public function setServerInfo(array $values): static
     {
         // Set headers.
+        $this->requestHeaders = [];
         foreach ($values as $key => $value) {
             if (str_starts_with($key, 'HTTP_')) {
                 $name = strtolower(str_replace('_', '-', substr($key, 5)));
