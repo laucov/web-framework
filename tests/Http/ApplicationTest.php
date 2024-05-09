@@ -30,6 +30,9 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Laucov\Http\Cookie\ResponseCookie;
+use Laucov\Http\Cookie\SameSite;
+use Laucov\Http\Message\OutgoingResponse;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Message\ResponseInterface;
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
@@ -285,6 +288,21 @@ class ApplicationTest extends TestCase
                 "Content length => 13\n" .
                 "Content type => application/json",
             ],
+            'response cookies' => [
+                [
+                    // $_SERVER
+                    'server' => [
+                        'REQUEST_URI' => '/cookies',
+                        'SERVER_PROTOCOL' => 'HTTP/1.0',
+                    ],
+                ],
+                // Expected output.
+                'HTTP/1.0 200 OK' . "\n" .
+                'Set-Cookie: a=123; Domain=foobar.com' . "\n" .
+                'Set-Cookie: b=456; Max-Age=999' . "\n" .
+                'Content-Length: 0' . "\n" .
+                '',
+            ],
         ];
     }
 
@@ -370,7 +388,20 @@ class ApplicationTest extends TestCase
             ->setMethodRoute('POST', 'test', 'analyze')
             ->pushPrefix('flights')
                 ->setMethodRoute('GET', '', 'list')
-                ->setMethodRoute('POST', '', 'create');
+                ->setMethodRoute('POST', '', 'create')
+            ->popPrefix()
+            ->setCallableRoute('GET', 'cookies', function (): ResponseInterface {
+                $response = new OutgoingResponse();
+                $response
+                    ->setBody('')
+                    ->setCookie(
+                        new ResponseCookie('a', '123', domain: 'foobar.com')
+                    )
+                    ->setCookie(
+                        new ResponseCookie('b', '456', maxAge: 999),
+                    );
+                return $response;
+            });
 
         // Run the request.
         $this->expectOutputString($expected);

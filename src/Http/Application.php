@@ -343,6 +343,12 @@ class Application
             }
         }
 
+        // Output cookies as headers.
+        foreach ($response->getCookieNames() as $name) {
+            $cookie = $response->getCookie($name);
+            $this->outputCallables['header']("Set-Cookie: {$cookie}");
+        }
+
         // Output body.
         $body = $response->getBody();
         if ($body !== null) {
