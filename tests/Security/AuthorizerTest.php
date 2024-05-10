@@ -36,7 +36,7 @@ use Laucov\WebFwk\Config\Session;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Security\AccreditationResult;
-use Laucov\WebFwk\Security\Authentication\AuthnCancel;
+use Laucov\WebFwk\Security\Authentication\AuthnCancelResult;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
@@ -155,6 +155,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\Modeling\Model\AbstractModel::getEntities
      * @uses Laucov\Modeling\Model\AbstractModel::getEntity
      * @uses Laucov\Modeling\Model\AbstractModel::retrieve
+     * @uses Laucov\WebFwk\Entities\UserAuthnMethod::getSettings
      * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::listForUser
      * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
      * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
@@ -203,9 +204,9 @@ class AuthorizerTest extends TestCase
             'Assert that result is AuthnRequestResult::NO_ACTIVE_SESSION',
         );
         $this->assertSame(
-            AuthnCancel::NO_ACTIVE_SESSION,
+            AuthnCancelResult::NO_ACTIVE_SESSION,
             $this->authorizer->cancelAuthn(),
-            'Assert that result is AuthnCancel::NO_ACTIVE_SESSION',
+            'Assert that result is AuthnCancelResult::NO_ACTIVE_SESSION',
         );
         $this->assertSame(
             AuthnResult::NO_ACTIVE_SESSION,
@@ -231,9 +232,9 @@ class AuthorizerTest extends TestCase
             'Assert that result is AuthnRequestResult::NO_ACCREDITED_USER',
         );
         $this->assertSame(
-            AuthnCancel::NO_ACCREDITED_USER,
+            AuthnCancelResult::NO_ACCREDITED_USER,
             $this->authorizer->cancelAuthn(),
-            'Assert that result is AuthnCancel::NO_ACCREDITED_USER',
+            'Assert that result is AuthnCancelResult::NO_ACCREDITED_USER',
         );
         $this->assertSame(
             AuthnResult::NO_ACCREDITED_USER,
@@ -379,9 +380,9 @@ class AuthorizerTest extends TestCase
 
         // Test giving up.
         $this->assertSame(
-            AuthnCancel::SUCCESS,
+            AuthnCancelResult::SUCCESS,
             $this->authorizer->cancelAuthn(),
-            'Assert that result is AuthnCancel::SUCCESS',
+            'Assert that result is AuthnCancelResult::SUCCESS',
         );
 
         // Check status.
@@ -407,8 +408,8 @@ class AuthorizerTest extends TestCase
 
         // Get authentication method name.
         $current = $this->authorizer->getCurrentAuthn();
-        $this->assertSame(2, $current->id);
         $this->assertSame('foobar', $current->name);
+        $this->assertIsArray($current->fields);
 
         // Complete 1st authentication.
         $this->assertSame(
@@ -610,6 +611,9 @@ class AuthorizerTest extends TestCase
         $authz->authnFactory = UselessAuthnFactory::class;
         $this->authorizer = new Authorizer($authz, $this->services);
         $this->authorizer->setSession($session_id);
+
+        // Try to get the current authentication method - should fail.
+        $this->assertNull($this->authorizer->getCurrentAuthn());
 
         // Try to complete - should fail.
         $this->assertSame(

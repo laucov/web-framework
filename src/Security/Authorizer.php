@@ -35,7 +35,8 @@ use Laucov\WebFwk\Entities\UserAuthnMethod;
 use Laucov\WebFwk\Models\UserAuthnMethodModel;
 use Laucov\WebFwk\Models\UserModel;
 use Laucov\WebFwk\Providers\ServiceProvider;
-use Laucov\WebFwk\Security\Authentication\AuthnCancel;
+use Laucov\WebFwk\Security\Authentication\AuthnCancelResult;
+use Laucov\WebFwk\Security\Authentication\AuthnInfo;
 use Laucov\WebFwk\Security\Authentication\AuthnOption;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
@@ -180,29 +181,29 @@ class Authorizer
     /**
      * Cancel any active authentication process.
      */
-    public function cancelAuthn(): AuthnCancel
+    public function cancelAuthn(): AuthnCancelResult
     {
         // Check if a session is active.
         if ($this->session === null) {
-            return AuthnCancel::NO_ACTIVE_SESSION;
+            return AuthnCancelResult::NO_ACTIVE_SESSION;
         }
 
         // Check if a session is active.
         if ($this->user === null) {
-            return AuthnCancel::NO_ACCREDITED_USER;
+            return AuthnCancelResult::NO_ACCREDITED_USER;
         }
 
         // Save data to session.
         $this->session->set('user.authn.current', null);
         $this->session->commit(false);
 
-        return AuthnCancel::SUCCESS;
+        return AuthnCancelResult::SUCCESS;
     }
 
     /**
      * Get the current authentication name.
      */
-    public function getCurrentAuthn(): null|UserAuthnMethod
+    public function getCurrentAuthn(): null|AuthnInfo
     {
         // Check status.
         if ($this->getStatus() !== UserStatus::AUTHENTICATING) {
@@ -210,11 +211,29 @@ class Authorizer
             throw new \RuntimeException($message);
         }
 
-        // Get IDs.
+        // Get authentication method record.
         $id = $this->session->get('user.authn.current');
         $user_id = $this->user->id;
 
-        return $this->userAuthnMethodModel->retrieveForUser($user_id, $id);
+        // Get authentication method record.
+        $record = $this->userAuthnMethodModel->retrieveForUser($user_id, $id);
+        if ($record === null) {
+            return null;
+        }
+
+        // Get fields.
+        if (!method_exists($this->authnFactory, $record->name)) {
+            return null;
+        }
+        $fields = $this->getAuthentication($record)->getFields();
+
+        // Build information object.
+        $info = new AuthnInfo();
+        $info->name = $record->name;
+        $info->settings = $record->getSettings();
+        $info->fields = $fields;
+
+        return $info;
     }
 
     /**

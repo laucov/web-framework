@@ -29,22 +29,24 @@
 namespace Laucov\WebFwk\Security\Authentication;
 
 /**
- * Represents an user authentication cancel result.
+ * Stores the information about an authentication process.
  */
-enum AuthnCancel
+class AuthnInfo
 {
     /**
-     * A session is active but there is no accredited user.
+     * Authentication fields.
+     * 
+     * @var array<AuthnField>
      */
-    case NO_ACCREDITED_USER;
+    public array $fields;
 
     /**
-     * There is no active session to use.
+     * Authentication name.
      */
-    case NO_ACTIVE_SESSION;
+    public string $name;
 
     /**
-     * Successfully canceled any active authentication process.
+     * Stored settings.
      */
-    case SUCCESS;
+    public array $settings;
 }
