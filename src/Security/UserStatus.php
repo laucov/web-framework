@@ -34,6 +34,11 @@ namespace Laucov\WebFwk\Security;
 enum UserStatus
 {
     /**
+     * User successfully requested an authentication process.
+     */
+    case AUTHENTICATING;
+
+    /**
      * User successfully accredited with login and password.
      */
     case ACCREDITED;

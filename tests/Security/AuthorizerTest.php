@@ -313,6 +313,13 @@ class AuthorizerTest extends TestCase
             'Assert that result is AuthnRequestResult::REQUESTED',
         );
 
+        // Check new status authenticating.
+        $this->assertSame(
+            UserStatus::AUTHENTICATING,
+            $this->authorizer->getStatus(),
+            'Assert that result is UserStatus::AUTHENTICATING',
+        );
+
         // Complete 1st authentication.
         $this->assertSame(
             AuthnResult::SUCCESS,

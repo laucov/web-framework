@@ -236,7 +236,9 @@ class Authorizer
             return UserStatus::AUTHENTICATED;
         }
 
-        return UserStatus::AWAITING_AUTHENTICATION;
+        return $this->session->get('user.authn.current') === null
+            ? UserStatus::AWAITING_AUTHENTICATION
+            : UserStatus::AUTHENTICATING;
     }
 
     /**
