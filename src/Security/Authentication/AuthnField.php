@@ -26,34 +26,25 @@
  * @copyright © 2024 Laucov Serviços de Tecnologia da Informação Ltda.
  */
 
-namespace Laucov\WebFwk\Security\Authentication\Interfaces;
-
-use Laucov\WebFwk\Security\Authentication\AuthnField;
+namespace Laucov\WebFwk\Security\Authentication;
 
 /**
- * Controls the life cycle of a specific authentication process.
+ * Represents an authentication field.
  */
-interface AuthnInterface
+class AuthnField
 {
     /**
-     * Configure the process.
+     * Field name.
      */
-    public function configure(array $settings): void;
+    public string $name = '';
 
     /**
-     * Get the authentication expected fields.
-     * 
-     * @return array<AuthnField>
+     * Whether the field is required.
      */
-    public function getFields(): array;
+    public bool $required = true;
 
     /**
-     * Start the process.
+     * Field type.
      */
-    public function request(): void;
-
-    /**
-     * Validate data for the process.
-     */
-    public function validate(array $data): bool;
+    public string $type = 'text';
 }

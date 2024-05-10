@@ -936,6 +936,11 @@ class FoobarAuthn implements AuthnInterface
         $this->factor = (int) $data['factor'];
     }
 
+    public function getFields(): array
+    {
+        return [];
+    }
+
     public function request(): void
     {
         static::$code = 2 * $this->factor;

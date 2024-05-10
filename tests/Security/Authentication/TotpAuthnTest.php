@@ -88,6 +88,20 @@ class TotpAuthnTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::getFields
+     */
+    public function testCanGetFields(): void
+    {
+        $authn = new TotpAuthn();
+        $fields = $authn->getFields();
+        $this->assertIsArray($fields);
+        $this->assertCount(1, $fields);
+        $this->assertSame('password', $fields[0]->name);
+        $this->assertSame(true, $fields[0]->required);
+        $this->assertSame('text', $fields[0]->type);
+    }
+
     protected function setUp(): void
     {
         Timestamp::$value = null;

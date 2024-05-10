@@ -58,6 +58,22 @@ class TotpAuthn implements AuthnInterface
             ->setOffset($offset)
             ->setStep($step);
     }
+    
+    /**
+     * Get the authentication expected fields.
+     * 
+     * @return array<AuthnField>
+     */
+    public function getFields(): array
+    {
+        // Create field.
+        $field = new AuthnField();
+        $field->name = 'password';
+        $field->required = true;
+        $field->type = 'text';
+
+        return [$field];
+    }
 
     /**
      * Start the process.
