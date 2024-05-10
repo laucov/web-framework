@@ -36,6 +36,7 @@ use Laucov\WebFwk\Config\Session;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Security\AccreditationResult;
+use Laucov\WebFwk\Security\Authentication\AuthnCancel;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
@@ -138,6 +139,7 @@ class AuthorizerTest extends TestCase
      * @covers ::__construct
      * @covers ::accredit
      * @covers ::authenticate
+     * @covers ::cancelAuthn
      * @covers ::getAuthentication
      * @covers ::getAuthnOptions
      * @covers ::getCurrentAuthn
@@ -201,6 +203,11 @@ class AuthorizerTest extends TestCase
             'Assert that result is AuthnRequestResult::NO_ACTIVE_SESSION',
         );
         $this->assertSame(
+            AuthnCancel::NO_ACTIVE_SESSION,
+            $this->authorizer->cancelAuthn(),
+            'Assert that result is AuthnCancel::NO_ACTIVE_SESSION',
+        );
+        $this->assertSame(
             AuthnResult::NO_ACTIVE_SESSION,
             $this->authorizer->authenticate([]),
             'Assert that result is AuthnResult::NO_ACTIVE_SESSION',
@@ -222,6 +229,11 @@ class AuthorizerTest extends TestCase
             AuthnRequestResult::NO_ACCREDITED_USER,
             $this->authorizer->requestAuthn('2'),
             'Assert that result is AuthnRequestResult::NO_ACCREDITED_USER',
+        );
+        $this->assertSame(
+            AuthnCancel::NO_ACCREDITED_USER,
+            $this->authorizer->cancelAuthn(),
+            'Assert that result is AuthnCancel::NO_ACCREDITED_USER',
         );
         $this->assertSame(
             AuthnResult::NO_ACCREDITED_USER,
@@ -358,7 +370,35 @@ class AuthorizerTest extends TestCase
             'Assert that result is AuthnRequestResult::REQUESTED',
         );
 
-        // Check new status authenticating.
+        // Check status.
+        $this->assertSame(
+            UserStatus::AUTHENTICATING,
+            $this->authorizer->getStatus(),
+            'Assert that result is UserStatus::AUTHENTICATING',
+        );
+
+        // Test giving up.
+        $this->assertSame(
+            AuthnCancel::SUCCESS,
+            $this->authorizer->cancelAuthn(),
+            'Assert that result is AuthnCancel::SUCCESS',
+        );
+
+        // Check status.
+        $this->assertSame(
+            UserStatus::AWAITING_AUTHENTICATION,
+            $this->authorizer->getStatus(),
+            'Assert that result is UserStatus::AUTHENTICATING',
+        );
+
+        // Request authentication again.
+        $this->assertSame(
+            AuthnRequestResult::REQUESTED,
+            $this->authorizer->requestAuthn('2'),
+            'Assert that result is AuthnRequestResult::REQUESTED',
+        );
+
+        // Check status.
         $this->assertSame(
             UserStatus::AUTHENTICATING,
             $this->authorizer->getStatus(),

@@ -35,6 +35,7 @@ use Laucov\WebFwk\Entities\UserAuthnMethod;
 use Laucov\WebFwk\Models\UserAuthnMethodModel;
 use Laucov\WebFwk\Models\UserModel;
 use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\AuthnCancel;
 use Laucov\WebFwk\Security\Authentication\AuthnOption;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
@@ -174,6 +175,28 @@ class Authorizer
         }
 
         return $is_valid ? AuthnResult::SUCCESS : AuthnResult::FAILURE;
+    }
+
+    /**
+     * Cancel any active authentication process.
+     */
+    public function cancelAuthn(): AuthnCancel
+    {
+        // Check if a session is active.
+        if ($this->session === null) {
+            return AuthnCancel::NO_ACTIVE_SESSION;
+        }
+
+        // Check if a session is active.
+        if ($this->user === null) {
+            return AuthnCancel::NO_ACCREDITED_USER;
+        }
+
+        // Save data to session.
+        $this->session->set('user.authn.current', null);
+        $this->session->commit(false);
+
+        return AuthnCancel::SUCCESS;
     }
 
     /**
