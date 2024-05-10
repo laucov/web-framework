@@ -84,6 +84,50 @@ class AuthorizerTest extends TestCase
                 $authz->setSession($id);
                 $authz->accredit('mary', '4321');
                 $authz->requestAuthn('1');
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+                $authz->accredit('mary', '4321');
+                $authz->requestAuthn('1');
+                $data = ['value' => 4];
+                $authz->authenticate($data);
+            }],
+        ];
+    }
+
+    /**
+     * Provides callbacks to execute before getting the current authentication.
+     * 
+     * The getter must throw an exception.
+     */
+    public function currentAuthnGetterInitProvider(): array
+    {
+        return [
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                // Don't create a session.
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                // Create session, but don't login.
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                // Create session and login.
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+                $authz->accredit('john', '1234');
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+                $authz->accredit('mary', '4321');
+            }],
+            [function (Authorizer $authz, ServiceProvider $services): void {
+                $id = $services->session()->createSession()->id;
+                $authz->setSession($id);
+                $authz->accredit('mary', '4321');
+                $authz->requestAuthn('1');
                 $data = ['value' => 4];
                 $authz->authenticate($data);
             }],
@@ -96,6 +140,7 @@ class AuthorizerTest extends TestCase
      * @covers ::authenticate
      * @covers ::getAuthentication
      * @covers ::getAuthnOptions
+     * @covers ::getCurrentAuthn
      * @covers ::getStatus
      * @covers ::logout
      * @covers ::requestAuthn
@@ -320,6 +365,11 @@ class AuthorizerTest extends TestCase
             'Assert that result is UserStatus::AUTHENTICATING',
         );
 
+        // Get authentication method name.
+        $current = $this->authorizer->getCurrentAuthn();
+        $this->assertSame(2, $current->id);
+        $this->assertSame('foobar', $current->name);
+
         // Complete 1st authentication.
         $this->assertSame(
             AuthnResult::SUCCESS,
@@ -443,6 +493,7 @@ class AuthorizerTest extends TestCase
 
     /**
      * @covers ::authenticate
+     * @covers ::getCurrentAuthn
      * @uses Laucov\WebFwk\Entities\User::testPassword
      * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
      * @uses Laucov\Modeling\Entity\AbstractEntity::__set
@@ -471,6 +522,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Security\Authorizer::__construct
      * @uses Laucov\WebFwk\Security\Authorizer::accredit
      * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
+     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
      * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
      * @uses Laucov\WebFwk\Security\Authorizer::setSession
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
@@ -497,6 +549,9 @@ class AuthorizerTest extends TestCase
             ->getTable('users_authn_methods')
             ->filter('id', '=', '2')
             ->deleteRecords();
+        
+        // Try to get the current authentication method - should fail.
+        $this->assertNull($this->authorizer->getCurrentAuthn());
 
         // Try to complete - should fail.
         $this->assertSame(
@@ -522,6 +577,50 @@ class AuthorizerTest extends TestCase
             $this->authorizer->authenticate(['value' => 12]),
             'Assert that result is AuthnResult::INVALID_METHOD',
         );
+    }
+
+    /**
+     * @covers ::getCurrentAuthn
+     * @uses Laucov\WebFwk\Entities\User::testPassword
+     * @uses Laucov\WebFwk\Models\UserModel::retrieveWithLogin
+     * @uses Laucov\WebFwk\Models\UserAuthnMethodModel::retrieveForUser
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Security\Authorizer::accredit
+     * @uses Laucov\WebFwk\Security\Authorizer::authenticate
+     * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
+     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
+     * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
+     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::createSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
+     * @dataProvider currentAuthnGetterInitProvider
+     */
+    public function testMustBeAuthenticatingToGetCurrentMethod(
+        callable $callable,
+    ): void {
+        $callable($this->authorizer, $this->services);
+        $this->expectException(\RuntimeException::class);
+        $this->authorizer->getCurrentAuthn();
     }
 
     /**

@@ -177,6 +177,24 @@ class Authorizer
     }
 
     /**
+     * Get the current authentication name.
+     */
+    public function getCurrentAuthn(): null|UserAuthnMethod
+    {
+        // Check status.
+        if ($this->getStatus() !== UserStatus::AUTHENTICATING) {
+            $message = 'Unexpected authentication query.';
+            throw new \RuntimeException($message);
+        }
+
+        // Get IDs.
+        $id = $this->session->get('user.authn.current');
+        $user_id = $this->user->id;
+
+        return $this->userAuthnMethodModel->retrieveForUser($user_id, $id);
+    }
+
+    /**
      * Get available authentication options for the current user.
      * 
      * @return array<AuthnOption>
