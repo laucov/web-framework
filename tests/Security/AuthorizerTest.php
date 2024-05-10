@@ -844,9 +844,9 @@ class AuthorizerTest extends TestCase
         $this->services = new ServiceProvider($this->config);
 
         // Create passwords.
-        $pass_a = password_hash('1234', PASSWORD_DEFAULT);
-        $pass_b = password_hash('4321', PASSWORD_DEFAULT);
-        $pass_c = password_hash('abcd', PASSWORD_DEFAULT);
+        $pass_a = '$2y$10$r9h/OqWhmUcHgry5stBWI.69AKtcm6kNUJ0nn16VnKo8fyp7T1OM2';
+        $pass_b = '$2y$10$08oGKnASGV6uwgohcFvIEuc410qRYfo5GiWVpQm9lO8Z30/zR86DC';
+        $pass_c = '$2y$10$XQtB8gUT20isJWm8hLvnE.jbfmZMZI5zLFrJpTDRwGeCbfOCVctrO';
 
         // Create tables.
         $conn = $this->services->db()->getConnection();
