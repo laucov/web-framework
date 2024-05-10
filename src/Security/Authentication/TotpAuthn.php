@@ -58,7 +58,7 @@ class TotpAuthn implements AuthnInterface
             ->setOffset($offset)
             ->setStep($step);
     }
-    
+
     /**
      * Get the authentication expected fields.
      * 

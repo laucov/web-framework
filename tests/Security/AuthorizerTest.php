@@ -590,7 +590,7 @@ class AuthorizerTest extends TestCase
             ->getTable('users_authn_methods')
             ->filter('id', '=', '2')
             ->deleteRecords();
-        
+
         // Try to get the current authentication method - should fail.
         $this->assertNull($this->authorizer->getCurrentAuthn());
 

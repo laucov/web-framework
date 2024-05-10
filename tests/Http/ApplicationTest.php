@@ -31,7 +31,6 @@ declare(strict_types=1);
 namespace Tests\Http;
 
 use Laucov\Http\Cookie\ResponseCookie;
-use Laucov\Http\Cookie\SameSite;
 use Laucov\Http\Message\OutgoingResponse;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Message\ResponseInterface;
