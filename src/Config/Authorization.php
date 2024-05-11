@@ -29,6 +29,8 @@
 namespace Laucov\WebFwk\Config;
 
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Models\UserAuthnMethodModel;
+use Laucov\WebFwk\Models\UserModel;
 use Laucov\WebFwk\Security\Authentication\AuthnFactory;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
 
@@ -43,4 +45,22 @@ class Authorization implements ConfigInterface
      * @var class-string<AuthnFactoryInterface>
      */
     public string $authnFactory = AuthnFactory::class;
+
+    /**
+     * User authentication method model class name.
+     * 
+     * The model must provide `Laucov\WebFwk\Entities\UserAuthnMethod` objects.
+     * 
+     * @var class-string<UserAuthnMethodModel>
+     */
+    public string $userAuthnMethodModel = UserAuthnMethodModel::class;
+
+    /**
+     * User model class name.
+     * 
+     * The model must provide `Laucov\WebFwk\Entities\User` objects.
+     * 
+     * @var class-string<UserModel>
+     */
+    public string $userModel = UserModel::class;
 }

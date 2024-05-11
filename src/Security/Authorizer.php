@@ -93,8 +93,10 @@ class Authorizer
 
         // Create models.
         $conn = $this->services->db()->getConnection();
-        $this->userModel = new UserModel($conn);
-        $this->userAuthnMethodModel = new UserAuthnMethodModel($conn);
+        $class_name = $this->config->userModel;
+        $this->userModel = new $class_name($conn);
+        $class_name = $this->config->userAuthnMethodModel;
+        $this->userAuthnMethodModel = new $class_name($conn);
     }
 
     /**
