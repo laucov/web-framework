@@ -143,6 +143,7 @@ class AuthorizerTest extends TestCase
      * @covers ::getAuthentication
      * @covers ::getAuthnOptions
      * @covers ::getCurrentAuthn
+     * @covers ::getUser
      * @covers ::getStatus
      * @covers ::logout
      * @covers ::requestAuthn
@@ -242,6 +243,9 @@ class AuthorizerTest extends TestCase
             'Assert that result is AuthnResult::NO_ACCREDITED_USER',
         );
 
+        // Ensure that we do not have a user object yet.
+        $this->assertNull($this->authorizer->getUser());
+
         // Test accreditation with invalid login.
         $this->assertSame(
             AccreditationResult::WRONG_LOGIN,
@@ -267,6 +271,11 @@ class AuthorizerTest extends TestCase
             'Assert that status is UserStatus::ACCREDITED',
         );
 
+        // Get user.
+        $user = $this->authorizer->getUser();
+        $this->assertSame(1, $user->id);
+        $this->assertSame('john', $user->login);
+
         // Test accreditation with MFA.
         $this->assertSame(
             AccreditationResult::SUCCESS,
@@ -278,6 +287,11 @@ class AuthorizerTest extends TestCase
             $this->authorizer->getStatus(),
             'Assert that status is UserStatus::AWAITING_AUTHENTICATION',
         );
+
+        // Get user.
+        $user = $this->authorizer->getUser();
+        $this->assertSame(2, $user->id);
+        $this->assertSame('mary', $user->login);
 
         // Check available authentication methods.
         $authn_methods = $this->authorizer->getAuthnOptions();
@@ -494,6 +508,9 @@ class AuthorizerTest extends TestCase
         // Assert that the session ID wasn't changed.
         $this->assertSame($prev_session_id, $curr_session->id);
 
+        // Assert that the user was removed.
+        $this->assertNull($this->authorizer->getUser());
+
         // Login without changing the session ID.
         $this->assertSame(
             AccreditationResult::SUCCESS,
@@ -530,6 +547,9 @@ class AuthorizerTest extends TestCase
         $this->assertSame('', $prev_session->id);
         // Assert that the session file was also removed.
         $this->assertFileDoesNotExist($session_filename);
+
+        // Assert that the user was removed.
+        $this->assertNull($this->authorizer->getUser());
     }
 
     /**

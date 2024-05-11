@@ -201,6 +201,39 @@ class Authorizer
     }
 
     /**
+     * Get available authentication options for the current user.
+     * 
+     * @return array<AuthnOption>
+     */
+    public function getAuthnOptions(): array
+    {
+        // Check if we have a user.
+        if ($this->getStatus() !== UserStatus::AWAITING_AUTHENTICATION) {
+            $message = 'Unexpected authentication options request.';
+            throw new \RuntimeException($message);
+        }
+
+        // Get authentication methods.
+        $authn_methods = $this->userAuthnMethodModel
+            ->withColumns('id', 'name')
+            ->listForUser($this->user->id);
+
+        // Create options.
+        $options = [];
+        $completed = $this->session->get('user.authn.completed', []);
+        foreach ($authn_methods as $authn_method) {
+            $option = new AuthnOption();
+            $id = $authn_method->id;
+            $option->id = $id;
+            $option->name = $authn_method->name;
+            $option->completed = array_key_exists($id, $completed);
+            $options[] = $option;
+        }
+
+        return $options;
+    }
+
+    /**
      * Get the current authentication name.
      */
     public function getCurrentAuthn(): null|AuthnInfo
@@ -237,39 +270,6 @@ class Authorizer
     }
 
     /**
-     * Get available authentication options for the current user.
-     * 
-     * @return array<AuthnOption>
-     */
-    public function getAuthnOptions(): array
-    {
-        // Check if we have a user.
-        if ($this->getStatus() !== UserStatus::AWAITING_AUTHENTICATION) {
-            $message = 'Unexpected authentication options request.';
-            throw new \RuntimeException($message);
-        }
-
-        // Get authentication methods.
-        $authn_methods = $this->userAuthnMethodModel
-            ->withColumns('id', 'name')
-            ->listForUser($this->user->id);
-
-        // Create options.
-        $options = [];
-        $completed = $this->session->get('user.authn.completed', []);
-        foreach ($authn_methods as $authn_method) {
-            $option = new AuthnOption();
-            $id = $authn_method->id;
-            $option->id = $id;
-            $option->name = $authn_method->name;
-            $option->completed = array_key_exists($id, $completed);
-            $options[] = $option;
-        }
-
-        return $options;
-    }
-
-    /**
      * Get the current authorization status.
      */
     public function getStatus(): UserStatus
@@ -299,6 +299,14 @@ class Authorizer
         return $this->session->get('user.authn.current') === null
             ? UserStatus::AWAITING_AUTHENTICATION
             : UserStatus::AUTHENTICATING;
+    }
+
+    /**
+     * Get the current user object.
+     */
+    public function getUser(): null|User
+    {
+        return $this->user;
     }
 
     /**
