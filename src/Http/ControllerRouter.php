@@ -189,7 +189,9 @@ class ControllerRouter extends Router
         ServiceProvider $services,
     ): static {
         $this->configProvider = $config;
+        $this->dependencies->setValue(ConfigProvider::class, $config);
         $this->serviceProvider = $services;
+        $this->dependencies->setValue(ServiceProvider::class, $services);
 
         return $this;
     }
