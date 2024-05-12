@@ -119,17 +119,38 @@ class ControllerRouterTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
+    public function testControllerClassMustExist(): void
+    {
+        // Create router.
+        $config = new ConfigProvider([]);
+        $router = new ControllerRouter();
+        $router->setProviders($config, new ServiceProvider($config));
+
+        // Attempt to set an invalid controller.
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Foo\Bar\Baz does not exist.');
+        $router->setController('Foo\Bar\Baz');
+    }
+
+    /**
+     * @covers ::setController
+     * @uses Laucov\WebFwk\Http\ControllerRouter::setProviders
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     */
     public function testControllerMustExtendAbstractController(): void
     {
-        // Create providers.
-        $c = new ConfigProvider([]);
-        $s = new ServiceProvider($c);
-
         // Create router.
+        $config = new ConfigProvider([]);
         $router = new ControllerRouter();
-        $router->setProviders($c, $s);
+        $router->setProviders($config, new ServiceProvider($config));
 
+        // Attempt to set an invalid controller.
         $this->expectException(\InvalidArgumentException::class);
+        $abstract_ctrl = AbstractController::class;
+        $message = 'All controller classes must extend ' . $abstract_ctrl;
+        $this->expectExceptionMessage($message);
         $router->setController(G::class);
     }
 }

@@ -133,16 +133,16 @@
         },
         {
             "name": "laucov/cli",
-            "version": "v0.1.0",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/cli.git",
-                "reference": "29bdf71619018ab0f4a829a875362d7177f049db"
+                "reference": "231980c771da7e68283b071ed3ec2dd1a44606b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/cli/zipball/29bdf71619018ab0f4a829a875362d7177f049db",
-                "reference": "29bdf71619018ab0f4a829a875362d7177f049db",
+                "url": "https://api.github.com/repos/laucov/cli/zipball/231980c771da7e68283b071ed3ec2dd1a44606b1",
+                "reference": "231980c771da7e68283b071ed3ec2dd1a44606b1",
                 "shasum": ""
             },
             "require-dev": {
@@ -168,22 +168,22 @@
             "description": "CLI routing and output tools.",
             "support": {
                 "issues": "https://github.com/laucov/cli/issues",
-                "source": "https://github.com/laucov/cli/tree/v0.1.0"
+                "source": "https://github.com/laucov/cli/tree/v0.1.2"
             },
-            "time": "2024-04-21T17:42:26+00:00"
+            "time": "2024-05-04T01:22:21+00:00"
         },
         {
             "name": "laucov/db",
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/db.git",
-                "reference": "8e13085325bcc50bd3ec6f0d190d242bcf3613dc"
+                "reference": "0ab15cf317f2f66c014d7cb7d17375ff41a69872"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/db/zipball/8e13085325bcc50bd3ec6f0d190d242bcf3613dc",
-                "reference": "8e13085325bcc50bd3ec6f0d190d242bcf3613dc",
+                "url": "https://api.github.com/repos/laucov/db/zipball/0ab15cf317f2f66c014d7cb7d17375ff41a69872",
+                "reference": "0ab15cf317f2f66c014d7cb7d17375ff41a69872",
                 "shasum": ""
             },
             "require-dev": {
@@ -209,9 +209,9 @@
             "description": "Library for database management and operation.",
             "support": {
                 "issues": "https://github.com/laucov/db/issues",
-                "source": "https://github.com/laucov/db/tree/v1.1.2"
+                "source": "https://github.com/laucov/db/tree/v1.1.3"
             },
-            "time": "2024-04-27T11:48:17+00:00"
+            "time": "2024-05-12T12:00:36+00:00"
         },
         {
             "name": "laucov/files",
@@ -256,16 +256,16 @@
         },
         {
             "name": "laucov/http",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/http.git",
-                "reference": "3e7460e8c7c4f71e0a20323cb33435ab00468ba4"
+                "reference": "b9cc70c288cf0f262bdaeb6f56f249270480052b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/http/zipball/3e7460e8c7c4f71e0a20323cb33435ab00468ba4",
-                "reference": "3e7460e8c7c4f71e0a20323cb33435ab00468ba4",
+                "url": "https://api.github.com/repos/laucov/http/zipball/b9cc70c288cf0f262bdaeb6f56f249270480052b",
+                "reference": "b9cc70c288cf0f262bdaeb6f56f249270480052b",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "Library for HTTP communication lifecycle control.",
             "support": {
                 "issues": "https://github.com/laucov/http/issues",
-                "source": "https://github.com/laucov/http/tree/v1.6.0"
+                "source": "https://github.com/laucov/http/tree/v1.6.1"
             },
-            "time": "2024-04-28T17:41:21+00:00"
+            "time": "2024-05-12T14:38:37+00:00"
         },
         {
             "name": "laucov/injection",
@@ -518,16 +518,16 @@
         },
         {
             "name": "laucov/views",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/views.git",
-                "reference": "dc2bc420bc8e6ef45c6638dbbea3df523a315aee"
+                "reference": "25383a82acf35d4682365a122ab88bfbfe73af6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/views/zipball/dc2bc420bc8e6ef45c6638dbbea3df523a315aee",
-                "reference": "dc2bc420bc8e6ef45c6638dbbea3df523a315aee",
+                "url": "https://api.github.com/repos/laucov/views/zipball/25383a82acf35d4682365a122ab88bfbfe73af6f",
+                "reference": "25383a82acf35d4682365a122ab88bfbfe73af6f",
                 "shasum": ""
             },
             "require-dev": {
@@ -553,9 +553,9 @@
             "description": "Library for view management and templating.",
             "support": {
                 "issues": "https://github.com/laucov/views/issues",
-                "source": "https://github.com/laucov/views/tree/v1.0.0"
+                "source": "https://github.com/laucov/views/tree/v1.0.2"
             },
-            "time": "2024-03-08T12:50:18+00:00"
+            "time": "2024-05-10T14:31:01+00:00"
         }
     ],
     "packages-dev": [

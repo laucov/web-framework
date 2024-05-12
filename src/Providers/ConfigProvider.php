@@ -69,6 +69,12 @@ class ConfigProvider
      */
     public function addConfig(string $class_name): static
     {
+        // Check if the class exists.
+        if (!class_exists($class_name)) {
+            $message = "{$class_name} does not exist.";
+            throw new \InvalidArgumentException($message);
+        }
+
         // Check if the class implements ConfigInterface.
         if (!is_a($class_name, ConfigInterface::class, true)) {
             $msg = 'All configuration classes must implement %s.';

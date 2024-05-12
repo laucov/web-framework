@@ -102,6 +102,17 @@ class ConfigProviderTest extends TestCase
     }
 
     /**
+     * @covers ::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     */
+    public function testConfigurationClassMustExist(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('\Foo\Bar\Baz does not exist.');
+        $this->provider->addConfig('\Foo\Bar\Baz');
+    }
+
+    /**
      * @covers ::getConfig
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
@@ -119,6 +130,9 @@ class ConfigProviderTest extends TestCase
     public function testMustUseConfigurationClassesToSetConfigs(): void
     {
         $this->expectException(\InvalidArgumentException::class);
+        $message = 'All configuration classes must implement %s.';
+        $message = sprintf($message, ConfigInterface::class);
+        $this->expectExceptionMessage($message);
         $this->provider->addConfig(\stdClass::class);
     }
 

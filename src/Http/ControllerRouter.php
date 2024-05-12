@@ -170,9 +170,14 @@ class ControllerRouter extends Router
      */
     public function setController(string $class_name): static
     {
+        if (!class_exists($class_name)) {
+            $message = $class_name . ' does not exist.';
+            throw new \InvalidArgumentException($message);
+        }
+
         if (!is_a($class_name, AbstractController::class, true)) {
-            $parent = AbstractController::class;
-            $message = "The passed class name does not extend {$parent}.";
+            $message = 'All controller classes must extend %s.';
+            $message = sprintf($message, AbstractController::class);
             throw new \InvalidArgumentException($message);
         }
 
