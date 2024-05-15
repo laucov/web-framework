@@ -174,16 +174,16 @@
         },
         {
             "name": "laucov/db",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/db.git",
-                "reference": "0ab15cf317f2f66c014d7cb7d17375ff41a69872"
+                "reference": "61ab0fb40cd4841ff7eed40a2b7a3a1648aea5d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/db/zipball/0ab15cf317f2f66c014d7cb7d17375ff41a69872",
-                "reference": "0ab15cf317f2f66c014d7cb7d17375ff41a69872",
+                "url": "https://api.github.com/repos/laucov/db/zipball/61ab0fb40cd4841ff7eed40a2b7a3a1648aea5d5",
+                "reference": "61ab0fb40cd4841ff7eed40a2b7a3a1648aea5d5",
                 "shasum": ""
             },
             "require-dev": {
@@ -209,9 +209,9 @@
             "description": "Library for database management and operation.",
             "support": {
                 "issues": "https://github.com/laucov/db/issues",
-                "source": "https://github.com/laucov/db/tree/v1.1.3"
+                "source": "https://github.com/laucov/db/tree/v1.1.4"
             },
-            "time": "2024-05-12T12:00:36+00:00"
+            "time": "2024-05-13T19:38:16+00:00"
         },
         {
             "name": "laucov/files",
@@ -387,16 +387,16 @@
         },
         {
             "name": "laucov/modeling",
-            "version": "v0.5.0",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/modeling.git",
-                "reference": "aa24d69f8626ff97c0efca3f30eda18d2b0cfc78"
+                "reference": "7764573ff70a03e7f32ee9ca10686e58cd030819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/modeling/zipball/aa24d69f8626ff97c0efca3f30eda18d2b0cfc78",
-                "reference": "aa24d69f8626ff97c0efca3f30eda18d2b0cfc78",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/7764573ff70a03e7f32ee9ca10686e58cd030819",
+                "reference": "7764573ff70a03e7f32ee9ca10686e58cd030819",
                 "shasum": ""
             },
             "require": {
@@ -426,9 +426,9 @@
             "description": "Library for data modeling and database management.",
             "support": {
                 "issues": "https://github.com/laucov/modeling/issues",
-                "source": "https://github.com/laucov/modeling/tree/v0.5.0"
+                "source": "https://github.com/laucov/modeling/tree/v0.6.0"
             },
-            "time": "2024-05-03T16:09:18+00:00"
+            "time": "2024-05-15T14:45:14+00:00"
         },
         {
             "name": "laucov/sessions",
