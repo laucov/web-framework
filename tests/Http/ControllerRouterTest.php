@@ -189,7 +189,7 @@ class ControllerRouterTest extends TestCase
             ->addPrelude('example', ExamplePrelude::class, [])
             ->setPreludes('example')
             ->setCallableRoute('GET', '/', $callable);
-        
+
         // Test output.
         $request = new IncomingRequest('');
         $result = (string) $router->findRoute($request)->run()->getBody();
