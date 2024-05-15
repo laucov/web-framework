@@ -30,7 +30,10 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Laucov\Http\Message\IncomingRequest;
+use Laucov\Http\Routing\Call\Interfaces\PreludeInterface;
 use Laucov\Http\Routing\Router;
+use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 use Laucov\WebFwk\Http\AbstractController;
 use Laucov\WebFwk\Http\ControllerRouter;
 use Laucov\WebFwk\Http\Crud;
@@ -152,6 +155,66 @@ class ControllerRouterTest extends TestCase
         $message = 'All controller classes must extend ' . $abstract_ctrl;
         $this->expectExceptionMessage($message);
         $router->setController(G::class);
+    }
+
+    /**
+     * @covers ::setProviders
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     */
+    public function testProvidersCanBeUsedAsDependencies(): void
+    {
+        // Create router.
+        $config = new ConfigProvider([]);
+        $config->addConfig(ExampleConfig::class);
+        $router = new ControllerRouter();
+        $router->setProviders($config, new ServiceProvider($config));
+
+        // Create function.
+        $callable = function (ServiceProvider $s, ConfigProvider $c): string {
+            $config = $c->getConfig(ExampleConfig::class);
+            $config->paramA = 'bar';
+            $message = 'Parameters are "%s" and "%s".';
+            return sprintf($message, $config->paramA, $config->paramB);
+        };
+
+        // Set route and prelude.
+        $router
+            ->addPrelude('example', ExamplePrelude::class, [])
+            ->setPreludes('example')
+            ->setCallableRoute('GET', '/', $callable);
+        
+        // Test output.
+        $request = new IncomingRequest('');
+        $result = (string) $router->findRoute($request)->run()->getBody();
+        $this->assertSame('Parameters are "bar" and "baz".', $result);
+    }
+}
+
+class ExampleConfig implements ConfigInterface
+{
+    public string $paramA = 'foo';
+    public string $paramB = 'bar';
+}
+
+class ExamplePrelude implements PreludeInterface
+{
+    public function __construct(
+        protected ConfigProvider $config,
+        protected ServiceProvider $services,
+    ) {
+    }
+
+    public function run(): null
+    {
+        $this->config->getConfig(ExampleConfig::class)->paramB = 'baz';
+        return null;
     }
 }
 
