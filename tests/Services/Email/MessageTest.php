@@ -47,14 +47,18 @@ final class MessageTest extends TestCase
     /**
      * @covers ::__toString
      * @covers ::addRecipient
+     * @covers ::getContent
      * @covers ::getRecipients
+     * @covers ::getReplyRecipient
+     * @covers ::getSender
+     * @covers ::getSubject
      * @covers ::setContent
      * @covers ::setSender
      * @covers ::setSubject
      */
-    public function testSetsHeadersAndWrapsContents(): void
+    public function testCanCompose(): void
     {
-        // Add a recipient.
+        // Setup message.
         $this->message
             ->addRecipient('john.doe@hmail.co.uk')
             ->addRecipient('juan.doe@imail.mx', 'Juan Doe', RcptType::TO)
@@ -74,7 +78,63 @@ final class MessageTest extends TestCase
             )
             ->addRecipient('hans.doe@mmail.de', 'Hans Doe', RcptType::BCC);
         
-        // Assert message - headers and wrapped content.
+        // Assert sender.
+        $this->assertSame(
+            'Jack Doe <jack.doe@nmail.com>',
+            $this->message->getSender(),
+        );
+        
+        // Assert recipients - do not filter.
+        $recipients = $this->message->getRecipients();
+        $this->assertIsArray($recipients);
+        $this->assertCount(6, $recipients);
+        $this->assertSame('john.doe@hmail.co.uk', $recipients[0]);
+        $this->assertSame('Juan Doe <juan.doe@imail.mx>', $recipients[1]);
+        $this->assertSame('João Doe <joao.doe@jmail.com.br>', $recipients[2]);
+        $this->assertSame('Jean Doe <jean.doe@kmail.fr>', $recipients[3]);
+        $this->assertSame('giovanni.doe@lmail.it', $recipients[4]);
+        $this->assertSame('Hans Doe <hans.doe@mmail.de>', $recipients[5]);
+
+        // Assert recipients - main recipients.
+        $recipients = $this->message->getRecipients(RcptType::TO);
+        $this->assertCount(2, $recipients);
+        $this->assertSame('john.doe@hmail.co.uk', $recipients[0]);
+        $this->assertSame('Juan Doe <juan.doe@imail.mx>', $recipients[1]);
+
+        // Assert recipients - CC recipients.
+        $recipients = $this->message->getRecipients(RcptType::CC);
+        $this->assertCount(2, $recipients);
+        $this->assertSame('João Doe <joao.doe@jmail.com.br>', $recipients[0]);
+        $this->assertSame('Jean Doe <jean.doe@kmail.fr>', $recipients[1]);
+
+        // Assert recipients - BCC recipients.
+        $recipients = $this->message->getRecipients(RcptType::BCC);
+        $this->assertCount(2, $recipients);
+        $this->assertSame('giovanni.doe@lmail.it', $recipients[0]);
+        $this->assertSame('Hans Doe <hans.doe@mmail.de>', $recipients[1]);
+
+        // Assert Reply-To header.
+        $this->assertNull($this->message->getReplyRecipient());
+
+        // Assert subject.
+        $this->assertSame('Greetings, Johns...', $this->message->getSubject());
+
+        // Assert content.
+        $this->assertSame(
+            'Hello, fellow same-name international companions.' . "\r\n"
+                . 'I must unfortunately inform you that you are currently '
+                . 'cursed, as I was last'
+                . "\r\n"
+                . 'night, by this electronic message.'
+                . "\r\n"
+                . 'A very evil witch shall visit you this night if you are '
+                . 'not able to forward'
+                . "\r\n"
+                . 'this letter to at least 5 other people.',
+            $this->message->getContent(),
+        );
+
+        // Assert raw message.
         $this->assertSame(
             'From: Jack Doe <jack.doe@nmail.com>'
                 . "\r\n"
@@ -104,20 +164,10 @@ final class MessageTest extends TestCase
             (string) $this->message,
         );
 
-        // Assert recipients.
-        $recipients = $this->message->getRecipients();
-        $this->assertIsArray($recipients);
-        $this->assertCount(6, $recipients);
-        $this->assertSame('john.doe@hmail.co.uk', $recipients[0]);
-        $this->assertSame('Juan Doe <juan.doe@imail.mx>', $recipients[1]);
-        $this->assertSame('João Doe <joao.doe@jmail.com.br>', $recipients[2]);
-        $this->assertSame('Jean Doe <jean.doe@kmail.fr>', $recipients[3]);
-        $this->assertSame('giovanni.doe@lmail.it', $recipients[4]);
-        $this->assertSame('Hans Doe <hans.doe@mmail.de>', $recipients[5]);
-
         // Test setting a sender without name.
         $message = new Message();
         $message->setSender('johnny.doe@foobar.com');
+        $this->assertSame('johnny.doe@foobar.com', $message->getSender());
         $this->assertSame(
             'From: johnny.doe@foobar.com' . "\r\n"
                 . 'MIME-Version: 1.0' . "\r\n"
@@ -135,6 +185,14 @@ final class MessageTest extends TestCase
             'Foobar Company',
         );
         $this->assertSame(
+            'John Doe <salesman.joe@foobar.co.uk>',
+            $message->getSender(),
+        );
+        $this->assertSame(
+            'Foobar Company <sales@foobar.co.uk>',
+            $message->getReplyRecipient(),
+        );
+        $this->assertSame(
             'From: John Doe <salesman.joe@foobar.co.uk>' . "\r\n"
                 . 'Reply-To: Foobar Company <sales@foobar.co.uk>' . "\r\n"
                 . 'MIME-Version: 1.0' . "\r\n"
@@ -147,6 +205,14 @@ final class MessageTest extends TestCase
             'salesman.joe@foobar.co.uk',
             null,
             'sales@foobar.co.uk',
+        );
+        $this->assertSame(
+            'salesman.joe@foobar.co.uk',
+            $message->getSender(),
+        );
+        $this->assertSame(
+            'sales@foobar.co.uk',
+            $message->getReplyRecipient(),
         );
         $this->assertSame(
             'From: salesman.joe@foobar.co.uk' . "\r\n"

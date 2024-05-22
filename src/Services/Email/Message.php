@@ -126,11 +126,49 @@ class Message
     }
 
     /**
+     * Get the reply expected recipient (or the "Reply-To" header value).
+     */
+    public function getReplyRecipient(): null|string
+    {
+        return $this->replyTo;
+    }
+
+    /**
+     * Get the currently set content.
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    /**
      * Get all message recipients.
      */
-    public function getRecipients(): array
+    public function getRecipients(null|RecipientType $filter = null): array
     {
-        return array_merge($this->to, $this->cc, $this->bcc);
+        // Merge if no filter was passed.
+        if ($filter === null) {
+            return array_merge($this->to, $this->cc, $this->bcc);
+        }
+
+        // Get the specific list.
+        return $this->{$filter->value};
+    }
+
+    /**
+     * Get the message sender (or the "From" header value).
+     */
+    public function getSender(): null|string
+    {
+        return $this->from;
+    }
+
+    /**
+     * Get the subject.
+     */
+    public function getSubject(): null|string
+    {
+        return $this->subject;
     }
 
     /**
