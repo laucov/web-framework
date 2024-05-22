@@ -27,6 +27,7 @@
         "laucov/sessions": "^1.0",
         "laucov/modeling": "^0",
         "laucov/cli": "^0",
-        "covaleski/otp": "^1.1"
+        "covaleski/otp": "^1.1",
+        "phpmailer/phpmailer": "^6.9"
     }
 }

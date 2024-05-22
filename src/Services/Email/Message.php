@@ -143,6 +143,8 @@ class Message
 
     /**
      * Get all message recipients.
+     * 
+     * @return array<string>
      */
     public function getRecipients(null|RecipientType $filter = null): array
     {
