@@ -58,25 +58,29 @@ class PhpMailerSmtpService implements ServiceInterface
         $mailer = $this->createMailer();
         $this->setupMailer($mailer);
 
-        // Set sender ("From" and "Reply-To").
-        $sender = $message->getSender()
-            ?? $this->config->from
+        // Set sender ("From").
+        $sender = $message->getSender();
+        $from_address = $sender->address
+            ?? $this->config->fromAddress
             ?? $this->config->user;
-        $mailer->setFrom($sender);
+        $from_name = $sender->name ?? $this->config->fromName;
+        $mailer->setFrom($from_address, $from_name);
+
+        // Set expected reply recipient ("Reply-To").
         $reply_to = $message->getReplyRecipient();
         if ($reply_to !== null) {
-            $mailer->addReplyTo($reply_to);
+            $mailer->addReplyTo($reply_to->address, $reply_to->name ?? '');
         }
 
         // Set recipients.
         foreach ($message->getRecipients(RcptType::TO) as $mailbox) {
-            $mailer->addAddress($mailbox);
+            $mailer->addAddress($mailbox->address, $mailbox->name ?? '');
         }
         foreach ($message->getRecipients(RcptType::CC) as $mailbox) {
-            $mailer->addCC($mailbox);
+            $mailer->addCC($mailbox->address, $mailbox->name ?? '');
         }
         foreach ($message->getRecipients(RcptType::BCC) as $mailbox) {
-            $mailer->addBCC($mailbox);
+            $mailer->addBCC($mailbox->address, $mailbox->name ?? '');
         }
 
         // Set message information.

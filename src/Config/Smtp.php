@@ -36,11 +36,16 @@ use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 class Smtp implements ConfigInterface
 {
     /**
-     * Default "From" field.
+     * Default "From" e-mail address.
      * 
      * The user login will be used if this field is `null`.
      */
-    public null|string $from = null;
+    public null|string $fromAddress = null;
+
+    /**
+     * Default "From" mailbox name.
+     */
+    public null|string $fromName = null;
 
     /**
      * Host.

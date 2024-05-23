@@ -41,13 +41,14 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Laucov\WebFwk\Services\PhpMailerSmtpService
  */
-class PhpMailerEmailServiceTest extends TestCase
+class PhpMailerSmtpServiceTest extends TestCase
 {
     /**
      * @covers ::__construct
      * @covers ::createMailer
      * @covers ::send
      * @covers ::setupMailer
+     * @uses Laucov\WebFwk\Services\Email\Mailbox::__construct
      * @uses Laucov\WebFwk\Services\Email\Message::addRecipient
      * @uses Laucov\WebFwk\Services\Email\Message::getContent
      * @uses Laucov\WebFwk\Services\Email\Message::getRecipients
@@ -55,6 +56,7 @@ class PhpMailerEmailServiceTest extends TestCase
      * @uses Laucov\WebFwk\Services\Email\Message::getSender
      * @uses Laucov\WebFwk\Services\Email\Message::getSubject
      * @uses Laucov\WebFwk\Services\Email\Message::setContent
+     * @uses Laucov\WebFwk\Services\Email\Message::setReplyRecipient
      * @uses Laucov\WebFwk\Services\Email\Message::setSender
      * @uses Laucov\WebFwk\Services\Email\Message::setSubject
      */
@@ -96,8 +98,8 @@ class PhpMailerEmailServiceTest extends TestCase
             ->expects($this->exactly(2))
             ->method('addAddress')
             ->withConsecutive(
-                ['Jimmy <jimmy.vixay@inlook.com>'],
-                ['Sabrina <sabrina.durrah@fmail.com>'],
+                ['jimmy.vixay@inlook.com', 'Jimmy'],
+                ['sabrina.durrah@fmail.com', 'Sabrina'],
             );
         $mock
             ->expects($this->exactly(2))
@@ -167,11 +169,12 @@ class PhpMailerEmailServiceTest extends TestCase
             ->method('send');
 
         // Test "From" fallback with Smtp->from.
-        $config->from = 'Johnny <johnny.doe@othermail.com>';
+        $config->fromAddress = 'johnny.doe@othermail.com';
+        $config->fromName = 'Johnny';
         $mock
             ->expects($this->once())
             ->method('setFrom')
-            ->with('Johnny <johnny.doe@othermail.com>');
+            ->with('johnny.doe@othermail.com', 'Johnny');
         $service->send($message);
 
         // Create mock #3.
@@ -184,21 +187,23 @@ class PhpMailerEmailServiceTest extends TestCase
             ->expects($this->once())
             ->method('send');
 
-        // Test explicit "From" from message.
+        // Test explicit "From" and "Reply-To" from message.
         $message->setSender(
             'noreply@automail.com',
             'Someone',
+        );
+        $message->setReplyRecipient(
             'contact@foomail.com',
             'Contact Us',
         );
         $mock
             ->expects($this->once())
             ->method('setFrom')
-            ->with('Someone <noreply@automail.com>');
+            ->with('noreply@automail.com', 'Someone');
         $mock
             ->expects($this->once())
             ->method('addReplyTo')
-            ->with('Contact Us <contact@foomail.com>');
+            ->with('contact@foomail.com', 'Contact Us');
         $service->send($message);
 
         // Just ensure the service actually uses PHPMailer.
