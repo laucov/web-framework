@@ -36,14 +36,14 @@ class Message
     /**
      * Blind carbon copy recipient mailboxes.
      * 
-     * @var array<string>
+     * @var array<Mailbox>
      */
     protected array $bcc = [];
 
     /**
      * Carbon copy recipient mailboxes.
      * 
-     * @var array<string>
+     * @var array<Mailbox>
      */
     protected array $cc = [];
 
@@ -55,12 +55,12 @@ class Message
     /**
      * Sender mailbox.
      */
-    protected null|string $from = null;
+    protected null|Mailbox $from = null;
 
     /**
      * Reply-To mailbox.
      */
-    protected null|string $replyTo = null;
+    protected null|Mailbox $replyTo = null;
 
     /**
      * Message subject.
@@ -70,7 +70,7 @@ class Message
     /**
      * Main recipient mailboxes.
      * 
-     * @var array<string>
+     * @var array<Mailbox>
      */
     protected array $to = [];
 
@@ -80,39 +80,6 @@ class Message
     protected string $type = 'plain';
 
     /**
-     * Gets a string representation of the message.
-     */
-    public function __toString(): string
-    {
-        // Build envelope.
-        $envelope = [];
-        if ($this->from !== null) {
-            $envelope['from'] = $this->from;
-        }
-        if ($this->replyTo !== null) {
-            $envelope['reply_to'] = $this->replyTo;
-        }
-        if (count($this->to) > 0) {
-            $envelope['to'] = implode(', ', $this->to);
-        }
-        if (count($this->cc) > 0) {
-            $envelope['cc'] = implode(', ', $this->cc);
-        }
-        if ($this->subject !== null) {
-            $envelope['subject'] = $this->subject;
-        }
-
-        // Build bodies.
-        $bodies = [];
-        $bodies[0]['type'] = TYPETEXT;
-        $bodies[0]['subtype'] = $this->type;
-        $bodies[0]['charset'] = 'UTF-8';
-        $bodies[0]['contents.data'] = $this->content;
-
-        return imap_mail_compose($envelope, $bodies);
-    }
-
-    /**
      * Add a recipient to the message.
      */
     public function addRecipient(
@@ -120,17 +87,8 @@ class Message
         null|string $name = null,
         RecipientType $type = RecipientType::TO,
     ): static {
-        $mailbox = $name === null ? $address : "{$name} <{$address}>";
-        $this->{$type->value}[] = $mailbox;
+        $this->{$type->value}[] = new Mailbox($address, $name);
         return $this;
-    }
-
-    /**
-     * Get the reply expected recipient (or the "Reply-To" header value).
-     */
-    public function getReplyRecipient(): null|string
-    {
-        return $this->replyTo;
     }
 
     /**
@@ -144,7 +102,7 @@ class Message
     /**
      * Get all message recipients.
      * 
-     * @return array<string>
+     * @return array<Mailbox>
      */
     public function getRecipients(null|RecipientType $filter = null): array
     {
@@ -158,9 +116,17 @@ class Message
     }
 
     /**
+     * Get the reply expected recipient (or the "Reply-To" header value).
+     */
+    public function getReplyRecipient(): null|Mailbox
+    {
+        return $this->replyTo;
+    }
+
+    /**
      * Get the message sender (or the "From" header value).
      */
-    public function getSender(): null|string
+    public function getSender(): null|Mailbox
     {
         return $this->from;
     }
@@ -174,6 +140,14 @@ class Message
     }
 
     /**
+     * Get the content MIME type.
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
      * Set the message body content.
      * 
      * Ensures each line has 78 characters or less.
@@ -184,7 +158,7 @@ class Message
         $this->content = '';
 
         // Set main content subtype option.
-        $this->type = $is_html ? 'html' : 'plain';
+        $this->type = $is_html ? 'text/html' : 'text/plain';
 
         // Get and parse lines.
         $lines = array_map('trim', explode("\n", $content));
@@ -221,26 +195,25 @@ class Message
     }
 
     /**
+     * Set the reply expected recipient.
+     */
+    public function setReplyRecipient(
+        string $address,
+        null|string $name = null,
+    ): static {
+        $this->replyTo = new Mailbox($address, $name);
+        return $this;
+    }
+
+    /**
      * Set the message sender.
      */
     public function setSender(
         string $address,
         null|string $name = null,
-        null|string $reply_to_address = null,
-        null|string $reply_to_name = null,
     ): static {
-        // Set sender mailbox.
-        $this->from = $name === null ? $address : "{$name} <{$address}>";
+        $this->from = new Mailbox($address, $name);
         
-        // Set Reply-To header value.
-        if ($reply_to_address !== null) {
-            $this->replyTo = $reply_to_name === null
-                ? $reply_to_address
-                : "{$reply_to_name} <{$reply_to_address}>";
-        } else {
-            $this->replyTo = null;
-        }
-
         return $this;
     }
 

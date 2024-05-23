@@ -36,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Laucov\WebFwk\Services\Email\Message
+ * @covers \Laucov\WebFwk\Services\Email\Mailbox
  */
 final class MessageTest extends TestCase
 {
@@ -45,20 +46,199 @@ final class MessageTest extends TestCase
     protected Message $message;
 
     /**
-     * @covers ::__toString
      * @covers ::addRecipient
-     * @covers ::getContent
      * @covers ::getRecipients
      * @covers ::getReplyRecipient
      * @covers ::getSender
-     * @covers ::getSubject
      * @covers ::setContent
+     * @covers ::setReplyRecipient
      * @covers ::setSender
-     * @covers ::setSubject
+     * @uses Laucov\WebFwk\Services\Email\Mailbox::__construct
+     * @uses Laucov\WebFwk\Services\Email\Mailbox::__toString
+     * @uses Laucov\WebFwk\Services\Email\Message::getContent
+     * @uses Laucov\WebFwk\Services\Email\Message::setContent
+     * @uses Laucov\WebFwk\Services\Email\Message::getSubject
+     * @uses Laucov\WebFwk\Services\Email\Message::setSubject
      */
-    public function testCanCompose(): void
+    public function testCanSetAndGetMailboxes(): void
     {
-        // Setup message.
+        // Assert sender.
+        $this->assertMailbox(
+            'jack.doe@nmail.com',
+            'Jack Doe',
+            'Jack Doe <jack.doe@nmail.com>',
+            $this->message->getSender(),
+        );
+
+        // Test sender without a mailbox name.
+        $this->message->setSender('jack.doe@nmail.com');
+        $this->assertMailbox(
+            'jack.doe@nmail.com',
+            null,
+            'jack.doe@nmail.com',
+            $this->message->getSender(),
+        );
+
+        // Assert recipients - "To" header.
+        $to = $this->message->getRecipients(RcptType::TO);
+        $this->assertIsArray($to);
+        $this->assertCount(2, $to);
+        $this->assertMailbox(
+            'john.doe@hmail.co.uk',
+            null,
+            'john.doe@hmail.co.uk',
+            $to[0],
+        );
+        $this->assertMailbox(
+            'juan.doe@imail.mx',
+            'Juan Doe',
+            'Juan Doe <juan.doe@imail.mx>',
+            $to[1],
+        );
+
+        // Assert recipients - "cc" header.
+        $cc = $this->message->getRecipients(RcptType::CC);
+        $this->assertIsArray($cc);
+        $this->assertCount(2, $cc);
+        $this->assertMailbox(
+            'joao.doe@jmail.com.br',
+            'João Doe',
+            'João Doe <joao.doe@jmail.com.br>',
+            $cc[0],
+        );
+        $this->assertMailbox(
+            'jean.doe@kmail.fr',
+            'Jean Doe',
+            'Jean Doe <jean.doe@kmail.fr>',
+            $cc[1],
+        );
+
+        // Assert recipients - "Bcc" header.
+        $bcc = $this->message->getRecipients(RcptType::BCC);
+        $this->assertIsArray($bcc);
+        $this->assertCount(2, $bcc);
+        $this->assertMailbox(
+            'giovanni.doe@lmail.it',
+            null,
+            'giovanni.doe@lmail.it',
+            $bcc[0],
+        );
+        $this->assertMailbox(
+            'hans.doe@mmail.de',
+            'Hans Doe',
+            'Hans Doe <hans.doe@mmail.de>',
+            $bcc[1],
+        );
+
+        // Assert recipients - no filter.
+        $recipients = $this->message->getRecipients();
+        $this->assertIsArray($recipients);
+        $this->assertCount(6, $recipients);
+        $this->assertSame($to[0], $recipients[0]);
+        $this->assertSame($to[1], $recipients[1]);
+        $this->assertSame($cc[0], $recipients[2]);
+        $this->assertSame($cc[1], $recipients[3]);
+        $this->assertSame($bcc[0], $recipients[4]);
+        $this->assertSame($bcc[1], $recipients[5]);
+        
+        // Assert reply recipient (Reply-To).
+        $this->assertNull($this->message->getReplyRecipient());
+
+        // Set and assert another reply recipient.
+        $this->message->setReplyRecipient('contact@doe.com');
+        $this->assertMailbox(
+            'contact@doe.com',
+            null,
+            'contact@doe.com',
+            $this->message->getReplyRecipient(),
+        );
+
+        // Set a complete mailbox for the reply recipient.
+        $this->message->setReplyRecipient('jack@doe.com', 'Jack Inbox');
+        $this->assertMailbox(
+            'jack@doe.com',
+            'Jack Inbox',
+            'Jack Inbox <jack@doe.com>',
+            $this->message->getReplyRecipient(),
+        );
+    }
+
+    /**
+     * @covers ::getContent
+     * @covers ::getSubject
+     * @covers ::getType
+     * @covers ::setContent
+     * @covers ::setSubject
+     * @uses Laucov\WebFwk\Services\Email\Mailbox::__construct
+     * @uses Laucov\WebFwk\Services\Email\Message::addRecipient
+     * @uses Laucov\WebFwk\Services\Email\Message::setSender
+     */
+    public function testCanSetAndGetContents(): void
+    {
+        // Assert subject.
+        $this->assertSame('Greetings, Johns...', $this->message->getSubject());
+
+        // Assert content.
+        // Ensure line-breaks contain carriage returns.
+        // Ensure wraps long lines (above 78 characters).
+        $this->assertSame('text/plain', $this->message->getType());
+        $this->assertSame(
+            'Hello, fellow same-name international companions.'
+                . "\r\n"
+                . 'I must unfortunately inform you that you are currently '
+                . 'cursed, as I was last'
+                . "\r\n"
+                . 'night, by this electronic message.'
+                . "\r\n"
+                . 'A very evil witch shall visit you this night if you are '
+                . 'not able to forward'
+                . "\r\n"
+                . 'this letter to at least 5 other people.',
+            $this->message->getContent(),
+        );
+
+        // Set html content.
+        $this->message->setContent(
+            '<p>Hello, fellow same-name international companions.</p>'
+                . "\n"
+                . '<p>I must unfortunately inform you that you are '
+                . 'currently <span class="very-scary-text">cursed</span>, '
+                . 'as I was last night, by this electronic message.</p>'
+                . "\n"
+                . '<p>A very evil witch shall visit you this night if you '
+                . 'are not able to forward this letter to at least 5 other '
+                . 'people.</p>',
+            true,
+        );
+
+        // Assert content.
+        $this->assertSame('text/html', $this->message->getType());
+        $this->assertSame(
+            '<p>Hello, fellow same-name international companions.</p>'
+                . "\r\n"
+                . '<p>I must unfortunately inform you that you are '
+                . 'currently <span'
+                . "\r\n"
+                . 'class="very-scary-text">cursed</span>, as I was last night, by this electronic'
+                . "\r\n"
+                . 'message.</p>'
+                . "\r\n"
+                . '<p>A very evil witch shall visit you this night if you '
+                . 'are not able to forward'
+                . "\r\n"
+                . 'this letter to at least 5 other '
+                . 'people.</p>',
+            $this->message->getContent(),
+        );
+    }
+    
+    /**
+     * This method is called before each test.
+     */
+    public function setUp(): void
+    {
+        // Create message.
+        $this->message = new Message();
         $this->message
             ->addRecipient('john.doe@hmail.co.uk')
             ->addRecipient('juan.doe@imail.mx', 'Juan Doe', RcptType::TO)
@@ -77,223 +257,27 @@ final class MessageTest extends TestCase
                     . 'other people.'
             )
             ->addRecipient('hans.doe@mmail.de', 'Hans Doe', RcptType::BCC);
-        
-        // Assert sender.
-        $this->assertSame(
-            'Jack Doe <jack.doe@nmail.com>',
-            $this->message->getSender(),
-        );
-        
-        // Assert recipients - do not filter.
-        $recipients = $this->message->getRecipients();
-        $this->assertIsArray($recipients);
-        $this->assertCount(6, $recipients);
-        $this->assertSame('john.doe@hmail.co.uk', $recipients[0]);
-        $this->assertSame('Juan Doe <juan.doe@imail.mx>', $recipients[1]);
-        $this->assertSame('João Doe <joao.doe@jmail.com.br>', $recipients[2]);
-        $this->assertSame('Jean Doe <jean.doe@kmail.fr>', $recipients[3]);
-        $this->assertSame('giovanni.doe@lmail.it', $recipients[4]);
-        $this->assertSame('Hans Doe <hans.doe@mmail.de>', $recipients[5]);
-
-        // Assert recipients - main recipients.
-        $recipients = $this->message->getRecipients(RcptType::TO);
-        $this->assertCount(2, $recipients);
-        $this->assertSame('john.doe@hmail.co.uk', $recipients[0]);
-        $this->assertSame('Juan Doe <juan.doe@imail.mx>', $recipients[1]);
-
-        // Assert recipients - CC recipients.
-        $recipients = $this->message->getRecipients(RcptType::CC);
-        $this->assertCount(2, $recipients);
-        $this->assertSame('João Doe <joao.doe@jmail.com.br>', $recipients[0]);
-        $this->assertSame('Jean Doe <jean.doe@kmail.fr>', $recipients[1]);
-
-        // Assert recipients - BCC recipients.
-        $recipients = $this->message->getRecipients(RcptType::BCC);
-        $this->assertCount(2, $recipients);
-        $this->assertSame('giovanni.doe@lmail.it', $recipients[0]);
-        $this->assertSame('Hans Doe <hans.doe@mmail.de>', $recipients[1]);
-
-        // Assert Reply-To header.
-        $this->assertNull($this->message->getReplyRecipient());
-
-        // Assert subject.
-        $this->assertSame('Greetings, Johns...', $this->message->getSubject());
-
-        // Assert content.
-        $this->assertSame(
-            'Hello, fellow same-name international companions.' . "\r\n"
-                . 'I must unfortunately inform you that you are currently '
-                . 'cursed, as I was last'
-                . "\r\n"
-                . 'night, by this electronic message.'
-                . "\r\n"
-                . 'A very evil witch shall visit you this night if you are '
-                . 'not able to forward'
-                . "\r\n"
-                . 'this letter to at least 5 other people.',
-            $this->message->getContent(),
-        );
-
-        // Assert raw message.
-        $this->assertSame(
-            'From: Jack Doe <jack.doe@nmail.com>'
-                . "\r\n"
-                . 'Subject: Greetings, Johns...'
-                . "\r\n"
-                . 'To: john.doe@hmail.co.uk, Juan Doe <juan.doe@imail.mx>'
-                . "\r\n"
-                . 'cc: João Doe <joao.doe@jmail.com.br>, '
-                . 'Jean Doe <jean.doe@kmail.fr>'
-                . "\r\n"
-                . 'MIME-Version: 1.0'
-                . "\r\n"
-                . 'Content-Type: TEXT/plain; CHARSET=UTF-8'
-                . "\r\n"
-                . ''
-                . "\r\n"
-                . 'Hello, fellow same-name international companions.' . "\r\n"
-                . 'I must unfortunately inform you that you are currently '
-                . 'cursed, as I was last'
-                . "\r\n"
-                . 'night, by this electronic message.'
-                . "\r\n"
-                . 'A very evil witch shall visit you this night if you are '
-                . 'not able to forward'
-                . "\r\n"
-                . 'this letter to at least 5 other people.' . "\r\n",
-            (string) $this->message,
-        );
-
-        // Test setting a sender without name.
-        $message = new Message();
-        $message->setSender('johnny.doe@foobar.com');
-        $this->assertSame('johnny.doe@foobar.com', $message->getSender());
-        $this->assertSame(
-            'From: johnny.doe@foobar.com' . "\r\n"
-                . 'MIME-Version: 1.0' . "\r\n"
-                . 'Content-Type: TEXT/plain; CHARSET=UTF-8' . "\r\n"
-                . "\r\n"
-                . "\r\n",
-            (string) $message,
-        );
-
-        // Test sender Reply-To option.
-        $message->setSender(
-            'salesman.joe@foobar.co.uk',
-            'John Doe',
-            'sales@foobar.co.uk',
-            'Foobar Company',
-        );
-        $this->assertSame(
-            'John Doe <salesman.joe@foobar.co.uk>',
-            $message->getSender(),
-        );
-        $this->assertSame(
-            'Foobar Company <sales@foobar.co.uk>',
-            $message->getReplyRecipient(),
-        );
-        $this->assertSame(
-            'From: John Doe <salesman.joe@foobar.co.uk>' . "\r\n"
-                . 'Reply-To: Foobar Company <sales@foobar.co.uk>' . "\r\n"
-                . 'MIME-Version: 1.0' . "\r\n"
-                . 'Content-Type: TEXT/plain; CHARSET=UTF-8' . "\r\n"
-                . "\r\n"
-                . "\r\n",
-            (string) $message,
-        );
-        $message->setSender(
-            'salesman.joe@foobar.co.uk',
-            null,
-            'sales@foobar.co.uk',
-        );
-        $this->assertSame(
-            'salesman.joe@foobar.co.uk',
-            $message->getSender(),
-        );
-        $this->assertSame(
-            'sales@foobar.co.uk',
-            $message->getReplyRecipient(),
-        );
-        $this->assertSame(
-            'From: salesman.joe@foobar.co.uk' . "\r\n"
-                . 'Reply-To: sales@foobar.co.uk' . "\r\n"
-                . 'MIME-Version: 1.0' . "\r\n"
-                . 'Content-Type: TEXT/plain; CHARSET=UTF-8' . "\r\n"
-                . "\r\n"
-                . "\r\n",
-            (string) $message,
-        );
     }
 
     /**
-     * @covers ::__toString
-     * @covers ::setContent
+     * Assert that the tested value is a mailbox object.
      */
-    public function testCanChooseBetweenTextAndHtml(): void
-    {
-        // Set plain text content.
-        $this->message->setContent('Hello, World!', false);
+    protected function assertMailbox(
+        string $address,
+        null|string $name,
+        string $string,
+        mixed $actual,
+    ): void {
+        // Check if is an object.
+        $this->assertIsObject($actual);
 
-        // Assert message.
-        $this->assertSame(
-            'MIME-Version: 1.0'
-                . "\r\n"
-                . 'Content-Type: TEXT/plain; CHARSET=UTF-8'
-                . "\r\n"
-                . ''
-                . "\r\n"
-                . 'Hello, World!' . "\r\n",
-            (string) $this->message,
-        );
+        // Check properties.
+        $this->assertObjectHasProperty('address', $actual);
+        $this->assertSame($address, $actual->address);
+        $this->assertObjectHasProperty('name', $actual);
+        $this->assertSame($name, $actual->name);
 
-        // Set HTML content.
-        $this->message->setContent('<p>Hello, World!</p>', true);
-
-        // Assert message.
-        $this->assertSame(
-            'MIME-Version: 1.0'
-                . "\r\n"
-                . 'Content-Type: TEXT/html; CHARSET=UTF-8'
-                . "\r\n"
-                . ''
-                . "\r\n"
-                . '<p>Hello, World!</p>' . "\r\n",
-            (string) $this->message,
-        );
-
-        // Check if wraps HTML.
-        $this->message->setContent(
-            '<p>Hello, World!</p>'
-                . '<p class="foo bar baz">Hello, Planet!</p>'
-                . '<p id="solar-system-paragraph">Hello, Solar System!</p>'
-                . '<p><span>Hello, Galaxy!</span></p>'
-                . '<p>Hello, Universe!</p>',
-            true,
-        );
-        $this->assertSame(
-            'MIME-Version: 1.0'
-                . "\r\n"
-                . 'Content-Type: TEXT/html; CHARSET=UTF-8'
-                . "\r\n"
-                . ''
-                . "\r\n"
-                . '<p>Hello, World!</p><p class="foo bar baz">Hello, Planet!'
-                . '</p><p'
-                . "\r\n"
-                . 'id="solar-system-paragraph">Hello, Solar System!</p><p>'
-                . '<span>Hello,'
-                . "\r\n"
-                . 'Galaxy!</span></p><p>Hello, Universe!</p>'
-                . "\r\n",
-            (string) $this->message,
-        );
-    }
-    
-    /**
-     * This method is called before each test.
-     */
-    public function setUp(): void
-    {
-        $this->message = new Message();
+        // Check __toString() result.
+        $this->assertSame($string, (string) $actual);
     }
 }
