@@ -159,43 +159,7 @@ class ServiceProvider
             return $this->instances[$class_name];
         }
 
-        // // Get constructor parameters.
-        // $reflection = new \ReflectionClass($class_name);
-        // $constructor = $reflection->getMethod('__construct');
-        // $parameters = $constructor->getParameters();
-
-        // // Create arguments.
-        // $arguments = [];
-        // foreach ($parameters as $parameter) {
-        //     // Get and check type.
-        //     $type = $parameter->getType();
-        //     if ($type === null) {
-        //         $msg = 'Untyped argument found in provided service ' .
-        //             "{$class_name} constructor.";
-        //         throw new \RuntimeException($msg);
-        //     }
-        //     if (!($type instanceof \ReflectionNamedType)) {
-        //         $msg = 'Intersection or union type argument found in '
-        //             . "provided service {$class_name} constructor.";
-        //         throw new \RuntimeException($msg);
-        //     }
-        //     // Get name.
-        //     $name = $type->getName();
-        //     // Inject dependency.
-        //     if (array_key_exists($name, $this->services)) {
-        //         $method_name = $this->services[$name];
-        //         $arguments[] = $this->{$method_name}();
-        //     } elseif (is_a($name, ConfigInterface::class, true)) {
-        //         $arguments[] = $this->config->getConfig($name);
-        //     } else {
-        //         $msg = 'Invalid argument type "%s" found in provided ' .
-        //             "service {$class_name} constructor.";
-        //         throw new \RuntimeException($msg);
-        //     }
-        // }
-
-        // // Create and cache the instance.
-        // $service = new $class_name(...$arguments);
+        // Create and cache the instance.
         $service = $this->resolver->instantiate($class_name);
         $this->instances[$class_name] = $service;
 
