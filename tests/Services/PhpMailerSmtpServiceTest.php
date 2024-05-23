@@ -214,5 +214,14 @@ class PhpMailerSmtpServiceTest extends TestCase
             }
         };
         $this->assertInstanceOf(PHPMailer::class, $service->getMailer());
+
+        // Test if sends.
+        // Ensure the exception thrown refers to not finding the host.
+        // Ensure no other exception is thrown BEFORE sending the e-mail.
+        $config->host = 'localhost';
+        $config->port = 8888;
+        $this->expectException(\PHPMailer\PHPMailer\Exception::class);
+        $this->expectExceptionMessage('SMTP Error: Could not connect to SMTP host. Failed to connect to server');
+        $service->send($message);
     }
 }
