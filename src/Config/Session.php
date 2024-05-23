@@ -29,6 +29,8 @@
 namespace Laucov\WebFwk\Config;
 
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Services\FileSessionService;
+use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
 
 /**
  * Stores session configuration.
@@ -39,4 +41,11 @@ class Session implements ConfigInterface
      * Session path.
      */
     public string $path = '';
+
+    /**
+     * Service class.
+     * 
+     * @var class-string<SessionServiceInterface>
+     */
+    public string $service = FileSessionService::class;
 }

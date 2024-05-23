@@ -29,6 +29,8 @@
 namespace Laucov\WebFwk\Config;
 
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Services\PhpMailerSmtpService;
+use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 
 /**
  * Stores SMTP configuration.
@@ -61,6 +63,13 @@ class Smtp implements ConfigInterface
      * Port.
      */
     public int $port = 465;
+
+    /**
+     * Service class.
+     * 
+     * @var class-string<SmtpServiceInterface>
+     */
+    public string $service = PhpMailerSmtpService::class;
 
     /**
      * User login.

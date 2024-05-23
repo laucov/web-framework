@@ -30,19 +30,22 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
+use Laucov\Sessions\Session;
 use Laucov\WebFwk\Config\Database;
 use Laucov\WebFwk\Config\Language;
-use Laucov\WebFwk\Config\Session;
+use Laucov\WebFwk\Config\Session as SessionCfg;
 use Laucov\WebFwk\Config\View;
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 use Laucov\WebFwk\Config\Smtp;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Services\DatabaseService;
+use Laucov\WebFwk\Services\FileSessionService;
 use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
 use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 use Laucov\WebFwk\Services\LanguageService;
+use Laucov\WebFwk\Services\PhpMailerSmtpService;
 use Laucov\WebFwk\Services\ViewService;
 use PHPUnit\Framework\TestCase;
 
@@ -61,37 +64,84 @@ class ServiceProviderTest extends TestCase
      */
     protected ServiceProvider $services;
 
-    public function callProvider(): array
+    /**
+     * Provides a service provider that provides invalid service classes.
+     * 
+     * Also provides method names to test each of the provider methods.
+     */
+    public function invalidServiceProviderProvider(): array
     {
+        // Create generic config provider.
+        $config = new ConfigProvider([]);
+
+        // Create provider with invalid services.
+        $services = new class ($config) extends ServiceProvider {
+            public function a(): InvalidServiceA
+            {
+                return $this->getService(InvalidServiceA::class);
+            }
+            public function b(): InvalidServiceB
+            {
+                return $this->getService(InvalidServiceB::class);
+            }
+        };
+
         return [
-            ['db', DatabaseService::class, [Database::class]],
-            ['lang', LanguageService::class, [Language::class]],
-            ['session', SessionServiceInterface::class, [Session::class]],
-            ['smtp', SmtpServiceInterface::class, [Smtp::class]],
-            ['view', ViewService::class, [View::class]],
+            // Test method for service with union type constructor argument.
+            [$services, 'a'],
+            // Test method for service with unresolvable argument type.
+            [$services, 'b'],
         ];
     }
 
-    public function invalidChildrenProvider(): array
+    /**
+     * Provides test parameters for service method calls.
+     */
+    public function serviceCallProvider(): array
     {
-        $config = new ConfigProvider([]);
-
         return [
-            // Use a service with union/intersection constructor argument.
-            [new class ($config) extends AbstractFooProvider {
-                public function foobar()
-                {
-                    $this->getService(InvalidServiceA::class);
-                }
-            }],
-            // Use a service with invalid type argument.
-            [new class ($config) extends AbstractFooProvider {
-                public function foobar()
-                {
-                    $this->getService(InvalidServiceB::class);
-                }
-            }],
+            // Arguments:
+            // - Expected class name;
+            // - Provider method to call;
+            // - Configuration classes to setup before requesting the service.
+            [DatabaseService::class, 'db', [Database::class]],
+            [LanguageService::class, 'lang', [Language::class]],
+            [SessionServiceInterface::class, 'session', [SessionCfg::class]],
+            [SmtpServiceInterface::class, 'smtp', [Smtp::class]],
+            [ViewService::class, 'view', [View::class]],
         ];
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function testCanChooseSessionServiceClass(): void
+    {
+        // Test session service.
+        $this->config->addConfig(SessionCfg::class);
+        $mock = $this->createMock(SessionServiceInterface::class);
+        $config = $this->config->getConfig(SessionCfg::class);
+        $default_class = $config->service;
+        $config->service = $mock::class;
+        $service = $this->services->session();
+        $this->assertNotInstanceOf($default_class, $service);
+        $this->assertInstanceOf($mock::class, $service);
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function testCanChooseSmtpServiceClass(): void
+    {
+        // Test SMTP service.
+        $mock = $this->createMock(SmtpServiceInterface::class);
+        $this->config->addConfig(Smtp::class);
+        $config = $this->config->getConfig(Smtp::class);
+        $default_class = $config->service;
+        $config->service = $mock::class;
+        $service = $this->services->smtp();
+        $this->assertNotInstanceOf($default_class, $service);
+        $this->assertInstanceOf($mock::class, $service);
     }
 
     /**
@@ -119,21 +169,21 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFwk\Services\LanguageService::update
      * @uses Laucov\WebFwk\Services\PhpMailerSmtpService::__construct
      * @uses Laucov\WebFwk\Services\ViewService::__construct
-     * @dataProvider callProvider
+     * @dataProvider serviceCallProvider
      */
     public function testCanGetServices(
+        string $expected_class,
         string $method_name,
-        string $service_class_name,
-        array $config_classes,
+        array $required_config,
     ): void {
         // Add configuration classes.
-        foreach ($config_classes as $class_name) {
+        foreach ($required_config as $class_name) {
             $this->config->addConfig($class_name);
         }
 
         // Get a new instance.
         $a = $this->services->{$method_name}();
-        $this->assertInstanceOf($service_class_name, $a);
+        $this->assertInstanceOf($expected_class, $a);
 
         // Get cached instance.
         $b = $this->services->{$method_name}();
@@ -142,19 +192,23 @@ class ServiceProviderTest extends TestCase
 
     /**
      * @covers ::getService
-     * @dataProvider invalidChildrenProvider
+     * @dataProvider invalidServiceProviderProvider
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
      * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
      * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
      */
-    public function testValidatesServiceConstructors(object $provider): void
-    {
-        $this->assertInstanceOf(AbstractFooProvider::class, $provider);
+    public function testValidatesServiceConstructors(
+        ServiceProvider $provider,
+        string $method_name,
+    ): void {
         $this->expectException(\RuntimeException::class);
-        $provider->foobar();
+        $provider->{$method_name}();
     }
 
+    /**
+     * This method is called before each test.
+     */
     protected function setUp(): void
     {
         $this->config = new ConfigProvider([]);
@@ -162,21 +216,26 @@ class ServiceProviderTest extends TestCase
     }
 }
 
-abstract class AbstractFooProvider extends ServiceProvider
-{
-    abstract public function foobar();
-}
-
+/**
+ * Invalid service example.
+ * 
+ * Contains union types in the constructor.
+ */
 class InvalidServiceA implements ServiceInterface
 {
-    public function __construct(ConfigInterface|ServiceInterface $a)
+    public function __construct(ConfigInterface|ServiceInterface $arg)
     {
     }
 }
 
+/**
+ * Invalid service example.
+ * 
+ * Contains a constructor argument type that can't be resolved.
+ */
 class InvalidServiceB implements ServiceInterface
 {
-    public function __construct(array $b)
+    public function __construct(array $arg)
     {
     }
 }
