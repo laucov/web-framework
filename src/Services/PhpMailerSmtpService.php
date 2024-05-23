@@ -31,13 +31,13 @@ namespace Laucov\WebFwk\Services;
 use Laucov\WebFwk\Config\Smtp;
 use Laucov\WebFwk\Services\Email\Message;
 use Laucov\WebFwk\Services\Email\RecipientType as RcptType;
-use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
+use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Provides an interface to configurable e-mail features.
  */
-class PhpMailerSmtpService implements ServiceInterface
+class PhpMailerSmtpService implements SmtpServiceInterface
 {
     /**
      * Create the service instance.
@@ -47,10 +47,11 @@ class PhpMailerSmtpService implements ServiceInterface
          * Configuration instance.
          */
         protected Smtp $config,
-    ) {}
+    ) {
+    }
 
     /**
-     * Send an e-mail.
+     * Send an e-mail message.
      */
     public function send(Message $message): void
     {

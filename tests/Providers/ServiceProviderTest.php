@@ -35,11 +35,13 @@ use Laucov\WebFwk\Config\Language;
 use Laucov\WebFwk\Config\Session;
 use Laucov\WebFwk\Config\View;
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Config\Smtp;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Services\DatabaseService;
 use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
+use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 use Laucov\WebFwk\Services\LanguageService;
 use Laucov\WebFwk\Services\ViewService;
 use PHPUnit\Framework\TestCase;
@@ -65,6 +67,7 @@ class ServiceProviderTest extends TestCase
             ['db', DatabaseService::class, [Database::class]],
             ['lang', LanguageService::class, [Language::class]],
             ['session', SessionServiceInterface::class, [Session::class]],
+            ['smtp', SmtpServiceInterface::class, [Smtp::class]],
             ['view', ViewService::class, [View::class]],
         ];
     }
@@ -97,6 +100,7 @@ class ServiceProviderTest extends TestCase
      * @covers ::getService
      * @covers ::lang
      * @covers ::session
+     * @covers ::smtp
      * @covers ::view
      * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
      * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
@@ -113,6 +117,7 @@ class ServiceProviderTest extends TestCase
      * @uses Laucov\WebFwk\Services\FileSessionService::__construct
      * @uses Laucov\WebFwk\Services\LanguageService::__construct
      * @uses Laucov\WebFwk\Services\LanguageService::update
+     * @uses Laucov\WebFwk\Services\PhpMailerSmtpService::__construct
      * @uses Laucov\WebFwk\Services\ViewService::__construct
      * @dataProvider callProvider
      */

@@ -29,12 +29,13 @@
 namespace Laucov\WebFwk\Providers;
 
 use Laucov\Injection\Resolver;
-use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
 use Laucov\WebFwk\Services\DatabaseService;
 use Laucov\WebFwk\Services\FileSessionService;
 use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
+use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 use Laucov\WebFwk\Services\LanguageService;
+use Laucov\WebFwk\Services\PhpMailerSmtpService;
 use Laucov\WebFwk\Services\ViewService;
 
 /**
@@ -126,6 +127,14 @@ class ServiceProvider
     public function session(): SessionServiceInterface
     {
         return $this->getService(FileSessionService::class);
+    }
+
+    /**
+     * Get the session service.
+     */
+    public function smtp(): SmtpServiceInterface
+    {
+        return $this->getService(PhpMailerSmtpService::class);
     }
 
     /**
