@@ -92,7 +92,7 @@ class PhpMailerSmtpServiceTest extends TestCase
             ->expects($this->once())
             ->method('setFrom')
             ->with('john.doe@foobar.co.uk');
-        
+
         // Expect recipients to be added.
         $mock
             ->expects($this->exactly(2))

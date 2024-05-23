@@ -213,7 +213,7 @@ class Message
         null|string $name = null,
     ): static {
         $this->from = new Mailbox($address, $name);
-        
+
         return $this;
     }
 

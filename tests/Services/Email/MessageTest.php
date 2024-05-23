@@ -140,7 +140,7 @@ final class MessageTest extends TestCase
         $this->assertSame($cc[1], $recipients[3]);
         $this->assertSame($bcc[0], $recipients[4]);
         $this->assertSame($bcc[1], $recipients[5]);
-        
+
         // Assert reply recipient (Reply-To).
         $this->assertNull($this->message->getReplyRecipient());
 
@@ -231,7 +231,7 @@ final class MessageTest extends TestCase
             $this->message->getContent(),
         );
     }
-    
+
     /**
      * This method is called before each test.
      */
