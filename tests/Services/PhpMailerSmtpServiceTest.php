@@ -162,6 +162,7 @@ class PhpMailerSmtpServiceTest extends TestCase
                 TXT,
             $mock->Body,
         );
+        $this->assertSame('UTF-8', $mock->CharSet);
 
         // Create mock #2.
         $mock = $this->createMock(PHPMailer::class);
@@ -212,6 +213,7 @@ class PhpMailerSmtpServiceTest extends TestCase
             ->with(true);
         $service->send($message);
         $this->assertSame('<p>Hello, World!</p>', $mock->Body);
+        $this->assertSame('UTF-8', $mock->CharSet);
 
         // Just ensure the service actually uses PHPMailer.
         $service = new class ($config) extends PhpMailerSmtpService {

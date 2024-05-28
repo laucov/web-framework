@@ -88,6 +88,7 @@ class PhpMailerSmtpService implements SmtpServiceInterface
         $mailer->Subject = $message->getSubject();
         $mailer->Body = $message->getContent();
         $mailer->isHTML($message->getType() === 'text/html');
+        $mailer->CharSet = 'UTF-8';
 
         // Send.
         $mailer->send();
