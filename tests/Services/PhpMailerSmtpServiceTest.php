@@ -55,6 +55,7 @@ class PhpMailerSmtpServiceTest extends TestCase
      * @uses Laucov\WebFwk\Services\Email\Message::getReplyRecipient
      * @uses Laucov\WebFwk\Services\Email\Message::getSender
      * @uses Laucov\WebFwk\Services\Email\Message::getSubject
+     * @uses Laucov\WebFwk\Services\Email\Message::getType
      * @uses Laucov\WebFwk\Services\Email\Message::setContent
      * @uses Laucov\WebFwk\Services\Email\Message::setReplyRecipient
      * @uses Laucov\WebFwk\Services\Email\Message::setSender
@@ -112,6 +113,10 @@ class PhpMailerSmtpServiceTest extends TestCase
             ->expects($this->once())
             ->method('addBCC')
             ->with('leonard.goughnour@baz.co.uk');
+        $mock
+            ->expects($this->once())
+            ->method('isHTML')
+            ->with(false);
 
         // Create message.
         $message = new Message();
@@ -188,14 +193,11 @@ class PhpMailerSmtpServiceTest extends TestCase
             ->method('send');
 
         // Test explicit "From" and "Reply-To" from message.
-        $message->setSender(
-            'noreply@automail.com',
-            'Someone',
-        );
-        $message->setReplyRecipient(
-            'contact@foomail.com',
-            'Contact Us',
-        );
+        // Test HTML content.
+        $message
+            ->setSender('noreply@automail.com', 'Someone')
+            ->setReplyRecipient('contact@foomail.com', 'Contact Us')
+            ->setContent('<p>Hello, World!</p>', true);
         $mock
             ->expects($this->once())
             ->method('setFrom')
@@ -204,7 +206,12 @@ class PhpMailerSmtpServiceTest extends TestCase
             ->expects($this->once())
             ->method('addReplyTo')
             ->with('contact@foomail.com', 'Contact Us');
+        $mock
+            ->expects($this->once())
+            ->method('isHTML')
+            ->with(true);
         $service->send($message);
+        $this->assertSame('<p>Hello, World!</p>', $mock->Body);
 
         // Just ensure the service actually uses PHPMailer.
         $service = new class ($config) extends PhpMailerSmtpService {
