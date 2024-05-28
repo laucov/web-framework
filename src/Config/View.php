@@ -29,10 +29,12 @@
 namespace Laucov\WebFwk\Config;
 
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\EnvMatch;
 
 /**
  * Stores view configuration.
  */
+#[EnvMatch('APP_VIEW_CACHE_DIR', 'cacheDir')]
 class View implements ConfigInterface
 {
     /**

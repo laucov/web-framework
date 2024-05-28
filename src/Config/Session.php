@@ -29,12 +29,14 @@
 namespace Laucov\WebFwk\Config;
 
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\EnvMatch;
 use Laucov\WebFwk\Services\FileSessionService;
 use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
 
 /**
  * Stores session configuration.
  */
+#[EnvMatch('APP_SESSION_PATH', 'path')]
 class Session implements ConfigInterface
 {
     /**

@@ -35,7 +35,8 @@ use Laucov\WebFwk\Providers\EnvMatch;
 /**
  * Stores database-related configuration.
  */
-#[EnvMatch('APP_DATABASE_DEFAULT_CONNECTION', 'defaultConnection')]
+#[EnvMatch('APP_DATABASE_DEFAULT_CONN', 'defaultConnection')]
+#[EnvMatch('APP_DATABASE_DEFAULT_CONNS', 'defaultConnections')]
 class Database implements ConfigInterface
 {
     /**

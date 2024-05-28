@@ -29,12 +29,19 @@
 namespace Laucov\WebFwk\Config;
 
 use Laucov\WebFwk\Config\Interfaces\ConfigInterface;
+use Laucov\WebFwk\Providers\EnvMatch;
 use Laucov\WebFwk\Services\PhpMailerSmtpService;
 use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 
 /**
  * Stores SMTP configuration.
  */
+#[EnvMatch('APP_SMTP_FROM_ADDRESS', 'fromAddress')]
+#[EnvMatch('APP_SMTP_FROM_NAME', 'fromName')]
+#[EnvMatch('APP_SMTP_HOST', 'host')]
+#[EnvMatch('APP_SMTP_PASSWORD', 'password')]
+#[EnvMatch('APP_SMTP_PORT', 'port')]
+#[EnvMatch('APP_SMTP_USER', 'user')]
 class Smtp implements ConfigInterface
 {
     /**
