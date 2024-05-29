@@ -387,16 +387,16 @@
         },
         {
             "name": "laucov/modeling",
-            "version": "v0.6.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/modeling.git",
-                "reference": "7764573ff70a03e7f32ee9ca10686e58cd030819"
+                "reference": "54afb686673699e16415b028f5d921cbd79b3eee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/modeling/zipball/7764573ff70a03e7f32ee9ca10686e58cd030819",
-                "reference": "7764573ff70a03e7f32ee9ca10686e58cd030819",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/54afb686673699e16415b028f5d921cbd79b3eee",
+                "reference": "54afb686673699e16415b028f5d921cbd79b3eee",
                 "shasum": ""
             },
             "require": {
@@ -426,9 +426,9 @@
             "description": "Library for data modeling and database management.",
             "support": {
                 "issues": "https://github.com/laucov/modeling/issues",
-                "source": "https://github.com/laucov/modeling/tree/v0.6.0"
+                "source": "https://github.com/laucov/modeling/tree/v0.7.0"
             },
-            "time": "2024-05-15T14:45:14+00:00"
+            "time": "2024-05-27T21:21:57+00:00"
         },
         {
             "name": "laucov/sessions",
@@ -477,16 +477,16 @@
         },
         {
             "name": "laucov/validation",
-            "version": "v0.5.0",
+            "version": "v0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/validation.git",
-                "reference": "18a52197ea1744deb80f8451a0634d622cb3e101"
+                "reference": "8d1a8c4a9dafe41df2a003864f549762e17dca44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/validation/zipball/18a52197ea1744deb80f8451a0634d622cb3e101",
-                "reference": "18a52197ea1744deb80f8451a0634d622cb3e101",
+                "url": "https://api.github.com/repos/laucov/validation/zipball/8d1a8c4a9dafe41df2a003864f549762e17dca44",
+                "reference": "8d1a8c4a9dafe41df2a003864f549762e17dca44",
                 "shasum": ""
             },
             "require-dev": {
@@ -512,9 +512,9 @@
             "description": "Library for data validation.",
             "support": {
                 "issues": "https://github.com/laucov/validation/issues",
-                "source": "https://github.com/laucov/validation/tree/v0.5.0"
+                "source": "https://github.com/laucov/validation/tree/v0.8.0"
             },
-            "time": "2024-05-03T15:25:13+00:00"
+            "time": "2024-05-27T16:12:25+00:00"
         },
         {
             "name": "laucov/views",
