@@ -34,6 +34,9 @@ use Laucov\Files\Resource\StringSource;
 use Laucov\Http\Message\OutgoingResponse;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Routing\Exceptions\HttpException;
+use Laucov\Modeling\Entity\AbstractEntity;
+use Laucov\Validation\Error;
+use Laucov\Validation\Ruleset;
 use Laucov\WebFwk\Entities\Input;
 use Laucov\WebFwk\Http\Traits\JsonControllerTrait;
 use PHPUnit\Framework\TestCase;
@@ -72,7 +75,7 @@ class JsonControllerTraitTest extends TestCase
             protected function findMessage($path, $args = []): string
             {
                 $args = implode(',', $args);
-                return "{$path}:{$args}";
+                return $path . (strlen($args) ? ":{$args}" : '');
             }
         };
 
@@ -125,7 +128,7 @@ class JsonControllerTraitTest extends TestCase
                         . '_mime_types:application\/json","type":"info"}]}',
                 ],
                 [
-                    '{"messages":[{"content":"error.invalid_json:","type":"err'
+                    '{"messages":[{"content":"error.invalid_json","type":"err'
                         . 'or"}]}',
                 ],
                 [
@@ -181,5 +184,123 @@ class JsonControllerTraitTest extends TestCase
 
         // Run.
         $controller->test();
+    }
+
+    /**
+     * @covers ::getEntity
+     * @uses Laucov\WebFwk\Http\Traits\JsonControllerTrait::setJson
+     */
+    public function testCanValidateAndGetEntitiesFromData(): void
+    {
+        // Create ruleset.
+        $this->createMock(Ruleset::class);
+
+        // Create example entity.
+        $entity = new class extends AbstractEntity {
+            public static array $validationErrors;
+            public string $name;
+            public int $age;
+            public function validate(): bool
+            {
+                $this->errors = static::$validationErrors;
+                return count(static::$validationErrors) === 0;
+            }
+        };
+
+        // Mock dependencies.
+        $response = $this->createMock(OutgoingResponse::class);
+
+        // Create controller.
+        $controller = new class {
+            use JsonControllerTrait;
+            public null|AbstractEntity $entity;
+            public null|HttpException $exception;
+            public OutgoingResponse $response;
+            public function test(array $data, string $class_name): void
+            {
+                $this->entity = null;
+                $this->exception = null;
+                try {
+                    $this->entity = $this->getEntity($data, $class_name);
+                } catch (HttpException $e) {
+                    $this->exception = $e;
+                }
+            }
+            protected function findMessage($path, $args = []): string
+            {
+                $format = fn ($k, $v) => sprintf('%s=%s', $k, $v);
+                $args = array_map($format, array_keys($args), $args);
+                $args = implode(';', $args);
+                return $path . (strlen($args) ? ":{$args}" : '');
+            }
+        };
+
+        // Set properties.
+        $controller->response = $response;
+
+        // Set expectations.
+        $response
+            ->expects($this->exactly(3))
+            ->method('setBody')
+            ->withConsecutive(
+                [
+                    '{"messages":[{"content":"error.invalid_entity_fields:coun'
+                        . 't=2;list=\"name\" (string);last=\"age\" (int)","typ'
+                        . 'e":"error"}]}',
+                ],
+                [
+                    '{"errors":{"age":["validation.\\\\Path\\\\To\\\\Rule"]}}',
+                ],
+                [
+                    '{"errors":{"age":["Custom message..."]}}',
+                ],
+            )
+            ->willReturnSelf();
+        $response
+            ->expects($this->exactly(3))
+            ->method('setHeaderLine')
+            ->withConsecutive(
+                ['Content-Type', 'application/json'],
+                ['Content-Type', 'application/json'],
+                ['Content-Type', 'application/json'],
+            )
+            ->willReturnSelf();
+        $response
+            ->expects($this->exactly(3))
+            ->method('setStatus')
+            ->withConsecutive(
+                [422, 'Unprocessable Entity'],
+                [422, 'Unprocessable Entity'],
+                [422, 'Unprocessable Entity'],
+            );
+
+        // Test with invalid property types.
+        $data = ['name' => ['invalid_type'], 'age' => ['invalid_type']];
+        $controller->test($data, $entity::class);
+        $this->assertNull($controller->entity);
+        $this->assertNotNull($controller->exception);
+
+        // Test with validation errors.
+        $error = $this->getMockBuilder(Error::class)
+            ->setConstructorArgs(['\Path\To\Rule', [], null])
+            ->getMock();
+        $entity::class::$validationErrors = ['age' => [$error]];
+        $controller->test([], $entity::class);
+        $this->assertNull($controller->entity);
+        $this->assertNotNull($controller->exception);
+
+        // Test with validation errors (custom error messages).
+        $error->message = 'Custom message...';
+        $controller->test([], $entity::class);
+        $this->assertNull($controller->entity);
+        $this->assertNotNull($controller->exception);
+
+        // Test with valid data.
+        $entity::class::$validationErrors = [];
+        $controller->test(['name' => 'John', 'age' => 40], $entity::class);
+        $this->assertNotNull($controller->entity);
+        $this->assertNull($controller->exception);
+        $this->assertSame('John', $controller->entity->{'name'});
+        $this->assertSame(40, $controller->entity->{'age'});
     }
 }

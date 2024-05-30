@@ -31,6 +31,8 @@ namespace Laucov\WebFwk\Http\Traits;
 use Laucov\Http\Message\OutgoingResponse;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Routing\Exceptions\HttpException;
+use Laucov\Modeling\Entity\AbstractEntity;
+use Laucov\Validation\Error;
 use Laucov\WebFwk\Entities\Input;
 
 /**
@@ -40,6 +42,77 @@ use Laucov\WebFwk\Entities\Input;
  */
 trait JsonControllerTrait
 {
+    /**
+     * Get data from a JSON request in form of an entity.
+     * 
+     * Searches for a "data" key and parses it as the specified entity.
+     * 
+     * @template T of AbstractEntity
+     * @param class-string<T> $entity Entity class name.
+     * @return T
+     */
+    protected function getEntity(array $data, string $entity): mixed
+    {
+        // Instantiate.
+        /** @var T */
+        $object = new $entity();
+
+        // Set data.
+        $invalid = [];
+        foreach ($data as $name => $value) {
+            try {
+                $object->$name = $value;
+            } catch (\TypeError $error) {
+                $property = new \ReflectionProperty($object, $name);
+                $type = (string) $property->getType();
+                $invalid[] = sprintf('"%s" (%s)', $name, $type);
+            }
+        }
+
+        // Handle type errors.
+        $invalid_count = count($invalid);
+        if ($invalid_count > 0) {
+            // Create message.
+            $message = $this->findMessage(
+                'error.invalid_entity_fields',
+                [
+                    'count' => $invalid_count,
+                    'list' => implode(', ', array_slice($invalid, 0, -1)),
+                    'last' => array_slice($invalid, -1)[0] ?? '',
+                ],
+            );
+            // Set and throw response.
+            $this->response->setStatus(422, 'Unprocessable Entity');
+            $this->setJson([
+                'messages' => [
+                    ['content' => $message, 'type' => 'error'],
+                ],
+            ]);
+            throw new HttpException($this->response);
+        }
+
+        // Validate.
+        if (!$object->validate()) {
+            // Format errors.
+            $errors = [];
+            foreach ($object->getErrorKeys() as $name) {
+                $prop_errors = $object->getErrors($name);
+                // Get error text from each rule.
+                array_walk($prop_errors, function (Error &$error) {
+                    $path = $error->message ?? "validation.{$error->rule}";
+                    $error = $this->findMessage($path, $error->parameters);
+                });
+                $errors[$name] = $prop_errors;
+            }
+            // Set response and throw.
+            $this->response->setStatus(422, 'Unprocessable Entity');
+            $this->setJson(['errors' => $errors]);
+            throw new HttpException($this->response);
+        }
+
+        return $object;
+    }
+
     /**
      * Get the JSON data from the given request.
      * 
