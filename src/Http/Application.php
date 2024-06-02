@@ -346,14 +346,14 @@ class Application
         // Output cookies as headers.
         foreach ($response->getCookieNames() as $name) {
             $cookie = $response->getCookie($name);
-            $this->outputCallables['header']('Set-Cookie', $cookie);
+            $this->outputCallables['header']('Set-Cookie', (string) $cookie);
         }
 
         // Output body.
         $body = $response->getBody();
         if ($body !== null) {
             // Output content length.
-            $length = $body->getSize();
+            $length = (string) $body->getSize();
             $this->outputCallables['header']('Content-Length', $length);
             // Output content.
             for ($i = 0; $i < ceil($length / 4096); $i++) {

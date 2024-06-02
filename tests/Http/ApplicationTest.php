@@ -353,13 +353,17 @@ class ApplicationTest extends TestCase
         $application = new Application();
 
         // Create callables.
-        $print = function (string $data) {
+        $print = function ($data) {
+            $this->assertIsString($data);
             echo $data;
         };
-        $print_header = function (string $name, string $value) {
+        $print_header = function ($name, $value) {
+            $this->assertIsString($name);
+            $this->assertIsString($value);
             echo "{$name}: {$value}\n";
         };
-        $print_line = function (string $data) {
+        $print_line = function ($data) {
+            $this->assertIsString($data);
             echo $data . "\n";
         };
 
