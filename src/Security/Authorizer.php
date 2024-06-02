@@ -282,7 +282,7 @@ class Authorizer
         }
 
         // Prefix path.
-        $path = implode('.', ['data', ...explode('.', $path)]);
+        $path = implode('.', ['user.data', ...explode('.', $path)]);
 
         return $this->session->get($path, $default_value);
     }
@@ -400,7 +400,7 @@ class Authorizer
         }
 
         // Save value.
-        $path = implode('.', ['data', ...explode('.', $path)]);
+        $path = implode('.', ['user.data', ...explode('.', $path)]);
         $this->session
             ->set($path, $value)
             ->commit(false);
