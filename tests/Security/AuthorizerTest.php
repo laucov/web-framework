@@ -42,6 +42,7 @@ use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
 use Laucov\WebFwk\Security\Authorizer;
+use Laucov\WebFwk\Security\UserDataSettingResult;
 use Laucov\WebFwk\Security\UserStatus;
 use PHPUnit\Framework\TestCase;
 
@@ -550,6 +551,85 @@ class AuthorizerTest extends TestCase
 
         // Assert that the user was removed.
         $this->assertNull($this->authorizer->getUser());
+    }
+
+    /**
+     * @covers ::getData
+     * @covers ::setData
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::addConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::createInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getConfig
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getInstance
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::getName
+     * @uses Laucov\WebFwk\Providers\ConfigProvider::hasConfig
+     * @uses Laucov\WebFwk\Providers\EnvMatch::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::getValue
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::hasDependency
+     * @uses Laucov\WebFwk\Providers\ServiceDependencyRepository::setConfigProvider
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::__construct
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::db
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
+     * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Security\Authorizer::getUser
+     * @uses Laucov\WebFwk\Security\Authorizer::setData
+     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Services\DatabaseService::__construct
+     * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
+     * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
+     * @uses Laucov\WebFwk\Services\FileSessionService::__construct
+     * @uses Laucov\WebFwk\Services\FileSessionService::createSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::getSession
+     * @uses Laucov\WebFwk\Services\FileSessionService::validateId
+     */
+    public function testGetsAndSetsUserArbitrarySessionData(): void
+    {
+        // Create a session.
+        $id = $this->services->session()->createSession()->id;
+        $this->authorizer->setSession($id);
+
+        // Assert that no data is set.
+        $this->assertNull($this->authorizer->getData('foo'));
+
+        // Add some data.
+        $this->assertSame(
+            UserDataSettingResult::WRITTEN,
+            $this->authorizer->setData('foo.bar', 1),
+            'Assert that result is UserDataSettingResult::WRITTEN',
+        );
+        $this->authorizer->setData('foo.baz', 2);
+        $this->assertSame(1, $this->authorizer->getData('foo.bar'));
+        $this->assertSame(2, $this->authorizer->getData('foo.baz'));
+        $expected = ['bar' => 1, 'baz' => 2];
+        $this->assertSame($expected, $this->authorizer->getData('foo'));
+
+        // Check persistency.
+        $this->authorizer
+            ->setSession(null)
+            ->setSession($id);
+        $this->assertSame(1, $this->authorizer->getData('foo.bar'));
+        $this->assertSame(2, $this->authorizer->getData('foo.baz'));
+        $expected = ['bar' => 1, 'baz' => 2];
+        $this->assertSame($expected, $this->authorizer->getData('foo'));
+
+        // Check that the data is namespaced.
+        // Test if paths like user.id overwrite runtime data.
+        $this->authorizer->setData('user.id', 1);
+        $this->authorizer
+            ->setSession(null)
+            ->setSession($id);
+        $this->assertSame(['id' => 1], $this->authorizer->getData('user'));
+        $this->assertNull($this->authorizer->getUser());
+    
+        // Attempt to write to uninitialized session.
+        $this->authorizer->setSession(null);
+        $this->assertNull($this->authorizer->getData('some.data'));
+        $this->assertSame(
+            UserDataSettingResult::NO_ACTIVE_SESSION,
+            $this->authorizer->setData('some.data', 'foo'),
+            'Assert that result is UserDataSettingResult::NO_ACTIVE_SESSION',
+        );
     }
 
     /**

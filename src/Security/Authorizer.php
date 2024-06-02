@@ -272,6 +272,22 @@ class Authorizer
     }
 
     /**
+     * Get the user's arbitrary session data.
+     */
+    public function getData(string $path, mixed $default_value = null): mixed
+    {
+        // Check session.
+        if ($this->session === null) {
+            return $default_value;
+        }
+
+        // Prefix path.
+        $path = implode('.', ['data', ...explode('.', $path)]);
+
+        return $this->session->get($path, $default_value);
+    }
+
+    /**
      * Get the current authorization status.
      */
     public function getStatus(): UserStatus
@@ -371,6 +387,25 @@ class Authorizer
         $instance->request();
 
         return AuthnRequestResult::REQUESTED;
+    }
+
+    /**
+     * Set a value into the user's arbitrary session data.
+     */
+    public function setData(string $path, mixed $value): UserDataSettingResult
+    {
+        // Check session.
+        if ($this->session === null) {
+            return UserDataSettingResult::NO_ACTIVE_SESSION;
+        }
+
+        // Save value.
+        $path = implode('.', ['data', ...explode('.', $path)]);
+        $this->session
+            ->set($path, $value)
+            ->commit(false);
+        
+        return UserDataSettingResult::WRITTEN;
     }
 
     /**
