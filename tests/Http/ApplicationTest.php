@@ -356,7 +356,10 @@ class ApplicationTest extends TestCase
         $print = function (string $data) {
             echo $data;
         };
-        $println = function (string $data) {
+        $print_header = function (string $name, string $value) {
+            echo "{$name}: {$value}\n";
+        };
+        $print_line = function (string $data) {
             echo $data . "\n";
         };
 
@@ -371,8 +374,8 @@ class ApplicationTest extends TestCase
             ->setEnvironment($data['environment'] ?? [])
             ->setInputFilename($data['filename'] ?? 'data://text/plain,')
             ->setOutputCallables(
-                $println,
-                $println,
+                $print_line,
+                $print_header,
                 $print,
             )
             ->setPostVariables($data['post'] ?? [])

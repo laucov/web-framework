@@ -339,14 +339,14 @@ class Application
         foreach ($response->getHeaderNames() as $name) {
             $header_lines = $response->getHeaderLines($name);
             foreach ($header_lines as $line) {
-                $this->outputCallables['header']("{$name}: {$line}");
+                $this->outputCallables['header']($name, $line);
             }
         }
 
         // Output cookies as headers.
         foreach ($response->getCookieNames() as $name) {
             $cookie = $response->getCookie($name);
-            $this->outputCallables['header']("Set-Cookie: {$cookie}");
+            $this->outputCallables['header']('Set-Cookie', $cookie);
         }
 
         // Output body.
@@ -354,7 +354,7 @@ class Application
         if ($body !== null) {
             // Output content length.
             $length = $body->getSize();
-            $this->outputCallables['header']("Content-Length: {$length}");
+            $this->outputCallables['header']('Content-Length', $length);
             // Output content.
             for ($i = 0; $i < ceil($length / 4096); $i++) {
                 $this->outputCallables['body']($body->read(4096));
