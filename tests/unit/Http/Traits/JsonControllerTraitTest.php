@@ -48,6 +48,9 @@ class JsonControllerTraitTest extends TestCase
 {
     /**
      * @covers ::getJson
+     * @covers ::throwContentTypeError
+     * @covers ::throwInputTypeError
+     * @covers ::throwJsonError
      * @uses Laucov\WebFwk\Http\Traits\JsonControllerTrait::setJson
      */
     public function testCanGetAndValidateRequestJsonData(): void
@@ -132,8 +135,8 @@ class JsonControllerTraitTest extends TestCase
                         . 'or"}]}',
                 ],
                 [
-                    '{"messages":[{"content":"error.invalid_input_field:\"data'
-                        . '\" (array)","type":"error"}]}',
+                    '{"messages":[{"content":"error.invalid_input_fields:1,,\"d'
+                        . 'ata\" (array)","type":"error"}]}',
                 ],
             );
 
@@ -188,6 +191,8 @@ class JsonControllerTraitTest extends TestCase
 
     /**
      * @covers ::getEntity
+     * @covers ::throwEntityTypeError
+     * @covers ::throwValidationError
      * @uses Laucov\WebFwk\Http\Traits\JsonControllerTrait::setJson
      */
     public function testCanValidateAndGetEntitiesFromData(): void

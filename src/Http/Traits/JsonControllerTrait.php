@@ -32,6 +32,8 @@ use Laucov\Http\Message\OutgoingResponse;
 use Laucov\Http\Message\RequestInterface;
 use Laucov\Http\Routing\Exceptions\HttpException;
 use Laucov\Modeling\Entity\AbstractEntity;
+use Laucov\Modeling\Entity\CreationResult;
+use Laucov\Modeling\Entity\TypeError;
 use Laucov\Validation\Error;
 use Laucov\WebFwk\Entities\Input;
 
@@ -53,64 +55,22 @@ trait JsonControllerTrait
      */
     protected function getEntity(array $data, string $entity): mixed
     {
-        // Instantiate.
-        /** @var T */
-        $object = new $entity();
+        // Create entity.
+        /** @var CreationResult */
+        $result = $entity::createFromArray($data);
 
-        // Set data.
-        $invalid = [];
-        foreach ($data as $name => $value) {
-            try {
-                $object->$name = $value;
-            } catch (\TypeError $error) {
-                $property = new \ReflectionProperty($object, $name);
-                $type = (string) $property->getType();
-                $invalid[] = sprintf('"%s" (%s)', $name, $type);
-            }
-        }
-
-        // Handle type errors.
-        $invalid_count = count($invalid);
-        if ($invalid_count > 0) {
-            // Create message.
-            $message = $this->findMessage(
-                'error.invalid_entity_fields',
-                [
-                    'count' => $invalid_count,
-                    'list' => implode(', ', array_slice($invalid, 0, -1)),
-                    'last' => array_slice($invalid, -1)[0] ?? '',
-                ],
-            );
-            // Set and throw response.
-            $this->response->setStatus(422, 'Unprocessable Entity');
-            $this->setJson([
-                'messages' => [
-                    ['content' => $message, 'type' => 'error'],
-                ],
-            ]);
-            throw new HttpException($this->response);
+        // Check type errors.
+        if (count($result->typeErrors) > 0) {
+            $this->throwEntityTypeError($result->typeErrors);
         }
 
         // Validate.
-        if (!$object->validate()) {
-            // Format errors.
-            $errors = [];
-            foreach ($object->getErrorKeys() as $name) {
-                $prop_errors = $object->getErrors($name);
-                // Get error text from each rule.
-                array_walk($prop_errors, function (Error &$error) {
-                    $path = $error->message ?? "validation.{$error->rule}";
-                    $error = $this->findMessage($path, $error->parameters);
-                });
-                $errors[$name] = $prop_errors;
-            }
-            // Set response and throw.
-            $this->response->setStatus(422, 'Unprocessable Entity');
-            $this->setJson(['errors' => $errors]);
-            throw new HttpException($this->response);
+        $entity = $result->entity;
+        if (!$entity->validate()) {
+            $this->throwValidationError($entity);
         }
 
-        return $object;
+        return $entity;
     }
 
     /**
@@ -123,72 +83,23 @@ trait JsonControllerTrait
         // Check Content-Type header.
         $type = $request->getHeaderLine('Content-Type');
         if ($type !== 'application/json') {
-            // Inform that the MIME type is invalid.
-            $this->response->setStatus(415, 'Unsupported Media Type');
-            $this->setJson([
-                'messages' => [
-                    [
-                        'content' => $this->findMessage(
-                            'error.unsupported_mime_type',
-                            [$type],
-                        ),
-                        'type' => 'error',
-                    ],
-                    [
-                        'content' => $this->findMessage(
-                            'info.supported_mime_types',
-                            ['application/json'],
-                        ),
-                        'type' => 'info',
-                    ],
-                ],
-            ]);
-            throw new HttpException($this->response);
+            $this->throwContentTypeError($type, ['application/json']);
         }
 
         // Check data.
         $json = (string) $request->getBody();
         $data = json_decode($json, true);
         if (!is_array($data)) {
-            // Inform that the JSON string is invalid.
-            $this->response->setStatus(400, 'Bad Request');
-            $this->setJson([
-                'messages' => [
-                    [
-                        'content' => $this->findMessage('error.invalid_json'),
-                        'type' => 'error',
-                    ],
-                ],
-            ]);
-            throw new HttpException($this->response);
+            $this->throwJsonError();
         }
 
         // Format as an entity.
-        $entity = new Input();
-        foreach ($data as $key => $value) {
-            try {
-                // Set value.
-                $entity->$key = $value;
-            } catch (\TypeError $error) {
-                // Create message.
-                $property = new \ReflectionProperty($entity, $key);
-                $type = (string) $property->getType();
-                $message = $this->findMessage(
-                    'error.invalid_input_field',
-                    [sprintf('"%s" (%s)', $key, $type)],
-                );
-                // Set and throw response.
-                $this->response->setStatus(422, 'Unprocessable Entity');
-                $this->setJson([
-                    'messages' => [
-                        ['content' => $message, 'type' => 'error'],
-                    ],
-                ]);
-                throw new HttpException($this->response);
-            }
+        $result = Input::createFromArray($data);
+        if (count($result->typeErrors) > 0) {
+            $this->throwInputTypeError($result->typeErrors);
         }
 
-        return $entity;
+        return $result->entity;
     }
 
     /**
@@ -203,5 +114,150 @@ trait JsonControllerTrait
         $this->response
             ->setHeaderLine('Content-Type', 'application/json')
             ->setBody($json);
+    }
+
+    /**
+     * Throw an `HTTPException` based on Content-Type header error.
+     * 
+     * @param array<string> $expected
+     * @throws HTTPException
+     */
+    protected function throwContentTypeError(string $type, array $allowed): void
+    {
+        // Create messages.
+        $error_message = $this->findMessage(
+            'error.unsupported_mime_type',
+            [$type],
+        );
+        $info_message = $this->findMessage(
+            'info.supported_mime_types',
+            [implode(', ', $allowed)],
+        );
+
+        // Inform that the MIME type is invalid.
+        $this->response->setStatus(415, 'Unsupported Media Type');
+        $this->setJson([
+            'messages' => [
+                ['content' => $error_message, 'type' => 'error'],
+                ['content' => $info_message, 'type' => 'info'],
+            ],
+        ]);
+        
+        throw new HttpException($this->response);
+    }
+
+    /**
+     * Throw an `HTTPException` based on entity type errors.
+     * 
+     * @param array<TypeError> $type_errors
+     * @throws HTTPException
+     */
+    protected function throwEntityTypeError(array $type_errors): void
+    {
+        // Create property labels.
+        $labels = [];
+        foreach ($type_errors as $e) {
+            $labels[] = sprintf('"%s" (%s)', $e->name, $e->expected);
+        }
+
+        // Create message.
+        $message = $this->findMessage(
+            'error.invalid_entity_fields',
+            [
+                'count' => count($type_errors),
+                'list' => implode(', ', array_slice($labels, 0, -1)),
+                'last' => array_slice($labels, -1)[0] ?? '',
+            ],
+        );
+
+        // Set and throw response.
+        $this->response->setStatus(422, 'Unprocessable Entity');
+        $this->setJson([
+            'messages' => [
+                ['content' => $message, 'type' => 'error'],
+            ],
+        ]);
+
+        throw new HttpException($this->response);
+    }
+
+    /**
+     * Throw an `HTTPException` based on input type errors.
+     * 
+     * @param array<TypeError> $type_errors
+     * @throws HTTPException
+     */
+    protected function throwInputTypeError(array $type_errors): void
+    {
+        // Create property labels.
+        $labels = [];
+        foreach ($type_errors as $e) {
+            $labels[] = sprintf('"%s" (%s)', $e->name, $e->expected);
+        }
+
+        // Create message.
+        $message = $this->findMessage(
+            'error.invalid_input_fields',
+            [
+                'count' => count($type_errors),
+                'list' => implode(', ', array_slice($labels, 0, -1)),
+                'last' => array_slice($labels, -1)[0] ?? '',
+            ],
+        );
+
+        // Set and throw response.
+        $this->response->setStatus(422, 'Unprocessable Entity');
+        $this->setJson([
+            'messages' => [
+                ['content' => $message, 'type' => 'error'],
+            ],
+        ]);
+
+        throw new HttpException($this->response);
+    }
+
+    /**
+     * Throw an `HTTPException` based on entity validation errors.
+     * 
+     * @throws HTTPException
+     */
+    protected function throwValidationError(AbstractEntity $entity): void
+    {
+        // Format errors.
+        $errors = [];
+        foreach ($entity->getErrorKeys() as $name) {
+            $prop_errors = $entity->getErrors($name);
+            // Get error text from each rule.
+            array_walk($prop_errors, function (Error &$error) {
+                $path = $error->message ?? "validation.{$error->rule}";
+                $error = $this->findMessage($path, $error->parameters);
+            });
+            $errors[$name] = $prop_errors;
+        }
+
+        // Set response and throw.
+        $this->response->setStatus(422, 'Unprocessable Entity');
+        $this->setJson(['errors' => $errors]);
+
+        throw new HttpException($this->response);
+    }
+
+    /**
+     * Throw an `HTTPException` due to an invalid JSON string payload.
+     * 
+     * @throws HTTPException
+     */
+    protected function throwJsonError(): void
+    {
+        // Inform that the JSON string is invalid.
+        $this->response->setStatus(400, 'Bad Request');
+        $message = $this->findMessage('error.invalid_json');
+        $this->setJson([
+            'messages' => [
+                ['content' => $message, 'type' => 'error'],
+            ],
+        ]);
+
+        throw new HttpException($this->response);
     }
 }
