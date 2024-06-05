@@ -29,6 +29,7 @@
 namespace Laucov\WebFwk\Security\Authentication;
 
 use Laucov\Modeling\Entity\AbstractEntity;
+use Laucov\Modeling\Entity\CreationResult;
 
 /**
  * Controls the life cycle of a specific authentication process.
@@ -72,6 +73,26 @@ abstract class AbstractAuthn
      * @var T
      */
     protected mixed $settings;
+
+    /**
+     * Create a settings object.
+     * 
+     * @return T
+     */
+    public function createSettings(): mixed
+    {
+        return new $this->settingsEntity;
+    }
+
+    /**
+     * Create a settings object from array entries.
+     * 
+     * @return CreationResult<T>
+     */
+    public function createSettingsFromArray(array $data): mixed
+    {
+        return $this->settingsEntity::createFromArray($data);
+    }
 
     /**
      * Configure the process.
