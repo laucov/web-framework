@@ -30,10 +30,11 @@ declare(strict_types=1);
 
 namespace Tests\Security;
 
+use Laucov\Validation\AbstractRule;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\AbstractAuthn;
 use Laucov\WebFwk\Security\Authentication\AuthnFactory;
-use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
 use Laucov\WebFwk\Security\Authentication\TotpAuthn;
 use PHPUnit\Framework\TestCase;
 
@@ -62,7 +63,7 @@ class AuthnFactoryTest extends TestCase
     public function testCanGetAuthnObjs(string $name, string $expected): void
     {
         $instance = $this->factory->{$name}();
-        $this->assertInstanceOf(AuthnInterface::class, $instance);
+        $this->assertInstanceOf(AbstractAuthn::class, $instance);
         $this->assertInstanceOf($expected, $instance);
     }
 

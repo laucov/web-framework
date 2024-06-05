@@ -29,13 +29,21 @@
 namespace Laucov\WebFwk\Security\Authentication;
 
 use Covaleski\Otp\Totp;
-use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
+use Laucov\WebFwk\Entities\TotpSettings;
+use Laucov\WebFwk\Security\Authentication\AbstractAuthn;
 
 /**
  * Provides authentication with time-based one-time passwords.
+ * 
+ * @extends AbstractAuthn<TotpSettings>
  */
-class TotpAuthn implements AuthnInterface
+class TotpAuthn extends AbstractAuthn
 {
+    /**
+     * Settings entity class name.
+     */
+    protected string $settingsEntity = TotpSettings::class;
+
     /**
      * TOTP object.
      */
@@ -44,19 +52,20 @@ class TotpAuthn implements AuthnInterface
     /**
      * Configure the process.
      */
-    public function configure(array $settings): void
+    public function setup(): void
     {
-        // Get configuration values.
-        $digits = (int) $settings['digits'];
-        $secret = (string) $settings['secret'];
-        $offset = (int) $settings['offset'];
-        $step = (int) $settings['step'];
-
         // Set the TOTP object.
-        $this->totp = new Totp($digits, '', '', $secret);
+        $this->totp = new Totp(
+            $this->settings->digits,
+            '',
+            '',
+            $this->settings->secret,
+        );
+
+        // Set offset and step.
         $this->totp
-            ->setOffset($offset)
-            ->setStep($step);
+            ->setOffset($this->settings->offset)
+            ->setStep($this->settings->step);
     }
 
     /**

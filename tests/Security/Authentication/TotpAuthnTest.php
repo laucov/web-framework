@@ -30,6 +30,7 @@ declare(strict_types=1);
 
 namespace Tests\Security;
 
+use Laucov\WebFwk\Entities\TotpSettings;
 use Laucov\WebFwk\Security\Authentication\TotpAuthn;
 use PHPUnit\Framework\TestCase;
 
@@ -43,49 +44,44 @@ class TotpAuthnTest extends TestCase
      */
     public function authnTestProvider(): array
     {
+        // Create configuration.
+        $config = new TotpSettings();
+        $config->digits = 6;
+        $config->offset = 0;
+        $config->secret = 'abcdefghij';
+        $config->step = 30;
+
         return [
-            [
-                // Configuration
-                [
-                    'digits' => 6,
-                    'offset' => 0,
-                    'secret' => 'abcdefghij',
-                    'step' => 30,
-                ],
-                // Tests
-                [
-                    [true, 1325419200, ['password' => '274268']],
-                    [false, 1325419200, ['password' => '954167']],
-                    [true, 1325419235, ['password' => '935599']],
-                    [false, 1325419235, ['password' => '288412']],
-                    [true, 1325419261, ['password' => '478417']],
-                    [false, 1325419261, ['password' => '274268']],
-                    [false, 1325419261, ['password' => '417']],
-                    [false, 1325419261, []],
-                    [false, 1325419261, ['password' => ['478417']]],
-                ],
-            ],
+            [true, $config, 1325419200, ['password' => '274268']],
+            [false, $config, 1325419200, ['password' => '954167']],
+            [true, $config, 1325419235, ['password' => '935599']],
+            [false, $config, 1325419235, ['password' => '288412']],
+            [true, $config, 1325419261, ['password' => '478417']],
+            [false, $config, 1325419261, ['password' => '274268']],
+            [false, $config, 1325419261, ['password' => '417']],
+            [false, $config, 1325419261, []],
+            [false, $config, 1325419261, ['password' => ['478417']]],
         ];
     }
 
     /**
      * @covers ::configure
      * @covers ::request
+     * @covers ::setup
      * @covers ::validate
      * @dataProvider authnTestProvider
      */
-    public function testCanAuthenticate(array $config, array $tests): void
-    {
-        // Create and configure the authentication object.
+    public function testCanAuthenticate(
+        bool $expected,
+        TotpSettings $config,
+        int $time,
+        array $data,
+    ): void {
         $authn = new TotpAuthn();
         $authn->configure($config);
-
-        // Run tests for this configuration.
-        foreach ($tests as [$expected, $time, $data]) {
-            $authn->request();
-            Timestamp::$value = $time;
-            $this->assertSame($expected, $authn->validate($data));
-        }
+        $authn->request();
+        Timestamp::$value = $time;
+        $this->assertSame($expected, $authn->validate($data));
     }
 
     /**
