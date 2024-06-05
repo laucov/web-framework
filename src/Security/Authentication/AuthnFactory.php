@@ -32,7 +32,7 @@ use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
 
 /**
- * Creates `AuthnInterface` objects.
+ * Creates `AbstractAuthn` objects.
  */
 class AuthnFactory implements AuthnFactoryInterface
 {

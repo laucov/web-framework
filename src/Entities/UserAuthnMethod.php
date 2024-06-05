@@ -50,7 +50,7 @@ class UserAuthnMethod extends AbstractEntity
      * 
      * Must match a method from the `AuthnFactoryInterface` object in use.
      * 
-     * Used to get an `AuthnInterface` object from the matching method.
+     * Used to get an `AbstractAuthn` object from the matching method.
      */
     public string $name;
 

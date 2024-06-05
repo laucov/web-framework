@@ -35,13 +35,13 @@ use Laucov\WebFwk\Entities\UserAuthnMethod;
 use Laucov\WebFwk\Models\UserAuthnMethodModel;
 use Laucov\WebFwk\Models\UserModel;
 use Laucov\WebFwk\Providers\ServiceProvider;
+use Laucov\WebFwk\Security\Authentication\AbstractAuthn;
 use Laucov\WebFwk\Security\Authentication\AuthnCancelResult;
 use Laucov\WebFwk\Security\Authentication\AuthnInfo;
 use Laucov\WebFwk\Security\Authentication\AuthnOption;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
-use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
 
 /**
  * Accredits, authenticates and stores users in sessions.
@@ -404,7 +404,7 @@ class Authorizer
         $this->session
             ->set($path, $value)
             ->commit(false);
-        
+
         return UserDataSettingResult::WRITTEN;
     }
 
@@ -446,15 +446,17 @@ class Authorizer
     }
 
     /**
-     * Get an `AuthnInterface` object from an authentication method record.
+     * Get an `AbstractAuthn` object from an authentication method record.
      */
-    protected function getAuthentication(UserAuthnMethod $record): AuthnInterface
+    protected function getAuthentication(UserAuthnMethod $record): AbstractAuthn
     {
         // Decode settings.
-        $settings = json_decode($record->settings, true);
+        $settings_data = json_decode($record->settings, true);
 
         // Get and configure an instance from the factory.
+        /** @var AbstractAuthn */
         $authn = $this->authnFactory->{$record->name}();
+        $settings = $authn->createSettingsFromArray($settings_data)->entity;
         $authn->configure($settings);
 
         return $authn;

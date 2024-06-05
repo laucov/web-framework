@@ -31,7 +31,7 @@ namespace Laucov\WebFwk\Security\Authentication\Interfaces;
 use Laucov\WebFwk\Providers\ServiceProvider;
 
 /**
- * Creates `AuthnInterface` objects.
+ * Creates `AbstractAuthn` objects.
  */
 interface AuthnFactoryInterface
 {

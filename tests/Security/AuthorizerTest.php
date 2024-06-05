@@ -30,17 +30,18 @@ declare(strict_types=1);
 
 namespace Tests\Security;
 
+use Laucov\Modeling\Entity\AbstractEntity;
 use Laucov\WebFwk\Config\Authorization;
 use Laucov\WebFwk\Config\Database;
 use Laucov\WebFwk\Config\Session;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Security\AccreditationResult;
+use Laucov\WebFwk\Security\Authentication\AbstractAuthn;
 use Laucov\WebFwk\Security\Authentication\AuthnCancelResult;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
-use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnInterface;
 use Laucov\WebFwk\Security\Authorizer;
 use Laucov\WebFwk\Security\UserDataSettingResult;
 use Laucov\WebFwk\Security\UserStatus;
@@ -176,6 +177,8 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
      * @uses Laucov\WebFwk\Security\Authentication\AuthnFactory::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
@@ -621,7 +624,7 @@ class AuthorizerTest extends TestCase
             ->setSession($id);
         $this->assertSame(['id' => 1], $this->authorizer->getData('user'));
         $this->assertNull($this->authorizer->getUser());
-    
+
         // Attempt to write to uninitialized session.
         $this->authorizer->setSession(null);
         $this->assertNull($this->authorizer->getData('some.data'));
@@ -660,6 +663,8 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
      * @uses Laucov\WebFwk\Security\Authorizer::__construct
      * @uses Laucov\WebFwk\Security\Authorizer::accredit
      * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
@@ -743,6 +748,8 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
      * @uses Laucov\WebFwk\Security\Authorizer::__construct
      * @uses Laucov\WebFwk\Security\Authorizer::accredit
      * @uses Laucov\WebFwk\Security\Authorizer::authenticate
@@ -787,6 +794,8 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
+     * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
      * @uses Laucov\WebFwk\Security\Authorizer::__construct
      * @uses Laucov\WebFwk\Security\Authorizer::accredit
      * @uses Laucov\WebFwk\Security\Authorizer::authenticate
@@ -1029,15 +1038,17 @@ class OtherAuthnFactory extends UselessAuthnFactory
     }
 }
 
-class FoobarAuthn implements AuthnInterface
+/**
+ * @extends AbstractAuthn<FoobarAuthnSettings>
+ */
+class FoobarAuthn extends AbstractAuthn
 {
     protected static null|int $code = 0;
 
-    protected int $factor;
+    protected string $settingsEntity = FoobarAuthnSettings::class;
 
-    public function configure(array $data): void
+    public function setup(): void
     {
-        $this->factor = (int) $data['factor'];
     }
 
     public function getFields(): array
@@ -1047,7 +1058,7 @@ class FoobarAuthn implements AuthnInterface
 
     public function request(): void
     {
-        static::$code = 2 * $this->factor;
+        static::$code = 2 * $this->settings->factor;
     }
 
     public function validate(array $data): bool
@@ -1058,10 +1069,15 @@ class FoobarAuthn implements AuthnInterface
     }
 }
 
+class FoobarAuthnSettings extends AbstractEntity
+{
+    public int $factor;
+}
+
 class BazAuthn extends FoobarAuthn
 {
     public function request(): void
     {
-        static::$code = 3 * $this->factor;
+        static::$code = 3 * $this->settings->factor;
     }
 }
