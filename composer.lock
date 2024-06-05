@@ -256,16 +256,16 @@
         },
         {
             "name": "laucov/http",
-            "version": "v1.6.1",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/http.git",
-                "reference": "b9cc70c288cf0f262bdaeb6f56f249270480052b"
+                "reference": "23a97984aaa163ee8eaa9c90060c00656259a22d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/http/zipball/b9cc70c288cf0f262bdaeb6f56f249270480052b",
-                "reference": "b9cc70c288cf0f262bdaeb6f56f249270480052b",
+                "url": "https://api.github.com/repos/laucov/http/zipball/23a97984aaa163ee8eaa9c90060c00656259a22d",
+                "reference": "23a97984aaa163ee8eaa9c90060c00656259a22d",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "Library for HTTP communication lifecycle control.",
             "support": {
                 "issues": "https://github.com/laucov/http/issues",
-                "source": "https://github.com/laucov/http/tree/v1.6.1"
+                "source": "https://github.com/laucov/http/tree/v1.7.0"
             },
-            "time": "2024-05-12T14:38:37+00:00"
+            "time": "2024-06-02T15:16:04+00:00"
         },
         {
             "name": "laucov/injection",
@@ -387,16 +387,16 @@
         },
         {
             "name": "laucov/modeling",
-            "version": "v0.7.0",
+            "version": "v0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/modeling.git",
-                "reference": "54afb686673699e16415b028f5d921cbd79b3eee"
+                "reference": "821f00d5698a774bfa4844792613945a012277ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/modeling/zipball/54afb686673699e16415b028f5d921cbd79b3eee",
-                "reference": "54afb686673699e16415b028f5d921cbd79b3eee",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/821f00d5698a774bfa4844792613945a012277ac",
+                "reference": "821f00d5698a774bfa4844792613945a012277ac",
                 "shasum": ""
             },
             "require": {
@@ -426,9 +426,9 @@
             "description": "Library for data modeling and database management.",
             "support": {
                 "issues": "https://github.com/laucov/modeling/issues",
-                "source": "https://github.com/laucov/modeling/tree/v0.7.0"
+                "source": "https://github.com/laucov/modeling/tree/v0.8.0"
             },
-            "time": "2024-05-27T21:21:57+00:00"
+            "time": "2024-06-05T12:35:39+00:00"
         },
         {
             "name": "laucov/sessions",
