@@ -65,7 +65,7 @@ class AuthzControllerTraitTest extends TestCase
         $services = $this->createMock(ServiceProvider::class);
 
         // Create controller.
-        $controller = new class {
+        $controller = new class () {
             use AuthzControllerTrait;
             public ConfigProvider $config;
             public OutgoingResponse $response;
@@ -113,7 +113,7 @@ class AuthzControllerTraitTest extends TestCase
             ->method('validateId')
             ->withConsecutive(['some_string'], ['some_string'])
             ->willReturn(true, false);
-        
+
         // Test valid ID case.
         $authorizer = $controller->test($request);
         $this->assertSame(

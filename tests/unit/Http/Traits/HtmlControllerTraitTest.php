@@ -60,7 +60,7 @@ class HtmlControllerTraitTest extends TestCase
         $view_service = $this->createMock(ViewService::class);
 
         // Create controller.
-        $controller = new class {
+        $controller = new class () {
             use HtmlControllerTrait;
             public ConfigProvider $config;
             public OutgoingResponse $response;

@@ -32,12 +32,10 @@ use Laucov\Injection\Resolver;
 use Laucov\WebFwk\Config\Session;
 use Laucov\WebFwk\Config\Smtp;
 use Laucov\WebFwk\Services\DatabaseService;
-use Laucov\WebFwk\Services\FileSessionService;
 use Laucov\WebFwk\Services\Interfaces\ServiceInterface;
 use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
 use Laucov\WebFwk\Services\Interfaces\SmtpServiceInterface;
 use Laucov\WebFwk\Services\LanguageService;
-use Laucov\WebFwk\Services\PhpMailerSmtpService;
 use Laucov\WebFwk\Services\ViewService;
 
 /**

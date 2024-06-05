@@ -43,22 +43,22 @@ abstract class AbstractAuthn
      * 
      * @return array<AuthnField>
      */
-    public abstract function getFields(): array;
+    abstract public function getFields(): array;
 
     /**
      * Start the process.
      */
-    public abstract function request(): void;
+    abstract public function request(): void;
 
     /**
      * Validate data for the process.
      */
-    public abstract function validate(array $data): bool;
+    abstract public function validate(array $data): bool;
 
     /**
      * Setup the process after defining the settings.
      */
-    protected abstract function setup(): void;
+    abstract protected function setup(): void;
 
     /**
      * Settings entity class name.
@@ -81,7 +81,7 @@ abstract class AbstractAuthn
      */
     public function createSettings(): mixed
     {
-        return new $this->settingsEntity;
+        return new $this->settingsEntity();
     }
 
     /**

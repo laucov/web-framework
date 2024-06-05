@@ -47,7 +47,7 @@ class AbstractAuthnTest extends TestCase
     public function testCanConfigure(): void
     {
         // Create config class.
-        $config = new class extends AbstractEntity {
+        $config = new class () extends AbstractEntity {
             public string $secret;
         };
 
@@ -100,7 +100,7 @@ class AbstractAuthnTest extends TestCase
         $this->assertTrue($authn->validate(['guess' => '1234']));
 
         // Test if checks the configuration class name.
-        $config = new class extends AbstractEntity {
+        $config = new class () extends AbstractEntity {
             public string $value;
         };
         $this->expectException(\InvalidArgumentException::class);

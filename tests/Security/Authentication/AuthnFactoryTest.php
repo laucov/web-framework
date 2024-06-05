@@ -30,7 +30,6 @@ declare(strict_types=1);
 
 namespace Tests\Security;
 
-use Laucov\Validation\AbstractRule;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
 use Laucov\WebFwk\Security\Authentication\AbstractAuthn;

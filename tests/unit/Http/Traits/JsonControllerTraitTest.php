@@ -57,7 +57,7 @@ class JsonControllerTraitTest extends TestCase
         $response = $this->createMock(OutgoingResponse::class);
 
         // Create controller.
-        $controller = new class {
+        $controller = new class () {
             use JsonControllerTrait;
             public null|HttpException $exception = null;
             public null|Input $input = null;
@@ -159,7 +159,7 @@ class JsonControllerTraitTest extends TestCase
         $response = $this->createMock(OutgoingResponse::class);
 
         // Create controller.
-        $controller = new class {
+        $controller = new class () {
             use JsonControllerTrait;
             public OutgoingResponse $response;
             public function test(): void
@@ -196,7 +196,7 @@ class JsonControllerTraitTest extends TestCase
         $this->createMock(Ruleset::class);
 
         // Create example entity.
-        $entity = new class extends AbstractEntity {
+        $entity = new class () extends AbstractEntity {
             public static array $validationErrors;
             public string $name;
             public int $age;
@@ -211,7 +211,7 @@ class JsonControllerTraitTest extends TestCase
         $response = $this->createMock(OutgoingResponse::class);
 
         // Create controller.
-        $controller = new class {
+        $controller = new class () {
             use JsonControllerTrait;
             public null|AbstractEntity $entity;
             public null|HttpException $exception;

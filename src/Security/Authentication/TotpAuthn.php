@@ -30,7 +30,6 @@ namespace Laucov\WebFwk\Security\Authentication;
 
 use Covaleski\Otp\Totp;
 use Laucov\WebFwk\Entities\TotpSettings;
-use Laucov\WebFwk\Security\Authentication\AbstractAuthn;
 
 /**
  * Provides authentication with time-based one-time passwords.
