@@ -79,6 +79,7 @@ class UserMfaMethodModelTest extends TestCase
     }
 
     /**
+     * @covers ::existsForUser
      * @covers ::retrieveForUser
      * @uses Laucov\Modeling\Entity\AbstractEntity::__construct
      * @uses Laucov\Modeling\Entity\AbstractEntity::__set
@@ -94,6 +95,10 @@ class UserMfaMethodModelTest extends TestCase
         string $id,
         bool $should_exist,
     ): void {
+        // Check if exists.
+        $exists = $this->model->existsForUser($user_id, ...[$id]);
+        $this->assertSame($should_exist, $exists);
+
         // Try to get the record.
         $record = $this->model->retrieveForUser($user_id, $id);
 

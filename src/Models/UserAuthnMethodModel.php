@@ -55,6 +55,15 @@ class UserAuthnMethodModel extends AbstractModel
     protected string $tableName = 'users_authn_methods';
 
     /**
+     * Check whether an authentication model exists for an user.
+     */
+    public function existsForUser(string $user_id, string ...$ids): bool
+    {
+        $this->table->filter('user_id', '=', $user_id);
+        return $this->exists(...$ids);
+    }
+
+    /**
      * List all configured authentication methods for an user.
      * 
      * @return Collection<UserAuthnMethod>
