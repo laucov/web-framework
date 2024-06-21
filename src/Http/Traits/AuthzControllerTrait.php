@@ -34,7 +34,7 @@ use Laucov\Http\Message\RequestInterface;
 use Laucov\WebFwk\Config\Authorization;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
-use Laucov\WebFwk\Security\Authorizer;
+use Laucov\WebFwk\Security\SessionGuard;
 
 /**
  * Provides methods to easily control authorization dependant processes.
@@ -46,13 +46,13 @@ use Laucov\WebFwk\Security\Authorizer;
 trait AuthzControllerTrait
 {
     /**
-     * Create a new `Authorizer` instance using the request data.
+     * Create a new `SessionGuard` instance using the request data.
      */
-    protected function createAuthorizer(RequestInterface $request): Authorizer
+    protected function createSessionGuard(RequestInterface $request): SessionGuard
     {
         // Create instance.
         $config = $this->config->getConfig(Authorization::class);
-        $authorizer = new Authorizer($config, $this->services);
+        $authorizer = new SessionGuard($config, $this->services);
 
         // Get the session ID.
         $session_cookie = $request->getCookie('session_id');

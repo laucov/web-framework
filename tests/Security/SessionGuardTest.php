@@ -42,17 +42,17 @@ use Laucov\WebFwk\Security\Authentication\AuthnCancelResult;
 use Laucov\WebFwk\Security\Authentication\AuthnRequestResult;
 use Laucov\WebFwk\Security\Authentication\AuthnResult;
 use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
-use Laucov\WebFwk\Security\Authorizer;
+use Laucov\WebFwk\Security\SessionGuard;
 use Laucov\WebFwk\Security\UserDataSettingResult;
 use Laucov\WebFwk\Security\UserStatus;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Laucov\WebFwk\Security\Authorizer
+ * @coversDefaultClass \Laucov\WebFwk\Security\SessionGuard
  */
-class AuthorizerTest extends TestCase
+class SessionGuardTest extends TestCase
 {
-    protected Authorizer $authorizer;
+    protected SessionGuard $authorizer;
 
     protected ConfigProvider $config;
 
@@ -68,27 +68,27 @@ class AuthorizerTest extends TestCase
     public function authnOptionsGetterInitProvider(): array
     {
         return [
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 // Don't create a session.
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 // Create session, but don't login.
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 // Create session and login.
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
                 $authz->accredit('john', '1234');
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
                 $authz->accredit('mary', '4321');
                 $authz->requestAuthn('1');
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
                 $authz->accredit('mary', '4321');
@@ -107,26 +107,26 @@ class AuthorizerTest extends TestCase
     public function currentAuthnGetterInitProvider(): array
     {
         return [
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 // Don't create a session.
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 // Create session, but don't login.
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 // Create session and login.
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
                 $authz->accredit('john', '1234');
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
                 $authz->accredit('mary', '4321');
             }],
-            [function (Authorizer $authz, ServiceProvider $services): void {
+            [function (SessionGuard $authz, ServiceProvider $services): void {
                 $id = $services->session()->createSession()->id;
                 $authz->setSession($id);
                 $authz->accredit('mary', '4321');
@@ -574,10 +574,10 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::getUser
-     * @uses Laucov\WebFwk\Security\Authorizer::setData
-     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::getUser
+     * @uses Laucov\WebFwk\Security\SessionGuard::setData
+     * @uses Laucov\WebFwk\Security\SessionGuard::setSession
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
      * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
@@ -665,12 +665,12 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
      * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
      * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::accredit
-     * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
-     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
-     * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
-     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::accredit
+     * @uses Laucov\WebFwk\Security\SessionGuard::getAuthentication
+     * @uses Laucov\WebFwk\Security\SessionGuard::getStatus
+     * @uses Laucov\WebFwk\Security\SessionGuard::requestAuthn
+     * @uses Laucov\WebFwk\Security\SessionGuard::setSession
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
      * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
@@ -714,7 +714,7 @@ class AuthorizerTest extends TestCase
         // Could happen between requests.
         $authz = $this->config->getConfig(Authorization::class);
         $authz->authnFactory = UselessAuthnFactory::class;
-        $this->authorizer = new Authorizer($authz, $this->services);
+        $this->authorizer = new SessionGuard($authz, $this->services);
         $this->authorizer->setSession($session_id);
 
         // Try to get the current authentication method - should fail.
@@ -750,13 +750,13 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
      * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
      * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::accredit
-     * @uses Laucov\WebFwk\Security\Authorizer::authenticate
-     * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
-     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
-     * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
-     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::accredit
+     * @uses Laucov\WebFwk\Security\SessionGuard::authenticate
+     * @uses Laucov\WebFwk\Security\SessionGuard::getAuthentication
+     * @uses Laucov\WebFwk\Security\SessionGuard::getStatus
+     * @uses Laucov\WebFwk\Security\SessionGuard::requestAuthn
+     * @uses Laucov\WebFwk\Security\SessionGuard::setSession
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
      * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
@@ -796,13 +796,13 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
      * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::configure
      * @uses Laucov\WebFwk\Security\Authentication\AbstractAuthn::createSettingsFromArray
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::accredit
-     * @uses Laucov\WebFwk\Security\Authorizer::authenticate
-     * @uses Laucov\WebFwk\Security\Authorizer::getAuthentication
-     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
-     * @uses Laucov\WebFwk\Security\Authorizer::requestAuthn
-     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::accredit
+     * @uses Laucov\WebFwk\Security\SessionGuard::authenticate
+     * @uses Laucov\WebFwk\Security\SessionGuard::getAuthentication
+     * @uses Laucov\WebFwk\Security\SessionGuard::getStatus
+     * @uses Laucov\WebFwk\Security\SessionGuard::requestAuthn
+     * @uses Laucov\WebFwk\Security\SessionGuard::setSession
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
      * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
@@ -846,9 +846,9 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::accredit
-     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::accredit
+     * @uses Laucov\WebFwk\Security\SessionGuard::getStatus
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
      * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
@@ -914,7 +914,7 @@ class AuthorizerTest extends TestCase
      * @uses Laucov\WebFwk\Providers\ServiceProvider::db
      * @uses Laucov\WebFwk\Providers\ServiceProvider::getService
      * @uses Laucov\WebFwk\Providers\ServiceProvider::session
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::__construct
      * @uses Laucov\WebFwk\Services\DatabaseService::createConnection
      * @uses Laucov\WebFwk\Services\DatabaseService::getConnection
@@ -1001,7 +1001,7 @@ class AuthorizerTest extends TestCase
                 SQL);
 
         // Create authorizer instance.
-        $this->authorizer = new Authorizer($authz, $this->services);
+        $this->authorizer = new SessionGuard($authz, $this->services);
     }
 
     protected function tearDown(): void

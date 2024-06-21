@@ -37,7 +37,7 @@ use Laucov\WebFwk\Config\Authorization;
 use Laucov\WebFwk\Http\Traits\AuthzControllerTrait;
 use Laucov\WebFwk\Providers\ConfigProvider;
 use Laucov\WebFwk\Providers\ServiceProvider;
-use Laucov\WebFwk\Security\Authorizer;
+use Laucov\WebFwk\Security\SessionGuard;
 use Laucov\WebFwk\Security\UserStatus;
 use Laucov\WebFwk\Services\Interfaces\SessionServiceInterface;
 use PHPUnit\Framework\TestCase;
@@ -48,13 +48,13 @@ use PHPUnit\Framework\TestCase;
 class AuthzControllerTraitTest extends TestCase
 {
     /**
-     * @covers ::createAuthorizer
+     * @covers ::createSessionGuard
      * @uses Laucov\WebFwk\Security\Authentication\AuthnFactory::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::__construct
-     * @uses Laucov\WebFwk\Security\Authorizer::getStatus
-     * @uses Laucov\WebFwk\Security\Authorizer::setSession
+     * @uses Laucov\WebFwk\Security\SessionGuard::__construct
+     * @uses Laucov\WebFwk\Security\SessionGuard::getStatus
+     * @uses Laucov\WebFwk\Security\SessionGuard::setSession
      */
-    public function testCanGetTheAuthorizer(): void
+    public function testCanGetTheSessionGuard(): void
     {
         // Mock dependencies.
         $authz_config = $this->createMock(Authorization::class);
@@ -70,9 +70,9 @@ class AuthzControllerTraitTest extends TestCase
             public ConfigProvider $config;
             public OutgoingResponse $response;
             public ServiceProvider $services;
-            public function test(RequestInterface $request): Authorizer
+            public function test(RequestInterface $request): SessionGuard
             {
-                return $this->createAuthorizer($request);
+                return $this->createSessionGuard($request);
             }
         };
 

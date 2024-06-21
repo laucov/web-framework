@@ -46,7 +46,7 @@ use Laucov\WebFwk\Security\Authentication\Interfaces\AuthnFactoryInterface;
 /**
  * Accredits, authenticates and stores users in sessions.
  */
-class Authorizer
+class SessionGuard
 {
     /**
      * Authentication factory.
