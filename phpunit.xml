@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/|version|/phpunit.xsd"
          beStrictAboutCoversAnnotation="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="tests/bootstrap.php"
          convertDeprecationsToExceptions="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
