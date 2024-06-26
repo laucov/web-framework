@@ -89,6 +89,9 @@ class ModelTestCase extends TestCase
             ->method('query')
             ->withConsecutive(...$arguments);
         
+        // Reset expectations.
+        $this->queryExpectations = [];
+        
         return $connection;
     }
 }
