@@ -61,4 +61,13 @@ class UserModel extends AbstractModel
         $this->table->filter('login', '=', $login);
         return $this->getEntity();
     }
+
+    /**
+     * Join the user's person data in the next query.
+     */
+    public function withPerson(): static
+    {
+        $this->relateOneToOne('persons', 'person_id', 'id');
+        return $this;
+    }
 }
