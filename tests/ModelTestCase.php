@@ -33,7 +33,6 @@ namespace Tests;
 use Laucov\Db\Data\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Tests\QueryExpectation;
 
 /**
  * Provides methods for testing models.
@@ -88,10 +87,10 @@ class ModelTestCase extends TestCase
             ->expects($this->exactly($count))
             ->method('query')
             ->withConsecutive(...$arguments);
-        
+
         // Reset expectations.
         $this->queryExpectations = [];
-        
+
         return $connection;
     }
 }

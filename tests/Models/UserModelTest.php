@@ -137,7 +137,7 @@ class UserModelTest extends ModelTestCase
             WHERE login = {login}
             AND users.deleted_at IS NULL
             SQL;
-        
+
         // Set expectations.
         $this->expectQuery()
             ->withTemplate($template)
@@ -148,7 +148,7 @@ class UserModelTest extends ModelTestCase
         $this->expectQuery()
             ->withTemplate($template)
             ->withParameter('login', 'leonard');
-        
+
         // Mock connection.
         $conn = $this->mockConnection();
         $conn

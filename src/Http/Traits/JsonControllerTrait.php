@@ -142,7 +142,7 @@ trait JsonControllerTrait
                 ['content' => $info_message, 'type' => 'info'],
             ],
         ]);
-        
+
         throw new HttpException($this->response);
     }
 
