@@ -133,17 +133,20 @@
         },
         {
             "name": "laucov/cli",
-            "version": "v0.1.2",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/cli.git",
-                "reference": "231980c771da7e68283b071ed3ec2dd1a44606b1"
+                "reference": "d7e111961c715de603694dd25a7bd4b35498a92a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/cli/zipball/231980c771da7e68283b071ed3ec2dd1a44606b1",
-                "reference": "231980c771da7e68283b071ed3ec2dd1a44606b1",
+                "url": "https://api.github.com/repos/laucov/cli/zipball/d7e111961c715de603694dd25a7bd4b35498a92a",
+                "reference": "d7e111961c715de603694dd25a7bd4b35498a92a",
                 "shasum": ""
+            },
+            "require": {
+                "laucov/injection": "^1.2"
             },
             "require-dev": {
                 "laravel/pint": "^1.13",
@@ -168,9 +171,9 @@
             "description": "CLI routing and output tools.",
             "support": {
                 "issues": "https://github.com/laucov/cli/issues",
-                "source": "https://github.com/laucov/cli/tree/v0.1.2"
+                "source": "https://github.com/laucov/cli/tree/v0.2.0"
             },
-            "time": "2024-05-04T01:22:21+00:00"
+            "time": "2024-06-28T17:52:36+00:00"
         },
         {
             "name": "laucov/db",
@@ -387,16 +390,16 @@
         },
         {
             "name": "laucov/modeling",
-            "version": "v0.8.0",
+            "version": "v0.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laucov/modeling.git",
-                "reference": "821f00d5698a774bfa4844792613945a012277ac"
+                "reference": "75ab619abb941c99fbc5c11acfc36361cba6b46a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laucov/modeling/zipball/821f00d5698a774bfa4844792613945a012277ac",
-                "reference": "821f00d5698a774bfa4844792613945a012277ac",
+                "url": "https://api.github.com/repos/laucov/modeling/zipball/75ab619abb941c99fbc5c11acfc36361cba6b46a",
+                "reference": "75ab619abb941c99fbc5c11acfc36361cba6b46a",
                 "shasum": ""
             },
             "require": {
@@ -426,9 +429,9 @@
             "description": "Library for data modeling and database management.",
             "support": {
                 "issues": "https://github.com/laucov/modeling/issues",
-                "source": "https://github.com/laucov/modeling/tree/v0.8.0"
+                "source": "https://github.com/laucov/modeling/tree/v0.9.1"
             },
-            "time": "2024-06-05T12:35:39+00:00"
+            "time": "2024-06-28T18:15:22+00:00"
         },
         {
             "name": "laucov/sessions",
@@ -712,16 +715,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.16.0",
+            "version": "v1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "1b3a3dc5bc6a81ff52828ba7277621f1d49d6d98"
+                "reference": "9266a47f1b9231b83e0cfd849009547329d871b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/1b3a3dc5bc6a81ff52828ba7277621f1d49d6d98",
-                "reference": "1b3a3dc5bc6a81ff52828ba7277621f1d49d6d98",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/9266a47f1b9231b83e0cfd849009547329d871b1",
+                "reference": "9266a47f1b9231b83e0cfd849009547329d871b1",
                 "shasum": ""
             },
             "require": {
@@ -732,13 +735,13 @@
                 "php": "^8.1.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.57.1",
-                "illuminate/view": "^10.48.10",
-                "larastan/larastan": "^2.9.6",
+                "friendsofphp/php-cs-fixer": "^3.59.3",
+                "illuminate/view": "^10.48.12",
+                "larastan/larastan": "^2.9.7",
                 "laravel-zero/framework": "^10.4.0",
                 "mockery/mockery": "^1.6.12",
                 "nunomaduro/termwind": "^1.15.1",
-                "pestphp/pest": "^2.34.7"
+                "pestphp/pest": "^2.34.8"
             },
             "bin": [
                 "builds/pint"
@@ -774,20 +777,20 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2024-05-21T18:08:25+00:00"
+            "time": "2024-06-18T16:50:05+00:00"
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.11.1",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "7284c22080590fb39f2ffa3e9057f10a4ddd0e0c"
+                "reference": "3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/7284c22080590fb39f2ffa3e9057f10a4ddd0e0c",
-                "reference": "7284c22080590fb39f2ffa3e9057f10a4ddd0e0c",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c",
+                "reference": "3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c",
                 "shasum": ""
             },
             "require": {
@@ -795,11 +798,12 @@
             },
             "conflict": {
                 "doctrine/collections": "<1.6.8",
-                "doctrine/common": "<2.13.3 || >=3,<3.2.2"
+                "doctrine/common": "<2.13.3 || >=3 <3.2.2"
             },
             "require-dev": {
                 "doctrine/collections": "^1.6.8",
                 "doctrine/common": "^2.13.3 || ^3.2.2",
+                "phpspec/prophecy": "^1.10",
                 "phpunit/phpunit": "^7.5.20 || ^8.5.23 || ^9.5.13"
             },
             "type": "library",
@@ -825,7 +829,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.11.1"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.0"
             },
             "funding": [
                 {
@@ -833,7 +837,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-08T13:26:56+00:00"
+            "time": "2024-06-12T14:39:25+00:00"
         },
         {
             "name": "nikic/php-parser",
