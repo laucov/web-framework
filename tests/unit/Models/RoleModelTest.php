@@ -78,7 +78,7 @@ class RoleModelTest extends ModelTestCase
             ->withParameter('users_roles_user_id', 10);
         $this->expectQuery()
             ->withTemplate(<<<SQL
-                SELECT roles.id
+                SELECT roles.id,
                 name
                 FROM roles
                 LEFT JOIN users_roles
